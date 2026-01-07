@@ -1,0 +1,1207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                      String                   @id @default(cuid())
+  email                   String                   @unique
+  name                    String?
+  password                String?
+  avatar                  String?
+  phone                   String?
+  authProvider            AuthProvider             @default(EMAIL)
+  googleId                String?                  @unique
+  role                    UserRole                 @default(STUDENT)
+  isVerified              Boolean                  @default(false)
+  isActive                Boolean                  @default(true)
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  lastLoginAt             DateTime?
+  otps                    OTP[]
+  sessions                Session[]
+  orders                  Order[]
+  reviews                 Review[]
+  subscriptions           Subscription[]
+  indicatorReviews        IndicatorReview[]
+  webinarOrders           WebinarOrderItem[]
+  guidanceOrders          GuidanceOrder[]
+  mentorshipEnrollments   MentorshipEnrollment[]
+  mentorshipOrders        MentorshipOrder[]
+  courseEnrollments       CourseEnrollment[]
+  courseOrders            CourseOrder[]
+  courseReviews           CourseReview[]
+  certificates            Certificate[]
+  courseCompletions       CourseCompletion[]
+  webinarCompletions      WebinarCompletion[]
+  cartItems               CartItem[]
+  offlineBatchEnrollments OfflineBatchEnrollment[]
+  offlineBatchOrders      OfflineBatchOrder[]
+  bundleEnrollments       BundleEnrollment[]
+  bundleOrders            BundleOrder[]
+
+  @@index([email])
+  @@index([googleId])
+}
+
+model OTP {
+  id        String   @id @default(cuid())
+  userId    String
+  code      String
+  purpose   String
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([code])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+enum BatchType {
+  ONLINE
+  OFFLINE
+}
+
+enum ValidityType {
+  LIFETIME
+  SIX_MONTHS
+  ONE_YEAR
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Ebook {
+  id               String      @id @default(cuid())
+  title            String
+  slug             String      @unique
+  shortDescription String?     @db.Text
+  description      String      @db.Text
+  price            Float       @default(0)
+  salePrice        Float?
+  isFree           Boolean     @default(false)
+  image1           String?
+  image2           String?
+  image3           String?
+  pdfFile          String? // PDF file path in R2
+  pages            Int         @default(0)
+  curriculum       String[] // Array of curriculum points
+  categories       String[] // Array of categories: FEATURED, BESTSELLER, NEW, TRENDING, POPULAR
+  isPublished      Boolean     @default(false)
+  purchaseCount    Int         @default(0)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  orders           OrderItem[]
+  reviews          Review[]
+
+  @@index([isPublished])
+  @@index([isFree])
+  @@index([slug])
+}
+
+model Order {
+  id                 String              @id @default(cuid())
+  userId             String
+  orderNumber        String              @unique
+  orderType          String              @default("EBOOK") // EBOOK, SUBSCRIPTION, WEBINAR, GUIDANCE, MENTORSHIP, COURSE, OFFLINE_BATCH, or BUNDLE
+  totalAmount        Float
+  discountAmount     Float               @default(0)
+  finalAmount        Float
+  status             OrderStatus         @default(PENDING)
+  paymentStatus      PaymentStatus       @default(PENDING)
+  razorpayOrderId    String?
+  razorpayPaymentId  String?
+  razorpaySignature  String?
+  couponCode         String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items              OrderItem[]
+  subscriptions      Subscription[]
+  courseOrders       CourseOrder[]
+  offlineBatchOrders OfflineBatchOrder[]
+  bundleOrders       BundleOrder[]
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([orderType])
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  ebookId   String
+  price     Float
+  salePrice Float?
+  isFree    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  ebook     Ebook    @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([ebookId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  ebookId   String
+  rating    Int // 1-5
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ebook     Ebook    @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ebookId]) // One review per user per ebook
+  @@index([ebookId])
+  @@index([userId])
+}
+
+model Coupon {
+  id                String   @id @default(cuid())
+  code              String   @unique
+  discountType      String // PERCENTAGE or FIXED
+  discountValue     Float
+  minAmount         Float?
+  maxDiscount       Float?
+  validFrom         DateTime
+  validUntil        DateTime
+  usageLimit        Int?
+  usedCount         Int      @default(0)
+  isActive          Boolean  @default(true)
+  applicableTo      String   @default("ALL") // ALL, EBOOK, SUBSCRIPTION, WEBINAR, GUIDANCE, MENTORSHIP, COURSE, OFFLINE_BATCH, BUNDLE, INDICATOR
+  targetUserType    String   @default("ALL") // ALL, NEW_USER, SPECIFIC_USER
+  targetUserId      String? // If targetUserType is SPECIFIC_USER
+  targetContentType String? // Specific content type for popup display
+  imageUrl          String? // Image for popup (from MediaPicker)
+  videoUrl          String? // Video for popup
+  readyToShow       Boolean  @default(false) // Whether to show in popup
+  title             String? // Title for popup
+  description       String?  @db.Text // Description for popup
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+  @@index([readyToShow])
+  @@index([targetUserType])
+}
+
+model Indicator {
+  id            String            @id @default(cuid())
+  name          String
+  slug          String            @unique
+  description   String            @db.Text
+  image         String? // Image path in R2
+  videoUrl      String? // Video URL link
+  isPublished   Boolean           @default(false)
+  purchaseCount Int               @default(0)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  reviews       IndicatorReview[]
+
+  @@index([slug])
+  @@index([isPublished])
+}
+
+model GlobalSubscriptionPlan {
+  id            String               @id @default(cuid())
+  planType      SubscriptionPlanType @unique
+  price         Float
+  salePrice     Float?
+  isActive      Boolean              @default(true)
+  isPopular     Boolean              @default(false) // MOST POPULAR badge
+  features      String[] // Array of feature descriptions
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  subscriptions Subscription[]
+
+  @@index([planType])
+  @@index([isActive])
+}
+
+model Subscription {
+  id                  String                 @id @default(cuid())
+  userId              String
+  planId              String
+  orderId             String? // Link to Order if paid
+  planType            SubscriptionPlanType
+  startDate           DateTime
+  endDate             DateTime?
+  tradingViewUsername String // Required - user must provide to access indicators
+  status              SubscriptionStatus     @default(ACTIVE)
+  cancelledAt         DateTime?
+  razorpayOrderId     String?
+  razorpayPaymentId   String?
+  razorpaySignature   String?
+  couponCode          String?
+  totalAmount         Float
+  discountAmount      Float                  @default(0)
+  finalAmount         Float
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  user                User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                GlobalSubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  order               Order?                 @relation(fields: [orderId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([endDate])
+}
+
+model IndicatorReview {
+  id          String    @id @default(cuid())
+  userId      String
+  indicatorId String
+  rating      Int // 1-5
+  comment     String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  indicator   Indicator @relation(fields: [indicatorId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, indicatorId]) // One review per user per indicator
+  @@index([indicatorId])
+  @@index([userId])
+}
+
+enum SubscriptionPlanType {
+  ONE_MONTH
+  QUARTER
+  SIX_MONTHS
+  ONE_YEAR
+  LIFETIME
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+model Webinar {
+  id String @id @default(cuid())
+
+  // ===============================
+  // BASIC INFO
+  // ===============================
+  title       String
+  slug        String   @unique
+  type        LiveType
+  description String   @db.Text
+  image       String? // Thumbnail (Cloudflare R2)
+
+  // ===============================
+  // LIVE SESSION (GOOGLE MEET)
+  // ===============================
+  googleMeetLink String? // 🔐 only for enrolled users
+  startDate      DateTime // Webinar date and time
+  startTime      String // HH:mm (extracted from startDate for compatibility)
+  endTime        String? // Calculated from startDate + duration
+  duration       Int? // Duration in minutes (e.g., 45, 75)
+
+  // ===============================
+  // INSTRUCTOR INFO
+  // ===============================
+  instructorName            String
+  instructorDescription     String? @db.Text
+  instructorImage           String?
+  instructorYearsExperience Int?
+
+  // ===============================
+  // PRICING
+  // ===============================
+  price     Float   @default(0)
+  salePrice Float?
+  isFree    Boolean @default(false)
+
+  // ===============================
+  // SEAT MANAGEMENT
+  // ===============================
+  seatType SeatType @default(UNLIMITED)
+  maxSeats Int?
+
+  // ===============================
+  // COURSE META
+  // ===============================
+  numberOfSessions Int?
+  language         String?
+  accessDuration   AccessDuration?
+  liveDoubtSolving Boolean         @default(false)
+
+  // ===============================
+  // RECORDING ACCESS (NO URL)
+  // ===============================
+  accessToRecordings       Boolean @default(false)
+  recordingsAccessDuration String?
+
+  // ===============================
+  // MARKETING CONTENT
+  // ===============================
+  thumbnailVideoUrl String?
+  whatYouWillLearn  Json    @default("[]")
+  faqs              Json    @default("[]")
+
+  // ===============================
+  // STATUS
+  // ===============================
+  isPublished Boolean @default(false)
+
+  // ===============================
+  // RELATIONS
+  // ===============================
+  orders      WebinarOrderItem[]
+  completions WebinarCompletion[]
+
+  // ===============================
+  // TIMESTAMPS
+  // ===============================
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isPublished, isFree])
+}
+
+enum LiveType {
+  LIVE
+  WORKSHOP
+  MASTERCLASS
+}
+
+enum SeatType {
+  UNLIMITED
+  LIMITED
+}
+
+enum AccessDuration {
+  SIX_MONTHS
+  ONE_YEAR
+  LIFETIME
+}
+
+model WebinarOrderItem {
+  id String @id @default(cuid())
+
+  webinarId String
+  userId    String
+
+  amountPaid  Float
+  paymentId   String?
+  paymentMode String? // RAZORPAY | CASHFREE | FREE
+
+  webinar Webinar @relation(fields: [webinarId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([webinarId, userId])
+  @@index([webinarId])
+  @@index([userId])
+}
+
+enum GuidanceStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum SlotStatus {
+  AVAILABLE
+  BOOKED
+  CLOSED
+}
+
+model Guidance {
+  id          String @id @default(cuid())
+  title       String // 1:1 Guidance
+  slug        String @unique
+  description String @db.Text
+
+  expertName  String
+  expertBio   String? @db.Text
+  expertImage String? // R2 image
+  expertise   Json    @default("[]") // Options Trading, etc
+  language    String?
+
+  price           Float // INR only (NOT FREE)
+  durationMinutes Int // 30 / 60 / 90
+
+  googleMeetLink String // Admin provided
+
+  status GuidanceStatus @default(ACTIVE)
+
+  slots  GuidanceSlot[]
+  orders GuidanceOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+}
+
+model GuidanceSlot {
+  id         String   @id @default(cuid())
+  guidanceId String
+  date       DateTime // YYYY-MM-DD
+  startTime  String // HH:mm
+  endTime    String // HH:mm
+
+  status SlotStatus @default(AVAILABLE)
+
+  guidance Guidance       @relation(fields: [guidanceId], references: [id], onDelete: Cascade)
+  order    GuidanceOrder?
+
+  @@unique([guidanceId, date, startTime])
+  @@index([guidanceId])
+  @@index([status])
+}
+
+model GuidanceOrder {
+  id         String @id @default(cuid())
+  guidanceId String
+  slotId     String @unique
+  userId     String
+
+  amountPaid    Float
+  paymentId     String?
+  paymentStatus String // CREATED | PAID | FAILED
+  paymentMode   String? // RAZORPAY
+
+  guidance Guidance     @relation(fields: [guidanceId], references: [id], onDelete: Cascade)
+  slot     GuidanceSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([guidanceId])
+  @@index([slotId])
+  @@index([userId])
+}
+
+enum MentorshipStatus {
+  DRAFT
+  PUBLISHED
+  UNPUBLISHED
+}
+
+enum MentorshipPricingType {
+  FREE
+  PAID
+}
+
+model LiveMentorshipProgram {
+  id String @id @default(cuid())
+
+  // ===============================
+  // BASIC INFO
+  // ===============================
+  title       String
+  slug        String  @unique
+  description String  @db.Text
+  coverImage  String? // R2 image
+
+  pricingType MentorshipPricingType @default(PAID)
+  price       Float                 @default(0)
+  salePrice   Float?
+  isFree      Boolean               @default(false)
+
+  status MentorshipStatus @default(DRAFT)
+
+  // ===============================
+  // PROGRAM DETAILS
+  // ===============================
+  totalSessions Int
+  startDate     DateTime
+  endDate       DateTime
+
+  googleMeetLink String // Admin provided (secure)
+
+  // ===============================
+  // CONTENT SECTIONS (ADMIN FILLS)
+  // ===============================
+  whoIsThisFor        Json @default("[]")
+  whatYouWillLearn    Json @default("[]")
+  keyConceptsRequired Json @default("[]")
+  faqs                Json @default("[]")
+  programOverview     Json @default("[]")
+
+  // ===============================
+  // INSTRUCTOR
+  // ===============================
+  instructorName  String
+  instructorBio   String? @db.Text
+  instructorImage String?
+
+  // ===============================
+  // RELATIONS
+  // ===============================
+  sessions    MentorshipSession[]
+  enrollments MentorshipEnrollment[]
+  orders      MentorshipOrder[]
+
+  // ===============================
+  // TIMESTAMPS
+  // ===============================
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, isFree])
+}
+
+model MentorshipSession {
+  id           String @id @default(cuid())
+  mentorshipId String
+
+  title       String
+  sessionDate DateTime
+  startTime   String // HH:mm
+  endTime     String
+
+  order Int // 1,2,3...
+
+  mentorship LiveMentorshipProgram @relation(fields: [mentorshipId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([mentorshipId])
+}
+
+model MentorshipEnrollment {
+  id           String @id @default(cuid())
+  mentorshipId String
+  userId       String
+
+  mentorship LiveMentorshipProgram @relation(fields: [mentorshipId], references: [id], onDelete: Cascade)
+  user       User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  enrolledAt DateTime @default(now())
+
+  @@unique([mentorshipId, userId])
+  @@index([mentorshipId])
+  @@index([userId])
+}
+
+model MentorshipOrder {
+  id           String @id @default(cuid())
+  mentorshipId String
+  userId       String
+
+  amountPaid    Float
+  paymentId     String?
+  paymentMode   String? // RAZORPAY
+  paymentStatus String // PAID | FAILED
+
+  mentorship LiveMentorshipProgram @relation(fields: [mentorshipId], references: [id], onDelete: Cascade)
+  user       User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([mentorshipId])
+  @@index([userId])
+}
+
+// =====================================
+// ONLINE COURSE SYSTEM
+// =====================================
+
+enum CourseLanguage {
+  HINDI
+  ENGLISH
+  MIXED
+}
+
+model CourseCategory {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses CourseCategoryRelation[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model CourseCategoryRelation {
+  id         String @id @default(cuid())
+  courseId   String
+  categoryId String
+
+  course   Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  category CourseCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, categoryId])
+  @@index([courseId])
+  @@index([categoryId])
+}
+
+model Course {
+  id          String         @id @default(cuid())
+  title       String
+  slug        String         @unique
+  description String         @db.Text
+  coverImage  String? // R2 URL
+  language    CourseLanguage @default(ENGLISH)
+  price       Float          @default(0)
+  salePrice   Float?
+  isFree      Boolean        @default(false)
+  isPublished Boolean        @default(false)
+  badges      String[] // Array of badges: FEATURED, BESTSELLER, NEW, TRENDING, POPULAR
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  sessions    CourseSession[]
+  enrollments CourseEnrollment[]
+  orders      CourseOrder[]
+  categories  CourseCategoryRelation[]
+  reviews     CourseReview[]
+  completions CourseCompletion[]
+  bundles     BundleCourse[]
+
+  @@index([slug])
+  @@index([isPublished])
+  @@index([isFree])
+}
+
+model CourseSession {
+  id          String   @id @default(cuid())
+  courseId    String
+  title       String
+  description String?  @db.Text
+  order       Int      @default(1)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course    Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapters  CourseChapter[]
+  resources SessionResource[]
+
+  @@index([courseId])
+  @@index([order])
+}
+
+model CourseChapter {
+  id            String   @id @default(cuid())
+  sessionId     String
+  title         String
+  slug          String
+  videoUrl      String? // YouTube URL (DEPRECATED - kept for backward compatibility)
+  bunnyVideoId  String? // Bunny.net video ID
+  videoDuration Int? // Duration in seconds
+  videoStatus   Int      @default(0) // Bunny status: 0-Created, 1-Uploaded, 2-Processing, 3-Transcoding, 4-Ready, 5-Error, 6-Upload Failed
+  duration      Int? // Duration in seconds (auto-calculated from YouTube)
+  isFreePreview Boolean  @default(false)
+  isPublished   Boolean  @default(false)
+  order         Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  session  CourseSession     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  progress ChapterProgress[]
+
+  @@unique([sessionId, slug])
+  @@index([sessionId])
+  @@index([order])
+  @@index([slug])
+  @@index([bunnyVideoId])
+}
+
+model SessionResource {
+  id        String   @id @default(cuid())
+  sessionId String
+  fileName  String
+  fileUrl   String // R2 URL
+  fileSize  Int? // Size in bytes
+  createdAt DateTime @default(now())
+
+  session CourseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+model CourseEnrollment {
+  id         String   @id @default(cuid())
+  courseId   String
+  userId     String
+  enrolledAt DateTime @default(now())
+
+  course   Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress ChapterProgress[]
+
+  @@unique([courseId, userId])
+  @@index([courseId])
+  @@index([userId])
+}
+
+model ChapterProgress {
+  id            String    @id @default(cuid())
+  chapterId     String
+  enrollmentId  String
+  progress      Float     @default(0) // Percentage 0-100
+  completed     Boolean   @default(false)
+  lastWatchedAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  chapter    CourseChapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  enrollment CourseEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([chapterId, enrollmentId])
+  @@index([chapterId])
+  @@index([enrollmentId])
+}
+
+model CourseOrder {
+  id       String @id @default(cuid())
+  courseId String
+  userId   String
+  orderId  String
+
+  amountPaid    Float
+  paymentId     String?
+  paymentStatus String // CREATED | PAID | FAILED
+  paymentMode   String? // RAZORPAY
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order  Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([courseId])
+  @@index([userId])
+  @@index([orderId])
+}
+
+model CourseReview {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  rating    Int // 1-5
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId]) // One review per user per course
+  @@index([courseId])
+  @@index([userId])
+}
+
+// ===============================
+// CERTIFICATE SYSTEM
+// ===============================
+
+enum CertificateType {
+  COURSE
+  WEBINAR
+  MENTORSHIP
+  GUIDANCE
+  OFFLINE_BATCH
+  BUNDLE
+}
+
+enum CertificateStatus {
+  GENERATED
+  REVOKED
+}
+
+model Certificate {
+  id             String            @id @default(cuid())
+  userId         String
+  type           CertificateType
+  referenceId    String // courseId OR webinarId
+  certificateNo  String            @unique
+  certificateUrl String? // PDF stored in R2
+  issuedAt       DateTime          @default(now())
+  status         CertificateStatus @default(GENERATED)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type, referenceId])
+  @@index([userId])
+  @@index([type])
+  @@index([certificateNo])
+}
+
+// Certificate Templates - Admin creates designs for each product type
+model CertificateTemplate {
+  id          String          @id @default(cuid())
+  type        CertificateType @unique // One template per type
+  name        String // e.g., "Course Completion Certificate"
+  description String?         @db.Text
+
+  // Design Elements
+  signatureUrl  String? // Admin signature image (R2)
+  stampUrl      String? // Admin stamp image (R2)
+  logoUrl       String? // Custom logo (R2)
+  backgroundUrl String? // Background image (R2)
+
+  // Text Settings
+  issuerName  String  @default("Shrestha Academy")
+  issuerTitle String  @default("Platform Director")
+  footerText  String? @db.Text
+
+  // Styling
+  primaryColor   String @default("#6366F1")
+  secondaryColor String @default("#A5B4FC")
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+}
+
+model CourseCompletion {
+  id          String   @id @default(cuid())
+  courseId    String
+  userId      String
+  completedAt DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, userId])
+  @@index([courseId])
+  @@index([userId])
+}
+
+model WebinarCompletion {
+  id          String   @id @default(cuid())
+  webinarId   String
+  userId      String
+  completedAt DateTime @default(now())
+
+  webinar Webinar @relation(fields: [webinarId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([webinarId, userId])
+  @@index([webinarId])
+  @@index([userId])
+}
+
+// Flash Sale for promotions
+enum FlashSaleType {
+  COURSE
+  EBOOK
+  WEBINAR
+  GUIDANCE
+  MENTORSHIP
+  INDICATOR
+  BUNDLE
+  OFFLINE_BATCH
+}
+
+model FlashSale {
+  id              String        @id @default(cuid())
+  type            FlashSaleType
+  referenceIds    String[] // Array of IDs of courses/ebooks/webinars/guidance/indicators
+  title           String // Sale title e.g. "Black Friday Sale!"
+  subtitle        String? // Subtitle e.g. "Save up to 60%"
+  discountPercent Int // Discount percentage
+  theme           String        @default("default") // default, blackfriday, diwali, holi, christmas, newyear
+  bgColor         String        @default("#dc2626") // Background color
+  textColor       String        @default("#ffffff") // Text color
+  startDate       DateTime
+  endDate         DateTime
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([isActive])
+  @@index([type])
+  @@index([startDate])
+  @@index([endDate])
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  itemType  String // EBOOK, WEBINAR, GUIDANCE, MENTORSHIP, COURSE, BUNDLE
+  itemId    String // ID of the item
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemType, itemId]) // One item per type per user
+  @@index([userId])
+  @@index([itemType])
+}
+
+model FooterLink {
+  id        String   @id @default(cuid())
+  label     String
+  url       String
+  icon      String? // Icon name (e.g., "Facebook", "Twitter", "Instagram")
+  color     String? // Hex color code
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([order])
+}
+
+enum OfflineBatchPricingType {
+  FREE
+  PAID
+}
+
+enum OfflineBatchStatus {
+  DRAFT
+  OPEN
+  FULL
+  CLOSED
+}
+
+model OfflineBatch {
+  id    String @id @default(cuid())
+  title String
+  slug  String @unique
+
+  // 🖼️ THUMBNAIL IMAGE
+  thumbnail String? // Cloudflare R2 image URL
+
+  // 📝 DESCRIPTION
+  shortDescription String?
+  description      String  @db.Text
+
+  // 📍 LOCATION DETAILS
+  centerName String
+  address    String
+  city       String
+  state      String
+  googleMap  String? // Google Maps link
+
+  // 🗓️ DATE & TIME
+  startDate DateTime
+  endDate   DateTime
+  startTime String // HH:mm
+  endTime   String // HH:mm
+  days      String[] // MON, TUE, WED
+
+  // 👨‍🏫 INSTRUCTOR
+  instructorName String
+  instructorBio  String?
+
+  // 💰 PRICING LOGIC
+  pricingType OfflineBatchPricingType @default(PAID)
+  price       Float? // shown only if PAID
+  salePrice   Float? // optional
+  isFree      Boolean                 @default(false)
+
+  // 🪑 SEAT LOGIC
+  isUnlimitedSeats Boolean @default(false)
+  seatLimit        Int?
+  seatsFilled      Int     @default(0)
+
+  // 📦 WHAT STUDENT GETS
+  includesNotes        Boolean @default(true)
+  includesRecordings   Boolean @default(false)
+  includesTests        Boolean @default(true)
+  includesDoubtSupport Boolean @default(true)
+
+  // 📢 STATUS
+  status OfflineBatchStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enrollments OfflineBatchEnrollment[]
+  orders      OfflineBatchOrder[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([city])
+}
+
+model OfflineBatchEnrollment {
+  id      String @id @default(cuid())
+  batchId String
+  userId  String
+
+  paymentStatus String // PAID | PARTIAL | UNPAID
+  amountPaid    Float
+  paymentMode   String? // CASH | UPI | RAZORPAY
+
+  enrolledAt DateTime @default(now())
+
+  batch OfflineBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([batchId, userId])
+  @@index([batchId])
+  @@index([userId])
+}
+
+model OfflineBatchOrder {
+  id      String @id @default(cuid())
+  batchId String
+  userId  String
+  orderId String
+
+  amountPaid    Float
+  paymentId     String?
+  paymentStatus String // CREATED | PAID | FAILED
+  paymentMode   String? // RAZORPAY
+
+  batch OfflineBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([batchId])
+  @@index([userId])
+  @@index([orderId])
+}
+
+// =====================================
+// BUNDLE SYSTEM
+// =====================================
+
+model Bundle {
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  shortDescription String?  @db.Text
+  description      String   @db.Text
+  thumbnail        String? // Cloudflare R2 image URL
+  price            Float    @default(0)
+  salePrice        Float?
+  isPublished      Boolean  @default(false)
+  badges           String[] // FEATURED, BESTSELLER, NEW, TRENDING, POPULAR
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  courses     BundleCourse[]
+  enrollments BundleEnrollment[]
+  orders      BundleOrder[]
+
+  @@index([slug])
+  @@index([isPublished])
+}
+
+// Bundle-Course many-to-many relationship
+model BundleCourse {
+  id       String @id @default(cuid())
+  bundleId String
+  courseId String
+
+  bundle Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Restrict)
+
+  @@unique([bundleId, courseId])
+  @@index([bundleId])
+  @@index([courseId])
+}
+
+model BundleEnrollment {
+  id         String   @id @default(cuid())
+  bundleId   String
+  userId     String
+  enrolledAt DateTime @default(now())
+
+  bundle Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([bundleId, userId])
+  @@index([bundleId])
+  @@index([userId])
+}
+
+model BundleOrder {
+  id       String @id @default(cuid())
+  bundleId String
+  userId   String
+  orderId  String
+
+  amountPaid    Float
+  paymentId     String?
+  paymentStatus String // CREATED | PAID | FAILED
+  paymentMode   String? // RAZORPAY
+
+  bundle Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order  Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([bundleId])
+  @@index([userId])
+  @@index([orderId])
+}
+
+// =====================================
+// CONTACT SYSTEM
+// =====================================
+
+model Contact {
+  id      String  @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  subject String
+  message String  @db.Text
+  isRead  Boolean @default(false)
+
+  replySent Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([isRead])
+  @@index([createdAt])
+}
