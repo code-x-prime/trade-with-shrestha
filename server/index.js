@@ -1,12 +1,12 @@
-import app from "./app.js";
 import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
+
+import app from "./app.js";
 import { prisma } from "./config/db.js";
 import { startWebinarReminderScheduler } from "./utils/webinarReminder.js";
 import { startMentorshipReminderScheduler } from "./utils/mentorshipReminder.js";
 import { startGuidanceReminderScheduler } from "./utils/guidanceReminder.js";
 import { startWebinarCertificateScheduler } from "./utils/webinarCertificateScheduler.js";
-
-dotenv.config({ path: ".env" });
 
 const PORT = process.env.PORT || 4000;
 
