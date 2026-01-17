@@ -19,6 +19,9 @@ const geistMono = localFont({
 export const metadata = {
   title: "Shrestha Academy",
   description: "Learn professional skills with expert guidance",
+  verification: {
+    google: "Jb52ltHuExa5CplypJPW7E6ksUG6reLfvrA2jv-9b0E",
+  },
 };
 
 export default function RootLayout({ children }) {
