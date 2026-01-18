@@ -267,7 +267,7 @@ export default function AdminUsersPage() {
                           </TableCell>
                           <TableCell className="text-sm">{u.email}</TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {u.googleId ? (
+                            {u.authProvider === 'GOOGLE' ? (
                               <div className="flex items-center gap-2">
                                 <div className="h-6 w-6 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
                                   <svg className="h-4 w-4" viewBox="0 0 24 24">
