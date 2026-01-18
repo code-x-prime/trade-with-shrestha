@@ -240,6 +240,13 @@ export default function EnrolledPage() {
           if (wo.webinar) {
             const webinar = wo.webinar;
             const startDate = new Date(webinar.startDate);
+            
+            // Combine startDate with startTime if available
+            if (webinar.startTime) {
+              const [hours, minutes] = webinar.startTime.split(':').map(Number);
+              startDate.setHours(hours, minutes, 0, 0);
+            }
+            
             const duration = webinar.duration || 60;
             const endDate = new Date(startDate.getTime() + duration * 60 * 1000);
             const now = new Date();
