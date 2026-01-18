@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Calendar, Clock, CheckCircle2, Video, ShoppingCart, Loader2, Radio, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import Breadcrumb from '@/components/Breadcrumb';
-import { webinarAPI } from '@/lib/api';
+import { webinarAPI, orderAPI } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -74,6 +74,13 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     if (!webinar.startDate) return;
     const now = new Date();
     const sessionStart = new Date(webinar.startDate);
+    
+    // Combine startDate with startTime if available
+    if (webinar.startTime) {
+      const [hours, minutes] = webinar.startTime.split(':').map(Number);
+      sessionStart.setHours(hours, minutes, 0, 0);
+    }
+    
     const durationMinutes = webinar.duration || 60;
     const sessionEnd = new Date(sessionStart.getTime() + durationMinutes * 60000);
 
@@ -139,6 +146,23 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     }
   };
 
+  const handleEnrollFree = async () => {
+    if (!isAuthenticated) {
+      router.push('/auth?mode=login&redirect=' + encodeURIComponent(window.location.pathname));
+      return;
+    }
+
+    try {
+      const response = await orderAPI.createWebinarOrder([webinar.id], null);
+      if (response.success) {
+        toast.success('Successfully enrolled!');
+        await checkEnrollment();
+      }
+    } catch (error) {
+      toast.error(error.message || 'Failed to enroll');
+    }
+  };
+
   const formatCountdown = () => {
     if (!countdown) return null;
     const { days, hours, minutes, seconds } = countdown;
@@ -149,6 +173,13 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     if (!webinar.startDate) return false;
     const now = new Date();
     const sessionStart = new Date(webinar.startDate);
+    
+    // Combine startDate with startTime if available
+    if (webinar.startTime) {
+      const [hours, minutes] = webinar.startTime.split(':').map(Number);
+      sessionStart.setHours(hours, minutes, 0, 0);
+    }
+    
     const durationMinutes = webinar.duration || 60;
     const sessionEnd = new Date(sessionStart.getTime() + durationMinutes * 60000);
     return now > sessionEnd;
@@ -302,7 +333,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
                   'Certificate of Participation'
                 ]}
                 ctaLabel={enrollmentStatus.loading ? 'Checking...' : enrollmentStatus.enrolled ? 'Join Live' : webinar.isFree ? 'Enroll Now' : 'Add to Cart'}
-                onCtaClick={enrollmentStatus.enrolled ? () => { } : webinar.isFree ? addToCart : addToCart}
+                onCtaClick={enrollmentStatus.enrolled ? () => { } : webinar.isFree ? handleEnrollFree : addToCart}
                 ctaVariant={enrollmentStatus.enrolled ? 'bg-green-600 hover:bg-green-700' : 'default'}
                 className="border-2 border-red-100"
               >
@@ -336,7 +367,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
                 ) : webinar.isFree ? (
                   <Button
                     className="w-full bg-green-600 hover:bg-green-700"
-                    onClick={addToCart}
+                    onClick={handleEnrollFree}
                   >
                     <Video className="h-4 w-4 mr-2" />
                     Enroll Now

@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ExternalLink, Calendar, Clock, User, CheckCircle2, Video, ShoppingCart, Loader2, Users, Award, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import Breadcrumb from '@/components/Breadcrumb';
-import { mentorshipAPI } from '@/lib/api';
+import { mentorshipAPI, orderAPI } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -116,6 +116,23 @@ export default function MentorshipDetailClient({ mentorship: initialMentorship }
       router.push('/cart');
     } catch (error) {
       toast.error('Failed to add to cart');
+    }
+  };
+
+  const handleEnrollFree = async () => {
+    if (!isAuthenticated) {
+      router.push('/auth?mode=login&redirect=' + encodeURIComponent(window.location.pathname));
+      return;
+    }
+
+    try {
+      const response = await orderAPI.createMentorshipOrder(mentorship.id, null);
+      if (response.success) {
+        toast.success('Successfully enrolled!');
+        await checkEnrollment();
+      }
+    } catch (error) {
+      toast.error(error.message || 'Failed to enroll');
     }
   };
 
@@ -253,7 +270,7 @@ export default function MentorshipDetailClient({ mentorship: initialMentorship }
                   'Community Support'
                 ]}
                 ctaLabel={enrollmentStatus.loading ? 'Checking...' : enrollmentStatus.isEnrolled ? 'Join Live Session' : mentorship.isFree ? 'Enroll for Free' : 'Add to Cart'}
-                onCtaClick={enrollmentStatus.isEnrolled ? handleJoinLive : handleAddToCart}
+                onCtaClick={enrollmentStatus.isEnrolled ? handleJoinLive : mentorship.isFree ? handleEnrollFree : handleAddToCart}
                 ctaVariant={enrollmentStatus.isEnrolled ? 'bg-green-600 hover:bg-green-700' : 'default'}
                 className="border-2 border-emerald-100"
               >
@@ -290,7 +307,7 @@ export default function MentorshipDetailClient({ mentorship: initialMentorship }
                 ) : (
                   <Button
                     className="w-full bg-emerald-600 hover:bg-emerald-700"
-                    onClick={handleAddToCart}
+                    onClick={mentorship.isFree ? handleEnrollFree : handleAddToCart}
                   >
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     {mentorship.isFree ? 'Enroll for Free' : 'Add to Cart'}
