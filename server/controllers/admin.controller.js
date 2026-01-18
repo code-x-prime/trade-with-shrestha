@@ -237,15 +237,18 @@ export const deleteUser = asyncHandler(async (req, res) => {
     }
 
     // Delete all related data in transaction
+    // Most relations have onDelete: Cascade, but some need manual deletion
     await prisma.$transaction(async (tx) => {
-        // Delete user addresses
-        await tx.userAddress.deleteMany({ where: { userId } });
-
-        // Delete cart items
-        await tx.cartItem.deleteMany({ where: { userId } });
+        // Delete cart items (if model exists)
+        try {
+            await tx.cartItem.deleteMany({ where: { userId } });
+        } catch (e) { /* Model may not exist */ }
 
         // Delete reviews
         await tx.review.deleteMany({ where: { userId } });
+
+        // Delete indicator reviews
+        await tx.indicatorReview.deleteMany({ where: { userId } });
 
         // Delete webinar order items
         await tx.webinarOrderItem.deleteMany({ where: { userId } });
@@ -259,27 +262,44 @@ export const deleteUser = asyncHandler(async (req, res) => {
         // Delete mentorship orders
         await tx.mentorshipOrder.deleteMany({ where: { userId } });
 
+        // Delete course enrollments (this will cascade to chapter progress)
+        await tx.courseEnrollment.deleteMany({ where: { userId } });
+
         // Delete course orders
         await tx.courseOrder.deleteMany({ where: { userId } });
+
+        // Delete bundle enrollments
+        await tx.bundleEnrollment.deleteMany({ where: { userId } });
 
         // Delete bundle orders
         await tx.bundleOrder.deleteMany({ where: { userId } });
 
+        // Delete offline batch enrollments
+        await tx.offlineBatchEnrollment.deleteMany({ where: { userId } });
+
         // Delete offline batch orders
         await tx.offlineBatchOrder.deleteMany({ where: { userId } });
 
-        // Delete course progress
-        await tx.courseProgress.deleteMany({ where: { userId } });
+        // Delete course reviews
+        await tx.courseReview.deleteMany({ where: { userId } });
 
-        // Delete chapter progress
-        await tx.chapterProgress.deleteMany({ where: { userId } });
+        // Delete certificates
+        await tx.certificate.deleteMany({ where: { userId } });
 
-        // Delete orders and order items
-        const userOrders = await tx.order.findMany({ where: { userId } });
-        for (const order of userOrders) {
-            await tx.orderItem.deleteMany({ where: { orderId: order.id } });
-        }
+        // Delete course completions
+        await tx.courseCompletion.deleteMany({ where: { userId } });
+
+        // Delete webinar completions
+        await tx.webinarCompletion.deleteMany({ where: { userId } });
+
+        // Delete subscriptions
+        await tx.subscription.deleteMany({ where: { userId } });
+
+        // Delete orders (will cascade to order items)
         await tx.order.deleteMany({ where: { userId } });
+
+        // Delete sessions
+        await tx.session.deleteMany({ where: { userId } });
 
         // Delete OTPs
         await tx.oTP.deleteMany({ where: { userId } });
@@ -296,3 +316,4 @@ export const deleteUser = asyncHandler(async (req, res) => {
         )
     );
 });
+

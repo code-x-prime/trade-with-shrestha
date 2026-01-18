@@ -17,9 +17,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Loader2, Search, FileSpreadsheet, Mail, Trash2 } from 'lucide-react';
+import { CheckCircle2, XCircle, Loader2, Search, FileSpreadsheet, Mail, Trash2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const USER_FILTERS = [
   { value: 'all', label: 'All Users' },
@@ -40,6 +50,7 @@ export default function AdminUsersPage() {
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [updating, setUpdating] = useState(null);
   const [deleting, setDeleting] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState({ open: false, user: null });
 
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) {
@@ -96,17 +107,26 @@ export default function AdminUsersPage() {
     setPage(1);
   };
 
-  const handleDeleteUser = async (userId, userName) => {
-    if (!confirm(`Are you sure you want to delete user "${userName}"? This will permanently delete all their data including orders, enrollments, and images.`)) {
-      return;
-    }
+  const openDeleteConfirm = (user) => {
+    setDeleteConfirm({ open: true, user });
+  };
+
+  const closeDeleteConfirm = () => {
+    setDeleteConfirm({ open: false, user: null });
+  };
+
+  const handleDeleteUser = async () => {
+    const userToDelete = deleteConfirm.user;
+    if (!userToDelete) return;
+    
+    closeDeleteConfirm();
 
     try {
-      setDeleting(userId);
-      const response = await adminAPI.deleteUser(userId);
+      setDeleting(userToDelete.id);
+      const response = await adminAPI.deleteUser(userToDelete.id);
 
       if (response.success) {
-        setUsers(users.filter(u => u.id !== userId));
+        setUsers(users.filter(u => u.id !== userToDelete.id));
         setPagination(prev => ({ ...prev, total: prev.total - 1 }));
         toast.success('User deleted successfully');
       }
@@ -362,7 +382,7 @@ export default function AdminUsersPage() {
                                 <Button
                                   variant="destructive"
                                   size="sm"
-                                  onClick={() => handleDeleteUser(u.id, u.name || u.email)}
+                                  onClick={() => openDeleteConfirm(u)}
                                   disabled={updating === u.id || deleting === u.id}
                                 >
                                   {deleting === u.id ? (
@@ -410,6 +430,40 @@ export default function AdminUsersPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteConfirm.open} onOpenChange={(open) => !open && closeDeleteConfirm()}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                <AlertTriangle className="h-6 w-6 text-red-600" />
+              </div>
+              <AlertDialogTitle className="text-xl">Delete User?</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-base">
+              Are you sure you want to delete <span className="font-semibold text-foreground">{deleteConfirm.user?.name || deleteConfirm.user?.email}</span>?
+              <br /><br />
+              <span className="text-red-600 font-medium">⚠️ This action is permanent and will delete:</span>
+              <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
+                <li>All orders and enrollments</li>
+                <li>Course progress and certificates</li>
+                <li>Reviews and subscriptions</li>
+                <li>Profile image and data</li>
+              </ul>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="gap-2">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteUser}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Yes, Delete User
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
