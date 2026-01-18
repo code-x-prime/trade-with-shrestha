@@ -647,9 +647,15 @@ export const checkEnrollment = asyncHandler(async (req, res) => {
         );
     }
 
-    // Calculate session start time (startDate already contains date and time)
+    // Calculate session start time (combine startDate with startTime if available)
     const now = new Date();
     const sessionStart = new Date(enrollment.webinar.startDate);
+
+    // Combine startDate with startTime if available (startTime is in HH:mm format)
+    if (enrollment.webinar.startTime) {
+        const [hours, minutes] = enrollment.webinar.startTime.split(':').map(Number);
+        sessionStart.setHours(hours, minutes, 0, 0);
+    }
 
     // Get duration from webinar (default to 60 minutes if not set)
     const webinar = await prisma.webinar.findUnique({
