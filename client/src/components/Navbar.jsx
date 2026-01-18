@@ -846,7 +846,7 @@ export default function Navbar() {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed left-0 top-0 h-screen w-[85vw] max-w-sm bg-white/98 backdrop-blur-xl z-[120] lg:hidden shadow-2xl shadow-[#4A50B0]/20 overflow-y-auto border-r border-[#4A50B0]/10 dark:bg-gray-900/98 dark:border-gray-800"
+                className="fixed left-0 top-0 h-[100dvh] w-[85vw] max-w-sm bg-white/95 dark:bg-gray-900/95 backdrop-blur-md z-[120] lg:hidden shadow-2xl shadow-[#4A50B0]/20 overflow-y-auto border-r border-[#4A50B0]/10 dark:border-gray-700"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="p-6">

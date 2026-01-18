@@ -144,7 +144,7 @@ export default function AdminLayout({ children }) {
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-3">
@@ -260,9 +260,9 @@ export default function AdminLayout({ children }) {
   );
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-[100dvh] bg-background overflow-hidden">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 border-r border-border bg-card flex-shrink-0 fixed left-0 top-0 bottom-0 h-screen">
+      <aside className="hidden md:flex w-64 border-r border-border bg-card flex-shrink-0 fixed left-0 top-0 bottom-0 h-[100dvh]">
         <SidebarContent />
       </aside>
 
@@ -283,7 +283,7 @@ export default function AdminLayout({ children }) {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0">
+            <SheetContent side="left" className="w-64 p-0 h-full overflow-hidden">
               <SidebarContent />
             </SheetContent>
           </Sheet>
