@@ -24,7 +24,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     enrolled: false,
     canAccessLink: false,
     googleMeetLink: null,
-    loading: true
+    loading: false // Start with false, only set true when actually checking
   });
   const [countdown, setCountdown] = useState(null);
   const [isLive, setIsLive] = useState(false);
@@ -36,6 +36,22 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
       setEnrollmentStatus({ enrolled: false, canAccessLink: false, googleMeetLink: null, loading: false });
     }
   }, [webinar?.id, isAuthenticated]);
+
+  // Calculate hasEnded once
+  const checkIfEnded = () => {
+    if (!webinar?.startDate) return false;
+    const now = new Date();
+    const sessionStart = new Date(webinar.startDate);
+    if (webinar?.startTime) {
+      const [hours, minutes] = webinar.startTime.split(':').map(Number);
+      sessionStart.setHours(hours, minutes, 0, 0);
+    }
+    const durationMinutes = webinar?.duration || 60;
+    const sessionEnd = new Date(sessionStart.getTime() + durationMinutes * 60000);
+    return now > sessionEnd;
+  };
+
+  const hasEnded = checkIfEnded();
 
   useEffect(() => {
     if (webinar?.startDate) {
@@ -109,7 +125,6 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
 
   const checkEnrollment = async () => {
     if (!webinar?.id || !isAuthenticated) {
-      setEnrollmentStatus({ enrolled: false, canAccessLink: false, googleMeetLink: null, loading: false });
       return;
     }
     try {
@@ -169,23 +184,6 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     return `${String(days).padStart(2, '0')}d : ${String(hours).padStart(2, '0')}h : ${String(minutes).padStart(2, '0')}m : ${String(seconds).padStart(2, '0')}s`;
   };
 
-  const checkIfEnded = () => {
-    if (!webinar.startDate) return false;
-    const now = new Date();
-    const sessionStart = new Date(webinar.startDate);
-    
-    // Combine startDate with startTime if available
-    if (webinar.startTime) {
-      const [hours, minutes] = webinar.startTime.split(':').map(Number);
-      sessionStart.setHours(hours, minutes, 0, 0);
-    }
-    
-    const durationMinutes = webinar.duration || 60;
-    const sessionEnd = new Date(sessionStart.getTime() + durationMinutes * 60000);
-    return now > sessionEnd;
-  };
-
-  const hasEnded = checkIfEnded();
   const startDate = webinar.startDate ? new Date(webinar.startDate) : null;
 
   if (!webinar) {
@@ -332,12 +330,20 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
                   'Recording Access',
                   'Certificate of Participation'
                 ]}
-                ctaLabel={enrollmentStatus.loading ? 'Checking...' : enrollmentStatus.enrolled ? 'Join Live' : webinar.isFree ? 'Enroll Now' : 'Add to Cart'}
-                onCtaClick={enrollmentStatus.enrolled ? () => { } : webinar.isFree ? handleEnrollFree : addToCart}
-                ctaVariant={enrollmentStatus.enrolled ? 'bg-green-600 hover:bg-green-700' : 'default'}
+                ctaLabel={hasEnded ? 'Session Ended' : enrollmentStatus.loading ? 'Checking...' : enrollmentStatus.enrolled ? 'Enrolled' : webinar.isFree ? 'Enroll Now' : 'Add to Cart'}
+                onCtaClick={hasEnded ? () => {} : enrollmentStatus.enrolled ? () => { } : webinar.isFree ? handleEnrollFree : addToCart}
+                ctaVariant={hasEnded ? 'bg-gray-400' : enrollmentStatus.enrolled ? 'bg-green-600 hover:bg-green-700' : 'default'}
                 className="border-2 border-red-100"
               >
-                {enrollmentStatus.loading ? (
+                {hasEnded ? (
+                  <div className="text-center text-sm text-muted-foreground p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border">
+                    <AlertCircle className="h-6 w-6 mx-auto mb-2 text-gray-500" />
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Session Ended</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      This webinar has concluded. Check back for upcoming sessions.
+                    </p>
+                  </div>
+                ) : enrollmentStatus.loading ? (
                   <Button disabled className="w-full">
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Checking...

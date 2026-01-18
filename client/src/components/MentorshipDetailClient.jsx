@@ -26,7 +26,7 @@ export default function MentorshipDetailClient({ mentorship: initialMentorship }
     canAccessLink: false,
     googleMeetLink: null,
     activeSession: null,
-    loading: true
+    loading: false // Start with false, only set true when actually checking
   });
   const [sessions, setSessions] = useState([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
