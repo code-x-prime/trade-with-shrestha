@@ -207,3 +207,92 @@ export const updateUserActiveStatus = asyncHandler(async (req, res) => {
     );
 });
 
+/**
+ * Delete user and all related data (Admin only)
+ */
+export const deleteUser = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    // Prevent admin from deleting themselves
+    if (user.id === req.user.id) {
+        throw new ApiError(400, "You cannot delete your own account");
+    }
+
+    // Delete user avatar from R2 if exists
+    if (user.avatar) {
+        try {
+            const { deleteFromR2 } = await import("../utils/cloudflare.js");
+            await deleteFromR2(user.avatar);
+        } catch (error) {
+            console.error("Error deleting user avatar:", error);
+        }
+    }
+
+    // Delete all related data in transaction
+    await prisma.$transaction(async (tx) => {
+        // Delete user addresses
+        await tx.userAddress.deleteMany({ where: { userId } });
+
+        // Delete cart items
+        await tx.cartItem.deleteMany({ where: { userId } });
+
+        // Delete reviews
+        await tx.review.deleteMany({ where: { userId } });
+
+        // Delete webinar order items
+        await tx.webinarOrderItem.deleteMany({ where: { userId } });
+
+        // Delete guidance orders
+        await tx.guidanceOrder.deleteMany({ where: { userId } });
+
+        // Delete mentorship enrollments
+        await tx.mentorshipEnrollment.deleteMany({ where: { userId } });
+
+        // Delete mentorship orders
+        await tx.mentorshipOrder.deleteMany({ where: { userId } });
+
+        // Delete course orders
+        await tx.courseOrder.deleteMany({ where: { userId } });
+
+        // Delete bundle orders
+        await tx.bundleOrder.deleteMany({ where: { userId } });
+
+        // Delete offline batch orders
+        await tx.offlineBatchOrder.deleteMany({ where: { userId } });
+
+        // Delete course progress
+        await tx.courseProgress.deleteMany({ where: { userId } });
+
+        // Delete chapter progress
+        await tx.chapterProgress.deleteMany({ where: { userId } });
+
+        // Delete orders and order items
+        const userOrders = await tx.order.findMany({ where: { userId } });
+        for (const order of userOrders) {
+            await tx.orderItem.deleteMany({ where: { orderId: order.id } });
+        }
+        await tx.order.deleteMany({ where: { userId } });
+
+        // Delete OTPs
+        await tx.oTP.deleteMany({ where: { userId } });
+
+        // Finally delete the user
+        await tx.user.delete({ where: { id: userId } });
+    });
+
+    return res.status(200).json(
+        new ApiResponsive(
+            200,
+            {},
+            "User and all related data deleted successfully"
+        )
+    );
+});

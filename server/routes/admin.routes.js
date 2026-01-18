@@ -3,6 +3,7 @@ import {
     getUsers,
     updateUserVerification,
     updateUserActiveStatus,
+    deleteUser,
 } from "../controllers/admin.controller.js";
 import { verifyJWTToken, isAdmin } from "../middlewares/auth.middleware.js";
 
@@ -21,5 +22,7 @@ router.patch("/users/:userId/verify", updateUserVerification);
 // Update user active status
 router.patch("/users/:userId/active", updateUserActiveStatus);
 
-export default router;
+// Delete user and all related data
+router.delete("/users/:userId", deleteUser);
 
+export default router;

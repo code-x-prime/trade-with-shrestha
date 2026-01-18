@@ -618,12 +618,15 @@ export const checkEnrollment = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    // Check enrollment - verify payment is completed
+    // Check enrollment - verify payment is completed OR it's a free enrollment
     const enrollment = await prisma.webinarOrderItem.findFirst({
         where: {
             webinarId: id,
             userId,
-            paymentId: { not: null }, // Must have payment ID (paid)
+            OR: [
+                { paymentId: { not: null } }, // Paid enrollment
+                { paymentMode: "FREE" },      // Free enrollment
+            ],
         },
         include: {
             webinar: {

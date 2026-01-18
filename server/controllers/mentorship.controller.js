@@ -610,14 +610,17 @@ export const checkEnrollment = asyncHandler(async (req, res) => {
         },
     });
 
-    // Verify there's a paid order
+    // Verify there's a paid or free order
     let isEnrolled = false;
     if (enrollment) {
         const mentorshipOrder = await prisma.mentorshipOrder.findFirst({
             where: {
                 mentorshipId: id,
                 userId,
-                paymentStatus: 'PAID',
+                OR: [
+                    { paymentStatus: 'PAID' },      // Paid enrollment
+                    { paymentMode: 'FREE' },        // Free enrollment
+                ],
             },
         });
         isEnrolled = !!mentorshipOrder;

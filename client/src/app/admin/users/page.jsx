@@ -17,7 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Loader2, Search, FileSpreadsheet, Mail } from 'lucide-react';
+import { CheckCircle2, XCircle, Loader2, Search, FileSpreadsheet, Mail, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 
@@ -39,6 +39,7 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [updating, setUpdating] = useState(null);
+  const [deleting, setDeleting] = useState(null);
 
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) {
@@ -93,6 +94,27 @@ export default function AdminUsersPage() {
     const value = e.target.value;
     setSearch(value);
     setPage(1);
+  };
+
+  const handleDeleteUser = async (userId, userName) => {
+    if (!confirm(`Are you sure you want to delete user "${userName}"? This will permanently delete all their data including orders, enrollments, and images.`)) {
+      return;
+    }
+
+    try {
+      setDeleting(userId);
+      const response = await adminAPI.deleteUser(userId);
+
+      if (response.success) {
+        setUsers(users.filter(u => u.id !== userId));
+        setPagination(prev => ({ ...prev, total: prev.total - 1 }));
+        toast.success('User deleted successfully');
+      }
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete user');
+    } finally {
+      setDeleting(null);
+    }
   };
 
   // Filter users
@@ -223,8 +245,7 @@ export default function AdminUsersPage() {
                       <TableHead>Email</TableHead>
                       <TableHead className="hidden md:table-cell">Login</TableHead>
                       <TableHead className="hidden md:table-cell">Role</TableHead>
-                      <TableHead className="hidden md:table-cell">Status</TableHead>
-                      <TableHead>Verified</TableHead>
+                      <TableHead>Status</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -295,49 +316,63 @@ export default function AdminUsersPage() {
                               }`}
                             >
                               {u.role}
-                            </span>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                u.isActive
-                                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                              }`}
-                            >
-                              {u.isActive ? 'Active' : 'Inactive'}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            {u.isVerified ? (
-                              <div className="flex items-center gap-2 text-green-600">
-                                <CheckCircle2 className="h-4 w-4" />
-                                <span className="text-sm hidden sm:inline">Verified</span>
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex flex-col gap-1">
+                                {u.isVerified ? (
+                                  <div className="flex items-center gap-1 text-green-600">
+                                    <CheckCircle2 className="h-4 w-4" />
+                                    <span className="text-xs">Verified</span>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-1 text-red-600">
+                                    <XCircle className="h-4 w-4" />
+                                    <span className="text-xs">Unverified</span>
+                                  </div>
+                                )}
+                                <span
+                                  className={`px-2 py-0.5 rounded-full text-[10px] font-medium text-center ${
+                                    u.isActive
+                                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                                      : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                                  }`}
+                                >
+                                  {u.isActive ? 'Active' : 'Inactive'}
+                                </span>
                               </div>
-                            ) : (
-                              <div className="flex items-center gap-2 text-red-600">
-                                <XCircle className="h-4 w-4" />
-                                <span className="text-sm hidden sm:inline">Unverified</span>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant={u.isVerified ? 'destructive' : 'default'}
+                                  size="sm"
+                                  onClick={() => handleVerificationToggle(u.id, u.isVerified)}
+                                  disabled={updating === u.id || deleting === u.id}
+                                  className={u.isVerified ? '' : 'bg-brand-600 hover:bg-brand-700'}
+                                >
+                                  {updating === u.id ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : u.isVerified ? (
+                                    'Unverify'
+                                  ) : (
+                                    'Verify'
+                                  )}
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleDeleteUser(u.id, u.name || u.email)}
+                                  disabled={updating === u.id || deleting === u.id}
+                                >
+                                  {deleting === u.id ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="h-4 w-4" />
+                                  )}
+                                </Button>
                               </div>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant={u.isVerified ? 'destructive' : 'default'}
-                              size="sm"
-                              onClick={() => handleVerificationToggle(u.id, u.isVerified)}
-                              disabled={updating === u.id}
-                              className={u.isVerified ? '' : 'bg-brand-600 hover:bg-brand-700'}
-                            >
-                              {updating === u.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : u.isVerified ? (
-                                'Unverify'
-                              ) : (
-                                'Verify'
-                              )}
-                            </Button>
-                          </TableCell>
+                            </TableCell>
                         </TableRow>
                       ))
                     )}

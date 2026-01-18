@@ -348,6 +348,15 @@ export const adminAPI = {
             body: JSON.stringify({ isActive }),
         });
     },
+
+    /**
+     * Delete user and all related data (Admin only)
+     */
+    deleteUser: async (userId) => {
+        return apiRequest(`/admin/users/${userId}`, {
+            method: 'DELETE',
+        });
+    },
 };
 
 // ==================== COUPON APIs ====================
