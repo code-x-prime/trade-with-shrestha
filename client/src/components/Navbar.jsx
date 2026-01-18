@@ -291,6 +291,7 @@ export default function Navbar() {
     },
     { name: 'Indicators', href: '/indicators', icon: TrendingUp },
     { name: 'E-Books', href: '/ebooks', icon: BookOpen },
+    { name: 'Blog', href: '/blog', icon: BookOpen },
   ];
 
   const courseMenuItems = [
