@@ -924,7 +924,7 @@ export const updateCourseBadges = asyncHandler(async (req, res) => {
  */
 export const createSession = asyncHandler(async (req, res) => {
     const { courseId } = req.params;
-    const { title, description, order } = req.body;
+    const { title, description, order, isPublished } = req.body;
 
     if (!title) {
         throw new ApiError(400, 'Title is required');
@@ -954,7 +954,7 @@ export const createSession = asyncHandler(async (req, res) => {
             title,
             description: description || null,
             order: sessionOrder,
-            isPublished: false,
+            isPublished: isPublished === 'true' || isPublished === true,
         },
     });
 

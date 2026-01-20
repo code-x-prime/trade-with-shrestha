@@ -11,7 +11,41 @@ import { validatePassword } from "../helper/validatePassword.js";
 import { generateOTP, isValidOTP } from "../utils/otp.js";
 import { sendEmail } from "../utils/email.js";
 import { getOTPTemplate } from "../email/templates/emailTemplates.js";
-import { getPublicUrl } from "../utils/cloudflare.js";
+import { getPublicUrl, uploadToR2 } from "../utils/cloudflare.js";
+
+/**
+ * Download Google profile image and upload to R2
+ */
+async function downloadAndUploadGoogleAvatar(googleAvatarUrl, userId) {
+  if (!googleAvatarUrl) return null;
+
+  try {
+    // Fetch image from Google
+    const response = await fetch(googleAvatarUrl);
+    if (!response.ok) return null;
+
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Get content type and extension
+    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    const extension = contentType.includes('png') ? 'png' : 'jpg';
+
+    // Create a file-like object for uploadToR2
+    const file = {
+      buffer,
+      originalname: `avatar_${userId}.${extension}`,
+      mimetype: contentType,
+    };
+
+    // Upload to R2
+    const r2Path = await uploadToR2(file, 'avatars');
+    return r2Path;
+  } catch (error) {
+    console.error('Error uploading Google avatar to R2:', error);
+    return null;
+  }
+}
 
 /**
  * Email signup with OTP
@@ -292,12 +326,23 @@ export const googleAuth = asyncHandler(async (req, res) => {
           googleId,
           email,
           name: name || email.split("@")[0],
-          avatar: avatar || null,
+          avatar: null, // Will be updated after R2 upload
           authProvider: "GOOGLE",
           isVerified: true,
           lastLoginAt: new Date(),
         },
       });
+
+      // Download Google avatar and upload to R2
+      if (avatar) {
+        const r2AvatarPath = await downloadAndUploadGoogleAvatar(avatar, user.id);
+        if (r2AvatarPath) {
+          user = await prisma.user.update({
+            where: { id: user.id },
+            data: { avatar: r2AvatarPath },
+          });
+        }
+      }
     }
   } else {
     // Update last login
