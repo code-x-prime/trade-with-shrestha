@@ -163,6 +163,14 @@ export default function AdminCouponsPage() {
         submitData.targetUserId = '';
       }
 
+      // Ensure dates are sent as ISO strings (converting local time to UTC)
+      if (submitData.validFrom) {
+        submitData.validFrom = new Date(submitData.validFrom).toISOString();
+      }
+      if (submitData.validUntil) {
+        submitData.validUntil = new Date(submitData.validUntil).toISOString();
+      }
+
       if (editingCoupon) {
         const response = await couponAPI.updateCoupon(editingCoupon.id, submitData);
         if (response.success) {
@@ -265,8 +273,10 @@ export default function AdminCouponsPage() {
       discountValue: coupon.discountValue.toString(),
       minAmount: coupon.minAmount?.toString() || '',
       maxDiscount: coupon.maxDiscount?.toString() || '',
-      validFrom: new Date(coupon.validFrom).toISOString().slice(0, 16),
-      validUntil: new Date(coupon.validUntil).toISOString().slice(0, 16),
+      maxDiscount: coupon.maxDiscount?.toString() || '',
+      validFrom: coupon.validFrom ? new Date(new Date(coupon.validFrom).getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 16) : '',
+      validUntil: coupon.validUntil ? new Date(new Date(coupon.validUntil).getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 16) : '',
+      usageLimit: coupon.usageLimit?.toString() || '',
       usageLimit: coupon.usageLimit?.toString() || '',
       applicableTo: coupon.applicableTo || 'ALL',
       isActive: coupon.isActive,
@@ -865,9 +875,25 @@ export default function AdminCouponsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          <div>{new Date(coupon.validFrom).toLocaleDateString()}</div>
-                          <div className="text-muted-foreground">
-                            to {new Date(coupon.validUntil).toLocaleDateString()}
+                          <div>
+                            {new Date(coupon.validFrom).toLocaleString('en-IN', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: true
+                            })}
+                          </div>
+                          <div className="text-muted-foreground text-xs">
+                            to {new Date(coupon.validUntil).toLocaleString('en-IN', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: true
+                            })}
                           </div>
                         </div>
                       </TableCell>

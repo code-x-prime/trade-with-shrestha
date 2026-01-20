@@ -1520,7 +1520,7 @@ function CartContent() {
                       />
                       {!appliedCoupon ? (
                         <Button
-                          onClick={applyCoupon}
+                          onClick={() => applyCoupon()}
                           variant="outline"
                           className="border-brand-600 text-brand-600 hover:bg-brand-50 hover:text-brand-600 dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-900/20"
                         >
