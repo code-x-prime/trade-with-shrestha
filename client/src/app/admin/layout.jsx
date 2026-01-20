@@ -32,7 +32,7 @@ import {
   Sun,
   Moon,
   HardDrive,
-  Mail
+  UserPlus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -54,6 +54,7 @@ const menuItems = [
       { title: 'All Courses', icon: GraduationCap, href: '/admin/courses' },
       { title: 'Categories', icon: Tag, href: '/admin/categories' },
       { title: 'Course Progress', icon: BarChart3, href: '/admin/course-progress' },
+      { title: 'Manual Enroll', icon: UserPlus, href: '/admin/manual-enroll' },
     ],
   },
   {
