@@ -357,6 +357,16 @@ export const adminAPI = {
             method: 'DELETE',
         });
     },
+
+    /**
+     * Manual enroll user in a course (Admin only)
+     */
+    manualEnroll: async (data) => {
+        return apiRequest('/courses/admin/manual-enroll', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
 };
 
 // ==================== COUPON APIs ====================

@@ -3943,15 +3943,54 @@ export const completePayment = asyncHandler(async (req, res) => {
             if (!course || course.isFree) continue;
 
             const pricing = await getItemPricing('COURSE', course.id, course.price, course.salePrice);
+            const totalAmount = pricing.effectivePrice;
+
+            // Calculate coupon discount for this course
+            let discountAmount = 0;
+            let finalAmount = totalAmount;
+
+            if (couponCode && totalAmount > 0) {
+                const coupon = await prisma.coupon.findFirst({
+                    where: {
+                        code: couponCode.toUpperCase(),
+                        isActive: true,
+                        validFrom: { lte: new Date() },
+                        validUntil: { gte: new Date() },
+                        OR: [
+                            { applicableTo: "ALL" },
+                            { applicableTo: "COURSE" },
+                        ],
+                    },
+                });
+
+                if (coupon) {
+                    // Skip min amount check and usage limit for completed payments
+                    if (coupon.discountType === "PERCENTAGE") {
+                        discountAmount = (totalAmount * coupon.discountValue) / 100;
+                        if (coupon.maxDiscount) {
+                            discountAmount = Math.min(discountAmount, coupon.maxDiscount);
+                        }
+                    } else {
+                        discountAmount = Math.min(coupon.discountValue, totalAmount);
+                    }
+                    finalAmount = Math.max(0, totalAmount - discountAmount);
+
+                    // Update coupon usage
+                    await prisma.coupon.update({
+                        where: { id: coupon.id },
+                        data: { usedCount: { increment: 1 } },
+                    });
+                }
+            }
 
             const order = await prisma.order.create({
                 data: {
                     userId,
                     orderNumber: `CRS-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
                     orderType: "COURSE",
-                    totalAmount: pricing.effectivePrice,
-                    discountAmount: 0,
-                    finalAmount: pricing.effectivePrice,
+                    totalAmount,
+                    discountAmount,
+                    finalAmount,
                     status: "COMPLETED",
                     paymentStatus: "PAID",
                     razorpayOrderId,
@@ -3967,7 +4006,7 @@ export const completePayment = asyncHandler(async (req, res) => {
                     courseId,
                     userId,
                     orderId: order.id,
-                    amountPaid: pricing.effectivePrice,
+                    amountPaid: finalAmount,
                     paymentStatus: "PAID",
                     paymentMode: "RAZORPAY",
                     paymentId,

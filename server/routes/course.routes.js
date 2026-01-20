@@ -31,6 +31,7 @@ import {
     getAdminCourseEnrollments,
     getAdminEnrollmentDetails,
     getAdminCourseStats,
+    adminManualEnroll,
 } from "../controllers/course.controller.js";
 import { verifyJWTToken, isAdmin, optionalJWTToken } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/upload.middleware.js";
@@ -86,6 +87,7 @@ router.delete("/resources/:resourceId", verifyJWTToken, isAdmin, deleteSessionRe
 router.get("/admin/enrollments", verifyJWTToken, isAdmin, getAdminCourseEnrollments);
 router.get("/admin/enrollments/:enrollmentId", verifyJWTToken, isAdmin, getAdminEnrollmentDetails);
 router.get("/admin/course-stats", verifyJWTToken, isAdmin, getAdminCourseStats);
+router.post("/admin/manual-enroll", verifyJWTToken, isAdmin, adminManualEnroll);
 
 export default router;
 

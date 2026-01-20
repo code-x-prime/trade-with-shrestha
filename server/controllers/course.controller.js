@@ -2182,3 +2182,125 @@ export const getAdminCourseStats = asyncHandler(async (req, res) => {
     );
 });
 
+/**
+ * Admin manual enrollment - Enroll a user in a course manually (for cash/bank payments)
+ */
+export const adminManualEnroll = asyncHandler(async (req, res) => {
+    const { userId, courseId, amountPaid, paymentMode = 'CASH', notes } = req.body;
+
+    if (!userId || !courseId) {
+        throw new ApiError(400, 'User ID and Course ID are required');
+    }
+
+    // Verify user exists
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, name: true, email: true },
+    });
+
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    // Verify course exists and is published
+    const course = await prisma.course.findUnique({
+        where: { id: courseId },
+        select: { id: true, title: true, slug: true, price: true, salePrice: true, isPublished: true, isFree: true },
+    });
+
+    if (!course) {
+        throw new ApiError(404, 'Course not found');
+    }
+
+    if (!course.isPublished) {
+        throw new ApiError(400, 'Course is not published');
+    }
+
+    // Check if already enrolled
+    const existingEnrollment = await prisma.courseEnrollment.findUnique({
+        where: {
+            courseId_userId: {
+                courseId,
+                userId,
+            },
+        },
+    });
+
+    // Check if there's already a completed order for this user-course combination
+    const existingOrder = await prisma.courseOrder.findFirst({
+        where: {
+            courseId,
+            userId,
+            order: {
+                status: 'COMPLETED',
+                paymentStatus: 'PAID',
+            },
+        },
+    });
+
+    if (existingEnrollment && existingOrder) {
+        throw new ApiError(400, 'User is already enrolled in this course');
+    }
+
+    // Calculate amount
+    const coursePrice = course.salePrice || course.price || 0;
+    const finalAmount = amountPaid !== undefined ? parseFloat(amountPaid) : coursePrice;
+
+    // Create order, course order, and enrollment in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+        // Create main Order
+        const order = await tx.order.create({
+            data: {
+                userId,
+                orderNumber: `MANUAL-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+                orderType: 'COURSE',
+                totalAmount: coursePrice,
+                discountAmount: Math.max(0, coursePrice - finalAmount),
+                finalAmount: finalAmount,
+                status: 'COMPLETED',
+                paymentStatus: 'PAID',
+            },
+        });
+
+        // Create CourseOrder
+        const courseOrder = await tx.courseOrder.create({
+            data: {
+                courseId,
+                userId,
+                orderId: order.id,
+                amountPaid: finalAmount,
+                paymentStatus: 'PAID',
+                paymentMode: paymentMode.toUpperCase(),
+            },
+        });
+
+        // Create or update CourseEnrollment
+        const enrollment = await tx.courseEnrollment.upsert({
+            where: {
+                courseId_userId: {
+                    courseId,
+                    userId,
+                },
+            },
+            update: {
+                enrolledAt: new Date(),
+            },
+            create: {
+                courseId,
+                userId,
+            },
+        });
+
+        return { order, courseOrder, enrollment };
+    });
+
+    return res.status(201).json(
+        new ApiResponsive(201, {
+            order: result.order,
+            courseOrder: result.courseOrder,
+            enrollment: result.enrollment,
+            user: { id: user.id, name: user.name, email: user.email },
+            course: { id: course.id, title: course.title, slug: course.slug },
+        }, 'User enrolled successfully')
+    );
+});

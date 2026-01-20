@@ -110,20 +110,8 @@ export default function AdminDashboard() {
           });
         }
         
-        // Course orders
-        if (ordersRes.data.courseOrders) {
-          ordersRes.data.courseOrders.forEach(order => {
-            allOrders.push({
-              id: order.id,
-              orderNumber: order.orderId ? `COURSE-${order.orderId.slice(0, 8)}` : `COURSE-${order.id.slice(0, 8)}`,
-              user: order.user,
-              type: 'Course',
-              amount: order.amountPaid || 0,
-              status: order.paymentStatus || 'PENDING',
-              createdAt: order.createdAt,
-            });
-          });
-        }
+        // Course orders are already included in the main orders array as orderType: "COURSE"
+        // So we don't add courseOrders separately to avoid duplicates
         
         // Sort by date (newest first) and take top 10
         allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
