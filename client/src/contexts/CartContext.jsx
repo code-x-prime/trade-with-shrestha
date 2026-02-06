@@ -11,8 +11,6 @@ const getEmptyCart = () => ({
   EBOOK: [],
   WEBINAR: [],
   GUIDANCE: [],
-  MENTORSHIP: [],
-  INDICATOR: [],
   OFFLINE_BATCH: [],
 });
 
@@ -27,11 +25,9 @@ const loadCartFromStorage = () => {
     const ebookCart = JSON.parse(localStorage.getItem('cart') || '[]');
     const webinarCart = JSON.parse(localStorage.getItem('webinarCart') || '[]');
     const guidanceCart = JSON.parse(localStorage.getItem('guidanceCart') || '[]');
-    const mentorshipCart = JSON.parse(localStorage.getItem('mentorshipCart') || '[]');
     const courseCart = JSON.parse(localStorage.getItem('courseCart') || '[]');
     const bundleCart = JSON.parse(localStorage.getItem('bundleCart') || '[]');
     const offlineBatchCart = JSON.parse(localStorage.getItem('offlineBatchCart') || '[]');
-    const indicatorCart = JSON.parse(localStorage.getItem('indicatorCart') || '[]');
 
     // Fallback to legacy cartItems only if everything else is empty
     const storedCart = localStorage.getItem('cartItems');
@@ -42,17 +38,13 @@ const loadCartFromStorage = () => {
       } catch (e) { }
     }
 
-    // For GUIDANCE and MENTORSHIP, they might be objects, so we need to count them properly
-    // But for counting purposes, we just need the length
     return {
       EBOOK: Array.isArray(ebookCart) && ebookCart.length > 0 ? ebookCart : (legacy.ebookCart || []),
       WEBINAR: Array.isArray(webinarCart) && webinarCart.length > 0 ? webinarCart : (legacy.webinarCart || []),
       GUIDANCE: Array.isArray(guidanceCart) && guidanceCart.length > 0 ? guidanceCart : (legacy.guidanceCart || []),
-      MENTORSHIP: Array.isArray(mentorshipCart) && mentorshipCart.length > 0 ? mentorshipCart : (legacy.mentorshipCart || []),
       COURSE: Array.isArray(courseCart) && courseCart.length > 0 ? courseCart : (legacy.courseCart || []),
       BUNDLE: Array.isArray(bundleCart) && bundleCart.length > 0 ? bundleCart : (legacy.bundleCart || []),
       OFFLINE_BATCH: Array.isArray(offlineBatchCart) && offlineBatchCart.length > 0 ? offlineBatchCart : (legacy.offlineBatchCart || []),
-      INDICATOR: Array.isArray(indicatorCart) && indicatorCart.length > 0 ? indicatorCart : (legacy.indicatorCart || []),
     };
   } catch (e) {
     console.error('Failed to parse cart:', e);
@@ -70,20 +62,15 @@ const saveCartToStorage = (cart) => {
     ebookCart: cart.EBOOK,
     webinarCart: cart.WEBINAR,
     guidanceCart: cart.GUIDANCE,
-    mentorshipCart: cart.MENTORSHIP,
-    indicatorCart: cart.INDICATOR,
     offlineBatchCart: cart.OFFLINE_BATCH,
   }));
 
-  // Also sync to individual keys for compatibility
   localStorage.setItem('cart', JSON.stringify(cart.EBOOK));
   localStorage.setItem('webinarCart', JSON.stringify(cart.WEBINAR));
   localStorage.setItem('guidanceCart', JSON.stringify(cart.GUIDANCE));
-  localStorage.setItem('mentorshipCart', JSON.stringify(cart.MENTORSHIP));
   localStorage.setItem('courseCart', JSON.stringify(cart.COURSE));
   localStorage.setItem('bundleCart', JSON.stringify(cart.BUNDLE));
   localStorage.setItem('offlineBatchCart', JSON.stringify(cart.OFFLINE_BATCH));
-  localStorage.setItem('indicatorCart', JSON.stringify(cart.INDICATOR));
 };
 
 export function CartProvider({ children }) {
@@ -191,11 +178,9 @@ export function CartProvider({ children }) {
     localStorage.removeItem('cart');
     localStorage.removeItem('webinarCart');
     localStorage.removeItem('guidanceCart');
-    localStorage.removeItem('mentorshipCart');
     localStorage.removeItem('courseCart');
     localStorage.removeItem('bundleCart');
     localStorage.removeItem('offlineBatchCart');
-    localStorage.removeItem('indicatorCart');
     localStorage.removeItem('cartItems'); // Legacy key
 
     // Clear coupon when cart is cleared

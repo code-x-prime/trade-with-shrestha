@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTheme } from '@/contexts/ThemeContext';
 import { footerAPI } from '@/lib/api';
 import {
   Facebook,
@@ -28,8 +29,8 @@ import {
 const iconMap = {
   Facebook: Facebook,
   Twitter: Twitter,
-    X: Twitter,
-    Instagram: Instagram,
+  X: Twitter,
+  Instagram: Instagram,
   LinkedIn: Linkedin,
   YouTube: Youtube,
   WhatsApp: MessageCircle,
@@ -43,9 +44,7 @@ const FOOTER_LINKS = {
   products: [
     { name: 'Courses', href: '/courses', icon: GraduationCap },
     { name: 'Webinars', href: '/webinars', icon: Video },
-    { name: 'Mentorship', href: '/mentorship', icon: BookOpen },
     { name: '1:1 Guidance', href: '/guidance', icon: HelpCircle },
-    { name: 'Indicators', href: '/indicators', icon: TrendingUp },
     { name: 'E-Books', href: '/ebooks', icon: FileText },
   ],
   company: [
@@ -61,6 +60,7 @@ const FOOTER_LINKS = {
 };
 
 export default function Footer() {
+  const { theme } = useTheme();
   const [socialLinks, setSocialLinks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,13 +101,13 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative h-12 w-auto rounded-lg overflow-hidden  flex items-center justify-center">
-                <Image 
-                  src="/logo.png" 
-                  alt="Shrestha Academy" 
-                  width={200} 
-                  height={200} 
-                  className="w-full h-full dark:invert"
+              <div className="relative h-16 w-auto rounded-lg overflow-hidden  flex items-center justify-center">
+                <Image
+                  src={theme === 'dark' ? '/logo.png' : '/logob.png'}
+                  alt="Shrestha Academy"
+                  width={200}
+                  height={200}
+                  className="w-full h-full "
                   onError={(e) => {
                     // Fallback if logo doesn't exist
                     e.target.style.display = 'none';
@@ -115,12 +115,12 @@ export default function Footer() {
                     if (fallback) fallback.style.display = 'flex';
                   }}
                 />
-                
+
               </div>
-             
+
             </Link>
             <p className="text-sm text-slate-400 dark:text-slate-500 leading-relaxed">
-              Master professional skills with expert courses, live webinars, and personalized guidance.
+              Master professional skills with expert courses, Live Events, and personalized guidance.
             </p>
             {socialLinks.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-2">

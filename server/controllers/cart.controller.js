@@ -19,7 +19,6 @@ export const getCart = asyncHandler(async (req, res) => {
         EBOOK: [],
         WEBINAR: [],
         GUIDANCE: [],
-        MENTORSHIP: [],
         COURSE: [],
         OFFLINE_BATCH: [],
         BUNDLE: [],
@@ -47,7 +46,7 @@ export const addToCart = asyncHandler(async (req, res) => {
         throw new ApiError(400, 'itemType and itemId are required');
     }
 
-    const validTypes = ['EBOOK', 'WEBINAR', 'GUIDANCE', 'MENTORSHIP', 'COURSE', 'BUNDLE', 'OFFLINE_BATCH'];
+    const validTypes = ['EBOOK', 'WEBINAR', 'GUIDANCE', 'COURSE', 'BUNDLE', 'OFFLINE_BATCH'];
     if (!validTypes.includes(itemType)) {
         throw new ApiError(400, 'Invalid itemType');
     }
@@ -139,7 +138,7 @@ export const syncCart = asyncHandler(async (req, res) => {
 
     // Add new items
     const itemsToAdd = [];
-    const validTypes = ['EBOOK', 'WEBINAR', 'GUIDANCE', 'MENTORSHIP', 'COURSE', 'BUNDLE', 'OFFLINE_BATCH'];
+    const validTypes = ['EBOOK', 'WEBINAR', 'GUIDANCE', 'COURSE', 'BUNDLE', 'OFFLINE_BATCH'];
 
     for (const [itemType, itemIds] of Object.entries(cart)) {
         if (validTypes.includes(itemType) && Array.isArray(itemIds)) {

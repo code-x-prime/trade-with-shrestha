@@ -32,7 +32,6 @@ import {
 const CERTIFICATE_TYPES = [
   { value: 'COURSE', label: 'Course', icon: BookOpen, color: 'bg-blue-500' },
   { value: 'WEBINAR', label: 'Webinar', icon: Video, color: 'bg-purple-500' },
-  { value: 'MENTORSHIP', label: 'Mentorship', icon: Users, color: 'bg-indigo-500' },
   { value: 'GUIDANCE', label: '1:1 Guidance', icon: FileText, color: 'bg-green-500' },
   { value: 'OFFLINE_BATCH', label: 'Offline Batch', icon: Award, color: 'bg-orange-500' },
   { value: 'BUNDLE', label: 'Bundle', icon: Award, color: 'bg-pink-500' },

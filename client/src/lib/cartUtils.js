@@ -8,11 +8,9 @@ export const addToCart = async (itemType, itemId, isAuthenticated = false) => {
         EBOOK: 'cart',
         WEBINAR: 'webinarCart',
         GUIDANCE: 'guidanceCart',
-        MENTORSHIP: 'mentorshipCart',
         COURSE: 'courseCart',
         OFFLINE_BATCH: 'offlineBatchCart',
         BUNDLE: 'bundleCart',
-        INDICATOR: 'indicatorCart',
     };
 
     const key = cartKeys[itemType];
@@ -21,7 +19,7 @@ export const addToCart = async (itemType, itemId, isAuthenticated = false) => {
     }
 
     // Add to localStorage
-    if (itemType === 'GUIDANCE' || itemType === 'MENTORSHIP') {
+    if (itemType === 'GUIDANCE') {
         // For guidance and mentorship, we might store objects
         const cart = JSON.parse(localStorage.getItem(key) || '[]');
         const exists = cart.some(item => (item.id || item) === itemId);
@@ -59,11 +57,9 @@ export const removeFromCart = async (itemType, itemId, isAuthenticated = false) 
         EBOOK: 'cart',
         WEBINAR: 'webinarCart',
         GUIDANCE: 'guidanceCart',
-        MENTORSHIP: 'mentorshipCart',
         COURSE: 'courseCart',
         OFFLINE_BATCH: 'offlineBatchCart',
         BUNDLE: 'bundleCart',
-        INDICATOR: 'indicatorCart',
     };
 
     const key = cartKeys[itemType];
@@ -72,7 +68,7 @@ export const removeFromCart = async (itemType, itemId, isAuthenticated = false) 
     }
 
     // Remove from localStorage
-    if (itemType === 'GUIDANCE' || itemType === 'MENTORSHIP') {
+    if (itemType === 'GUIDANCE') {
         const cart = JSON.parse(localStorage.getItem(key) || '[]');
         const updatedCart = cart.filter(item => (item.id || item) !== itemId);
         localStorage.setItem(key, JSON.stringify(updatedCart));
@@ -107,11 +103,9 @@ export const syncCartToBackend = async (isAuthenticated = false) => {
             EBOOK: JSON.parse(localStorage.getItem('cart') || '[]'),
             WEBINAR: JSON.parse(localStorage.getItem('webinarCart') || '[]'),
             GUIDANCE: JSON.parse(localStorage.getItem('guidanceCart') || '[]').map(item => item.id || item),
-            MENTORSHIP: JSON.parse(localStorage.getItem('mentorshipCart') || '[]').map(item => item.id || item),
             COURSE: JSON.parse(localStorage.getItem('courseCart') || '[]'),
             OFFLINE_BATCH: JSON.parse(localStorage.getItem('offlineBatchCart') || '[]'),
             BUNDLE: JSON.parse(localStorage.getItem('bundleCart') || '[]'),
-            INDICATOR: JSON.parse(localStorage.getItem('indicatorCart') || '[]'),
         };
 
         await cartAPI.syncCart(cart);
@@ -128,11 +122,9 @@ export const clearAllCartLocalStorage = () => {
     localStorage.removeItem('cart');
     localStorage.removeItem('webinarCart');
     localStorage.removeItem('guidanceCart');
-    localStorage.removeItem('mentorshipCart');
     localStorage.removeItem('courseCart');
     localStorage.removeItem('offlineBatchCart');
     localStorage.removeItem('bundleCart');
-    localStorage.removeItem('indicatorCart');
     localStorage.removeItem('cartItems'); // Legacy key
 
     // Also clear coupon data

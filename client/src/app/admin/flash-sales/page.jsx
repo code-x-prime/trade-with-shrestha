@@ -68,9 +68,8 @@ const TYPE_OPTIONS = [
     { value: 'BUNDLE', label: 'Bundle', icon: Package },
     { value: 'EBOOK', label: 'E-Book', icon: BookOpen },
     { value: 'WEBINAR', label: 'Webinar', icon: Video },
-    { value: 'MENTORSHIP', label: 'Mentorship', icon: Video },
     { value: 'GUIDANCE', label: '1:1 Guidance', icon: MessageCircle },
-    { value: 'INDICATOR', label: 'Indicator', icon: TrendingUp },
+    { value: 'OFFLINE_BATCH', label: 'Offline Batch', icon: Calendar },
 ];
 
 const THEME_OPTIONS = [

@@ -126,53 +126,57 @@ export const getAllReviews = asyncHandler(async (req, res) => {
         results.total += courseCount;
     }
 
-    // Indicator Reviews
-    if (type === 'all' || type === 'indicator') {
-        const indicatorWhere = {};
-        if (search) {
-            indicatorWhere.OR = [
-                { comment: { contains: search, mode: 'insensitive' } },
-                { user: { name: { contains: search, mode: 'insensitive' } } },
-                { user: { email: { contains: search, mode: 'insensitive' } } },
-                { indicator: { name: { contains: search, mode: 'insensitive' } } },
-            ];
-        }
-        if (rating) {
-            indicatorWhere.rating = parseInt(rating);
-        }
+    // Indicator Reviews (skip if model not in schema)
+    if ((type === 'all' || type === 'indicator') && typeof prisma.indicatorReview !== 'undefined') {
+        try {
+            const indicatorWhere = {};
+            if (search) {
+                indicatorWhere.OR = [
+                    { comment: { contains: search, mode: 'insensitive' } },
+                    { user: { name: { contains: search, mode: 'insensitive' } } },
+                    { user: { email: { contains: search, mode: 'insensitive' } } },
+                    { indicator: { name: { contains: search, mode: 'insensitive' } } },
+                ];
+            }
+            if (rating) {
+                indicatorWhere.rating = parseInt(rating);
+            }
 
-        const [indicatorReviews, indicatorCount] = await Promise.all([
-            prisma.indicatorReview.findMany({
-                where: indicatorWhere,
-                include: {
-                    user: {
-                        select: { id: true, name: true, email: true, avatar: true },
+            const [indicatorReviews, indicatorCount] = await Promise.all([
+                prisma.indicatorReview.findMany({
+                    where: indicatorWhere,
+                    include: {
+                        user: {
+                            select: { id: true, name: true, email: true, avatar: true },
+                        },
+                        indicator: {
+                            select: { id: true, name: true, slug: true, image: true },
+                        },
                     },
-                    indicator: {
-                        select: { id: true, name: true, slug: true, image: true },
-                    },
+                    orderBy: { [sortBy]: sortOrder },
+                    skip: type === 'indicator' ? skip : 0,
+                    take: type === 'indicator' ? limitNum : undefined,
+                }),
+                prisma.indicatorReview.count({ where: indicatorWhere }),
+            ]);
+
+            const formattedIndicatorReviews = indicatorReviews.map(r => ({
+                ...r,
+                reviewType: 'INDICATOR',
+                itemTitle: r.indicator?.name || 'Unknown Indicator',
+                itemSlug: r.indicator?.slug,
+                itemImage: r.indicator?.image ? getPublicUrl(r.indicator.image) : null,
+                user: {
+                    ...r.user,
+                    avatarUrl: r.user?.avatar ? getPublicUrl(r.user.avatar) : null,
                 },
-                orderBy: { [sortBy]: sortOrder },
-                skip: type === 'indicator' ? skip : 0,
-                take: type === 'indicator' ? limitNum : undefined,
-            }),
-            prisma.indicatorReview.count({ where: indicatorWhere }),
-        ]);
+            }));
 
-        const formattedIndicatorReviews = indicatorReviews.map(r => ({
-            ...r,
-            reviewType: 'INDICATOR',
-            itemTitle: r.indicator?.name || 'Unknown Indicator',
-            itemSlug: r.indicator?.slug,
-            itemImage: r.indicator?.image ? getPublicUrl(r.indicator.image) : null,
-            user: {
-                ...r.user,
-                avatarUrl: r.user?.avatar ? getPublicUrl(r.user.avatar) : null,
-            },
-        }));
-
-        results.reviews.push(...formattedIndicatorReviews);
-        results.total += indicatorCount;
+            results.reviews.push(...formattedIndicatorReviews);
+            results.total += indicatorCount;
+        } catch (_) {
+            // indicatorReview model may not exist in schema
+        }
     }
 
     // Sort combined results if type is 'all'
@@ -209,30 +213,40 @@ export const getReviewStats = asyncHandler(async (req, res) => {
     const [
         ebookCount,
         courseCount,
-        indicatorCount,
         ebookAvg,
         courseAvg,
-        indicatorAvg,
         recentEbook,
         recentCourse,
-        recentIndicator,
     ] = await Promise.all([
         prisma.review.count(),
         prisma.courseReview.count(),
-        prisma.indicatorReview.count(),
         prisma.review.aggregate({ _avg: { rating: true } }),
         prisma.courseReview.aggregate({ _avg: { rating: true } }),
-        prisma.indicatorReview.aggregate({ _avg: { rating: true } }),
         prisma.review.count({ where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } }),
         prisma.courseReview.count({ where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } }),
-        prisma.indicatorReview.count({ where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } }),
     ]);
 
-    // Rating distribution
-    const [ebookRatings, courseRatings, indicatorRatings] = await Promise.all([
+    let indicatorCount = 0;
+    let indicatorAvg = { _avg: { rating: null } };
+    let recentIndicator = 0;
+    let indicatorRatings = [];
+    if (typeof prisma.indicatorReview !== 'undefined') {
+        try {
+            const [iCount, iAvg, iRecent] = await Promise.all([
+                prisma.indicatorReview.count(),
+                prisma.indicatorReview.aggregate({ _avg: { rating: true } }),
+                prisma.indicatorReview.count({ where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } }),
+            ]);
+            indicatorCount = iCount;
+            indicatorAvg = iAvg;
+            recentIndicator = iRecent;
+            indicatorRatings = await prisma.indicatorReview.groupBy({ by: ['rating'], _count: true });
+        } catch (_) {}
+    }
+
+    const [ebookRatings, courseRatings] = await Promise.all([
         prisma.review.groupBy({ by: ['rating'], _count: true }),
         prisma.courseReview.groupBy({ by: ['rating'], _count: true }),
-        prisma.indicatorReview.groupBy({ by: ['rating'], _count: true }),
     ]);
 
     const ratingDistribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -240,19 +254,26 @@ export const getReviewStats = asyncHandler(async (req, res) => {
         ratingDistribution[r.rating] = (ratingDistribution[r.rating] || 0) + r._count;
     });
 
+    const total = ebookCount + courseCount + indicatorCount;
+    const avgE = ebookAvg._avg?.rating ?? 0;
+    const avgC = courseAvg._avg?.rating ?? 0;
+    const avgI = indicatorAvg._avg?.rating ?? 0;
+    const divisor = [avgE, avgC, avgI].filter(Boolean).length || 1;
+    const overall = (avgE + avgC + avgI) / divisor;
+
     return res.status(200).json(
         new ApiResponsive(200, {
-            total: ebookCount + courseCount + indicatorCount,
+            total,
             byType: {
                 ebook: ebookCount,
                 course: courseCount,
                 indicator: indicatorCount,
             },
             averageRating: {
-                ebook: ebookAvg._avg.rating || 0,
-                course: courseAvg._avg.rating || 0,
-                indicator: indicatorAvg._avg.rating || 0,
-                overall: ((ebookAvg._avg.rating || 0) + (courseAvg._avg.rating || 0) + (indicatorAvg._avg.rating || 0)) / 3,
+                ebook: avgE,
+                course: avgC,
+                indicator: avgI,
+                overall,
             },
             recentWeek: recentEbook + recentCourse + recentIndicator,
             ratingDistribution,

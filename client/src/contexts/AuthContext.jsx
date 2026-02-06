@@ -60,11 +60,9 @@ export function AuthProvider({ children }) {
         EBOOK: JSON.parse(localStorage.getItem('cart') || '[]'),
         WEBINAR: JSON.parse(localStorage.getItem('webinarCart') || '[]'),
         GUIDANCE: JSON.parse(localStorage.getItem('guidanceCart') || '[]').map(item => item.id || item.slotId || item),
-        MENTORSHIP: JSON.parse(localStorage.getItem('mentorshipCart') || '[]').map(item => item.id || item),
         COURSE: JSON.parse(localStorage.getItem('courseCart') || '[]'),
         BUNDLE: JSON.parse(localStorage.getItem('bundleCart') || '[]'),
         OFFLINE_BATCH: JSON.parse(localStorage.getItem('offlineBatchCart') || '[]'),
-        INDICATOR: JSON.parse(localStorage.getItem('indicatorCart') || '[]'),
       };
 
       // Fetch cart from backend
@@ -73,11 +71,9 @@ export function AuthProvider({ children }) {
         EBOOK: [],
         WEBINAR: [],
         GUIDANCE: [],
-        MENTORSHIP: [],
         COURSE: [],
         BUNDLE: [],
         OFFLINE_BATCH: [],
-        INDICATOR: [],
       };
 
       // Merge: combine both, remove duplicates for ALL cart types
@@ -85,11 +81,9 @@ export function AuthProvider({ children }) {
         EBOOK: [...new Set([...(backendCart.EBOOK || []), ...localCart.EBOOK])],
         WEBINAR: [...new Set([...(backendCart.WEBINAR || []), ...localCart.WEBINAR])],
         GUIDANCE: [...new Set([...(backendCart.GUIDANCE || []), ...localCart.GUIDANCE])],
-        MENTORSHIP: [...new Set([...(backendCart.MENTORSHIP || []), ...localCart.MENTORSHIP])],
         COURSE: [...new Set([...(backendCart.COURSE || []), ...localCart.COURSE])],
         BUNDLE: [...new Set([...(backendCart.BUNDLE || []), ...localCart.BUNDLE])],
         OFFLINE_BATCH: [...new Set([...(backendCart.OFFLINE_BATCH || []), ...localCart.OFFLINE_BATCH])],
-        INDICATOR: [...new Set([...(backendCart.INDICATOR || []), ...localCart.INDICATOR])],
       };
 
       // Sync merged cart to backend
@@ -101,24 +95,14 @@ export function AuthProvider({ children }) {
       localStorage.setItem('courseCart', JSON.stringify(mergedCart.COURSE));
       localStorage.setItem('bundleCart', JSON.stringify(mergedCart.BUNDLE));
       localStorage.setItem('offlineBatchCart', JSON.stringify(mergedCart.OFFLINE_BATCH));
-      localStorage.setItem('indicatorCart', JSON.stringify(mergedCart.INDICATOR));
       
-      // For guidance and mentorship, we need to handle objects
+      // For guidance, we need to handle objects
       const guidanceCart = JSON.parse(localStorage.getItem('guidanceCart') || '[]');
-      const mentorshipCart = JSON.parse(localStorage.getItem('mentorshipCart') || '[]');
-      
-      // Keep existing objects if they exist, otherwise just store IDs
       const updatedGuidanceCart = mergedCart.GUIDANCE.map(id => {
         const existing = guidanceCart.find(item => (item.id || item.slotId || item) === id);
         return existing || id;
       });
-      const updatedMentorshipCart = mergedCart.MENTORSHIP.map(id => {
-        const existing = mentorshipCart.find(item => (item.id || item) === id);
-        return existing || id;
-      });
-      
       localStorage.setItem('guidanceCart', JSON.stringify(updatedGuidanceCart));
-      localStorage.setItem('mentorshipCart', JSON.stringify(updatedMentorshipCart));
 
       // Dispatch event to update cart count
       window.dispatchEvent(new Event('cartUpdated'));

@@ -10,13 +10,10 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   LayoutDashboard,
   Users,
-  BookOpen,
   LogOut,
   User,
   Menu,
   Tag,
-  TrendingUp,
-  CreditCard,
   Video,
   ShoppingBag,
   MessageCircle,
@@ -25,17 +22,22 @@ import {
   FolderTree,
   BarChart3,
   Award,
+  Briefcase,
   Star,
   Zap,
   Calendar,
+  CalendarCheck,
   Package,
   Sun,
   Moon,
   HardDrive,
   UserPlus,
   Mail,
+  FileSpreadsheet,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const menuItems = [
   {
@@ -65,10 +67,10 @@ const menuItems = [
       { title: 'Bundles', icon: Package, href: '/admin/bundles' },
       { title: 'Offline Batches', icon: Calendar, href: '/admin/offline-batches' },
       { title: 'Webinars', icon: Video, href: '/admin/webinars' },
-      { title: 'Mentorship', icon: Video, href: '/admin/mentorship' },
       { title: '1:1 Guidance', icon: MessageCircle, href: '/admin/guidance' },
-      { title: 'Ebooks', icon: BookOpen, href: '/admin/ebooks' },
-      { title: 'Indicators', icon: TrendingUp, href: '/admin/indicators' },
+      // { title: 'Ebooks', icon: BookOpen, href: '/admin/ebooks' },
+      { title: 'Practice with Expert', icon: MessageCircle, href: '/admin/expert-practice' },
+      { title: 'Expert Practice Bookings', icon: CalendarCheck, href: '/admin/expert-practice-bookings' },
       { title: 'Certificates', icon: Award, href: '/admin/certificates' },
       { title: 'Reviews', icon: Star, href: '/admin/reviews' },
     ],
@@ -78,10 +80,9 @@ const menuItems = [
     icon: ShoppingBag,
     subItems: [
       { title: 'Orders', icon: ShoppingBag, href: '/admin/orders' },
+      { title: 'Invoices', icon: FileSpreadsheet, href: '/admin/invoices' },
       { title: 'Coupons', icon: Tag, href: '/admin/coupons' },
       { title: 'Flash Sales', icon: Zap, href: '/admin/flash-sales' },
-      { title: 'Subscription Plans', icon: CreditCard, href: '/admin/subscription-plans' },
-      { title: 'Subscriptions', icon: CreditCard, href: '/admin/subscriptions' },
     ],
   },
   {
@@ -89,6 +90,11 @@ const menuItems = [
     icon: Mail,
     subItems: [
       { title: 'Contacts', icon: Mail, href: '/admin/contacts' },
+      { title: 'Demo Requests', icon: Calendar, href: '/admin/demo-requests' },
+      { title: 'Hire From Us', icon: Briefcase, href: '/admin/hire-from-us' },
+      { title: 'Placement Training', icon: GraduationCap, href: '/admin/placement-training-registrations' },
+      { title: 'Training Schedule', icon: Video, href: '/admin/training-schedule' },
+      { title: 'Mock Interview', icon: Calendar, href: '/admin/mock-interview' },
     ],
   },
   {
@@ -96,8 +102,9 @@ const menuItems = [
     icon: Settings,
     subItems: [
       { title: 'Media Library', icon: HardDrive, href: '/admin/media' },
+      { title: 'Banners', icon: ImageIcon, href: '/admin/banners' },
       { title: 'Settings', icon: Settings, href: '/admin/settings' },
-      { title: 'Footer Settings', icon: Settings, href: '/admin/footer' },
+      { title: 'Social Settings', icon: Settings, href: '/admin/footer' },
     ],
   },
 ];
@@ -142,7 +149,8 @@ export default function AdminLayout({ children }) {
     if (href === '/admin') {
       return pathname === '/admin';
     }
-    return pathname?.startsWith(href);
+    // Exact match, or path is a sub-route of href (e.g. /admin/courses/123) — avoids /admin/expert-practice matching /admin/expert-practice-bookings
+    return pathname === href || (pathname?.startsWith(href + '/') ?? false);
   };
 
   const SidebarContent = () => (
@@ -150,9 +158,7 @@ export default function AdminLayout({ children }) {
       {/* Header */}
       <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-brand-600 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">TS</span>
-          </div>
+          <Image src="/sm-logo.png" alt="Shrestha Academy" width={60} height={60} />
           <div>
             <h2 className="font-semibold text-sm">Shrestha Academy</h2>
             <p className="text-xs text-muted-foreground">Admin Panel</p>
@@ -272,9 +278,8 @@ export default function AdminLayout({ children }) {
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-card border-b border-border">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-brand-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">TS</span>
-            </div>
+            <Image src="/sm-logo.png" alt="Shrestha Academy" width={50} height={50} />
+
             <div>
               <h2 className="font-semibold text-sm">Admin Panel</h2>
             </div>

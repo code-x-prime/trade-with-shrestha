@@ -247,20 +247,11 @@ export const deleteUser = asyncHandler(async (req, res) => {
         // Delete reviews
         await tx.review.deleteMany({ where: { userId } });
 
-        // Delete indicator reviews
-        await tx.indicatorReview.deleteMany({ where: { userId } });
-
         // Delete webinar order items
         await tx.webinarOrderItem.deleteMany({ where: { userId } });
 
         // Delete guidance orders
         await tx.guidanceOrder.deleteMany({ where: { userId } });
-
-        // Delete mentorship enrollments
-        await tx.mentorshipEnrollment.deleteMany({ where: { userId } });
-
-        // Delete mentorship orders
-        await tx.mentorshipOrder.deleteMany({ where: { userId } });
 
         // Delete course enrollments (this will cascade to chapter progress)
         await tx.courseEnrollment.deleteMany({ where: { userId } });
@@ -291,9 +282,6 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
         // Delete webinar completions
         await tx.webinarCompletion.deleteMany({ where: { userId } });
-
-        // Delete subscriptions
-        await tx.subscription.deleteMany({ where: { userId } });
 
         // Delete orders (will cascade to order items)
         await tx.order.deleteMany({ where: { userId } });

@@ -371,267 +371,6 @@ export const adminAPI = {
 
 // ==================== COUPON APIs ====================
 
-export const indicatorAPI = {
-    /**
-     * Get all indicators
-     */
-    getIndicators: async (params = {}) => {
-        const queryParams = new URLSearchParams();
-        if (params.page) queryParams.append('page', params.page);
-        if (params.limit) queryParams.append('limit', params.limit);
-        if (params.search) queryParams.append('search', params.search);
-        if (params.isPublished !== undefined) queryParams.append('isPublished', params.isPublished);
-
-        const queryString = queryParams.toString();
-        return apiRequest(`/indicators${queryString ? `?${queryString}` : ''}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get indicator by ID
-     */
-    getIndicatorById: async (id) => {
-        return apiRequest(`/indicators/${id}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get indicator by slug
-     */
-    getIndicatorBySlug: async (slug) => {
-        return apiRequest(`/indicators/slug/${slug}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Create indicator (Admin only)
-     */
-    createIndicator: async (formData) => {
-        return apiRequest('/indicators', {
-            method: 'POST',
-            body: formData,
-            headers: {},
-        });
-    },
-
-    /**
-     * Update indicator (Admin only)
-     */
-    updateIndicator: async (id, formData) => {
-        return apiRequest(`/indicators/${id}`, {
-            method: 'PATCH',
-            body: formData,
-            headers: {},
-        });
-    },
-
-    /**
-     * Publish/Unpublish indicator (Admin only)
-     */
-    togglePublish: async (id, isPublished) => {
-        return apiRequest(`/indicators/${id}/publish`, {
-            method: 'PATCH',
-            body: JSON.stringify({ isPublished }),
-        });
-    },
-
-    /**
-     * Delete indicator (Admin only)
-     */
-    deleteIndicator: async (id) => {
-        return apiRequest(`/indicators/${id}`, {
-            method: 'DELETE',
-        });
-    },
-};
-
-export const subscriptionPlanAPI = {
-    /**
-     * Get all active subscription plans (Public)
-     */
-    getPlans: async (activeOnly = true) => {
-        const queryParams = activeOnly ? '?activeOnly=true' : '';
-        return apiRequest(`/subscription-plans${queryParams}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get all subscription plans (Admin)
-     */
-    getAllPlans: async () => {
-        return apiRequest('/subscription-plans/all', {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get plan by ID (Admin)
-     */
-    getPlanById: async (id) => {
-        return apiRequest(`/subscription-plans/${id}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Create or update subscription plan (Admin)
-     */
-    upsertPlan: async (planData) => {
-        return apiRequest('/subscription-plans', {
-            method: 'POST',
-            body: JSON.stringify(planData),
-        });
-    },
-
-    /**
-     * Update subscription plan (Admin)
-     */
-    updatePlan: async (id, planData) => {
-        return apiRequest(`/subscription-plans/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify(planData),
-        });
-    },
-
-    /**
-     * Delete subscription plan (Admin)
-     */
-    deletePlan: async (id) => {
-        return apiRequest(`/subscription-plans/${id}`, {
-            method: 'DELETE',
-        });
-    },
-};
-
-export const subscriptionAPI = {
-    /**
-     * Create subscription order (global subscription - no indicatorId needed)
-     */
-    createSubscription: async (planId, tradingViewUsername, couponCode) => {
-        return apiRequest('/subscriptions', {
-            method: 'POST',
-            body: JSON.stringify({ planId, tradingViewUsername, couponCode }),
-        });
-    },
-
-    /**
-     * Verify subscription payment
-     */
-    verifyPayment: async (razorpayOrderId, paymentId, signature) => {
-        return apiRequest('/subscriptions/verify-payment', {
-            method: 'POST',
-            body: JSON.stringify({ razorpayOrderId, paymentId, signature }),
-        });
-    },
-
-    /**
-     * Check if user has active subscription
-     */
-    checkActiveSubscription: async () => {
-        return apiRequest('/subscriptions/check-active', {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get user subscriptions
-     */
-    getUserSubscriptions: async (status) => {
-        const queryParams = status ? `?status=${status}` : '';
-        return apiRequest(`/subscriptions${queryParams}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get all subscriptions (Admin only)
-     */
-    getAllSubscriptions: async (params = {}) => {
-        const queryParams = new URLSearchParams();
-        if (params.page) queryParams.append('page', params.page);
-        if (params.limit) queryParams.append('limit', params.limit);
-        if (params.status) queryParams.append('status', params.status);
-        if (params.indicatorId) queryParams.append('indicatorId', params.indicatorId);
-
-        const queryString = queryParams.toString();
-        return apiRequest(`/subscriptions/all${queryString ? `?${queryString}` : ''}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Update TradingView username (Admin only)
-     */
-    updateTradingViewUsername: async (id, tradingViewUsername) => {
-        return apiRequest(`/subscriptions/${id}/tradingview`, {
-            method: 'PATCH',
-            body: JSON.stringify({ tradingViewUsername }),
-        });
-    },
-
-    /**
-     * Cancel subscription
-     */
-    cancelSubscription: async (id) => {
-        return apiRequest(`/subscriptions/${id}/cancel`, {
-            method: 'POST',
-        });
-    },
-
-    /**
-     * Renew subscription
-     */
-    renewSubscription: async (id, planId, couponCode) => {
-        return apiRequest(`/subscriptions/${id}/renew`, {
-            method: 'POST',
-            body: JSON.stringify({ planId, couponCode }),
-        });
-    },
-
-    /**
-     * Update subscription status (Admin only)
-     */
-    updateStatus: async (id, status) => {
-        return apiRequest(`/subscriptions/${id}/status`, {
-            method: 'PATCH',
-            body: JSON.stringify({ status }),
-        });
-    },
-
-    /**
-     * Change subscription plan (Admin only)
-     */
-    changePlan: async (id, planId) => {
-        return apiRequest(`/subscriptions/${id}/plan`, {
-            method: 'PATCH',
-            body: JSON.stringify({ planId }),
-        });
-    },
-
-    /**
-     * Stop subscription (Admin only)
-     */
-    stopSubscription: async (id) => {
-        return apiRequest(`/subscriptions/${id}/stop`, {
-            method: 'POST',
-        });
-    },
-
-    /**
-     * Renew subscription (Admin only)
-     */
-    adminRenewSubscription: async (id, planId, couponCode) => {
-        return apiRequest(`/subscriptions/${id}/renew`, {
-            method: 'POST',
-            body: JSON.stringify({ planId, couponCode }),
-        });
-    },
-};
-
 export const couponAPI = {
     /**
      * Validate coupon code (Public)
@@ -932,184 +671,6 @@ export const guidanceAPI = {
     checkSlotAccess: async (slotId) => {
         return apiRequest(`/guidance/slots/${slotId}/access`, {
             method: 'GET',
-        });
-    },
-};
-
-// ==================== MENTORSHIP APIs ====================
-
-export const mentorshipAPI = {
-    /**
-     * Get all mentorship programs
-     */
-    getMentorship: async (params = {}) => {
-        const queryParams = new URLSearchParams();
-        if (params.page) queryParams.append('page', params.page);
-        if (params.limit) queryParams.append('limit', params.limit);
-        if (params.search) queryParams.append('search', params.search);
-        if (params.status) queryParams.append('status', params.status);
-
-        const queryString = queryParams.toString();
-        return apiRequest(`/mentorship${queryString ? `?${queryString}` : ''}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get mentorship by ID
-     */
-    getMentorshipById: async (id) => {
-        return apiRequest(`/mentorship/${id}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Get mentorship by slug
-     */
-    getMentorshipBySlug: async (slug) => {
-        return apiRequest(`/mentorship/slug/${slug}`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Create mentorship (Admin only)
-     */
-    createMentorship: async (formData) => {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 201) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        resolve(response);
-                    } catch {
-                        resolve({ success: true });
-                    }
-                } else {
-                    try {
-                        const error = JSON.parse(xhr.responseText);
-                        reject(new Error(error.message || 'Create failed'));
-                    } catch {
-                        reject(new Error('Create failed'));
-                    }
-                }
-            });
-
-            xhr.addEventListener('error', () => {
-                reject(new Error('Network error'));
-            });
-
-            const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-            xhr.open('POST', `${API_BASE_URL}/mentorship`);
-            if (token) {
-                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-            }
-            xhr.send(formData);
-        });
-    },
-
-    /**
-     * Update mentorship (Admin only)
-     */
-    updateMentorship: async (id, formData) => {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.addEventListener('load', () => {
-                if (xhr.status === 200) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        resolve(response);
-                    } catch {
-                        resolve({ success: true });
-                    }
-                } else {
-                    try {
-                        const error = JSON.parse(xhr.responseText);
-                        reject(new Error(error.message || 'Update failed'));
-                    } catch {
-                        reject(new Error('Update failed'));
-                    }
-                }
-            });
-
-            xhr.addEventListener('error', () => {
-                reject(new Error('Network error'));
-            });
-
-            const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-            xhr.open('PATCH', `${API_BASE_URL}/mentorship/${id}`);
-            if (token) {
-                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-            }
-            xhr.send(formData);
-        });
-    },
-
-    /**
-     * Delete mentorship (Admin only)
-     */
-    deleteMentorship: async (id) => {
-        return apiRequest(`/mentorship/${id}`, {
-            method: 'DELETE',
-        });
-    },
-
-    /**
-     * Toggle publish status (Admin only)
-     */
-    togglePublish: async (id, status) => {
-        return apiRequest(`/mentorship/${id}/publish`, {
-            method: 'PATCH',
-            body: JSON.stringify({ status }),
-        });
-    },
-
-    /**
-     * Check enrollment status
-     */
-    checkEnrollment: async (id) => {
-        return apiRequest(`/mentorship/${id}/enrollment`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Create session (Admin only)
-     */
-    createSession: async (mentorshipId, sessionData) => {
-        return apiRequest(`/mentorship/${mentorshipId}/sessions`, {
-            method: 'POST',
-            body: JSON.stringify(sessionData),
-        });
-    },
-
-    /**
-     * Get sessions (Admin only)
-     */
-    getSessions: async (mentorshipId) => {
-        return apiRequest(`/mentorship/${mentorshipId}/sessions`, {
-            method: 'GET',
-        });
-    },
-
-    /**
-     * Update session (Admin only)
-     */
-    updateSession: async (sessionId, sessionData) => {
-        return apiRequest(`/mentorship/sessions/${sessionId}`, {
-            method: 'PATCH',
-            body: JSON.stringify(sessionData),
-        });
-    },
-
-    /**
-     * Delete session (Admin only)
-     */
-    deleteSession: async (sessionId) => {
-        return apiRequest(`/mentorship/sessions/${sessionId}`, {
-            method: 'DELETE',
         });
     },
 };
@@ -2436,6 +1997,141 @@ export const mediaAPI = {
     },
 };
 
+// ==================== INVOICE APIs ====================
+
+export const invoiceAPI = {
+    getSettings: async () => {
+        return apiRequest('/invoice/settings', { method: 'GET' });
+    },
+    updateSettings: async (data) => {
+        return apiRequest('/invoice/settings', {
+            method: 'PUT',
+            body: JSON.stringify(data),
+        });
+    },
+    getOrderForInvoice: async (orderId) => {
+        return apiRequest(`/invoice/order/${orderId}`, { method: 'GET' });
+    },
+    // Manual invoices - kisi bhi cheez ke liye (course, ebook, office, service)
+    manual: {
+        list: () => apiRequest('/invoice/manual', { method: 'GET' }),
+        create: (data) => apiRequest('/invoice/manual', { method: 'POST', body: JSON.stringify(data) }),
+        get: (id) => apiRequest(`/invoice/manual/${id}`, { method: 'GET' }),
+        update: (id, data) => apiRequest(`/invoice/manual/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+        delete: (id) => apiRequest(`/invoice/manual/${id}`, { method: 'DELETE' }),
+    },
+};
+
+// ==================== BANNER APIs ====================
+
+export const bannerAPI = {
+    getActive: async () => {
+        return apiRequest('/banners/active', { method: 'GET' });
+    },
+    getAll: async () => {
+        return apiRequest('/banners', { method: 'GET' });
+    },
+    create: async (data) => {
+        return apiRequest('/banners', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
+    update: async (id, data) => {
+        return apiRequest(`/banners/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+        });
+    },
+    delete: async (id) => {
+        return apiRequest(`/banners/${id}`, { method: 'DELETE' });
+    },
+};
+
+// ==================== PLACEMENT APIs ====================
+export const placementAPI = {
+    getAll: async () => apiRequest('/placement', { method: 'GET' }),
+    getAllAdmin: async () => apiRequest('/placement/all', { method: 'GET' }),
+    create: async (data) => apiRequest('/placement', { method: 'POST', body: JSON.stringify(data) }),
+    update: async (id, data) => apiRequest(`/placement/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/placement/${id}`, { method: 'DELETE' }),
+};
+
+// ==================== TRAINING SCHEDULE APIs ====================
+export const trainingScheduleAPI = {
+    getUpcoming: async (params) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/training-schedule${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    getAllAdmin: async (params) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/training-schedule/all${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    create: async (data) => apiRequest('/training-schedule', { method: 'POST', body: JSON.stringify(data) }),
+    update: async (id, data) => apiRequest(`/training-schedule/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/training-schedule/${id}`, { method: 'DELETE' }),
+};
+
+// ==================== DEMO REQUEST APIs ====================
+export const demoRequestAPI = {
+    submit: async (data) => apiRequest('/demo-requests', { method: 'POST', body: JSON.stringify(data) }),
+    getAll: async (params) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/demo-requests${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    updateStatus: async (id, status) => apiRequest(`/demo-requests/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+};
+
+// ==================== MOCK INTERVIEW APIs ====================
+export const mockInterviewAPI = {
+    getSlots: async () => apiRequest('/mock-interview/slots', { method: 'GET' }),
+    book: async (data) => apiRequest('/mock-interview/book', { method: 'POST', body: JSON.stringify(data) }),
+    getMyBookings: async (params) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/mock-interview/my-bookings${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    admin: {
+        getSlots: async () => apiRequest('/mock-interview/admin/slots', { method: 'GET' }),
+        createSlot: async (data) => apiRequest('/mock-interview/admin/slots', { method: 'POST', body: JSON.stringify(data) }),
+        updateSlot: async (id, data) => apiRequest(`/mock-interview/admin/slots/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+        deleteSlot: async (id) => apiRequest(`/mock-interview/admin/slots/${id}`, { method: 'DELETE' }),
+        getBookings: async (params) => {
+            const q = new URLSearchParams(params || {}).toString();
+            return apiRequest(`/mock-interview/admin/bookings${q ? `?${q}` : ''}`, { method: 'GET' });
+        },
+        updateBookingStatus: async (id, status) => apiRequest(`/mock-interview/admin/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+    },
+};
+
+// ==================== EXPERT PRACTICE APIs ====================
+export const expertPracticeAPI = {
+    getActive: async () => apiRequest('/expert-practice', { method: 'GET' }),
+    getAllAdmin: async () => apiRequest('/expert-practice/all', { method: 'GET' }),
+    create: async (data) => apiRequest('/expert-practice', { method: 'POST', body: JSON.stringify(data) }),
+    update: async (id, data) => apiRequest(`/expert-practice/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/expert-practice/${id}`, { method: 'DELETE' }),
+    createBooking: async (data) => apiRequest('/expert-practice/bookings', { method: 'POST', body: JSON.stringify(data) }),
+    getBookingsAdmin: async () => apiRequest('/expert-practice/bookings', { method: 'GET' }),
+    updateBookingStatus: async (id, status) => apiRequest(`/expert-practice/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+};
+
+export const hireFromUsAPI = {
+    submit: async (data) => apiRequest('/hire-from-us', { method: 'POST', body: JSON.stringify(data) }),
+    getAllAdmin: async (params) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/hire-from-us/admin${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+};
+
+export const placementTrainingAPI = {
+    register: async (data) => apiRequest('/placement-training/register', { method: 'POST', body: JSON.stringify(data) }),
+    verifyOtp: async (data) => apiRequest('/placement-training/verify-otp', { method: 'POST', body: JSON.stringify(data) }),
+    getAllAdmin: async (params) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/placement-training/admin/registrations${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+};
+
 // Export default for convenience
 const api = {
     auth: authAPI,
@@ -2445,12 +2141,9 @@ const api = {
     admin: adminAPI,
     ebook: ebookAPI,
     order: orderAPI,
-    indicator: indicatorAPI,
-    subscription: subscriptionAPI,
     coupon: couponAPI,
     webinar: webinarAPI,
     guidance: guidanceAPI,
-    mentorship: mentorshipAPI,
     course: courseAPI,
     category: categoryAPI,
     analytics: analyticsAPI,
@@ -2462,6 +2155,15 @@ const api = {
     offlineBatch: offlineBatchAPI,
     bundle: bundleAPI,
     media: mediaAPI,
+    invoice: invoiceAPI,
+    banner: bannerAPI,
+    placement: placementAPI,
+    trainingSchedule: trainingScheduleAPI,
+    demoRequest: demoRequestAPI,
+    mockInterview: mockInterviewAPI,
+    expertPractice: expertPracticeAPI,
+    hireFromUs: hireFromUsAPI,
+    placementTraining: placementTrainingAPI,
 };
 
 export default api;

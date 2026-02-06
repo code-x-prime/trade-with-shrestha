@@ -36,7 +36,6 @@ const sendEmail = async (options) => {
     if (process.env.NODE_ENV === "development") {
       try {
         await transporter.verify();
-        console.log("SMTP connection verified successfully");
       } catch (verifyError) {
         console.error(
           "SMTP verification failed:",
@@ -58,13 +57,12 @@ const sendEmail = async (options) => {
       to: options.email,
       subject: options.subject,
       html: options.html,
-      text: options.text || options.html.replace(/<[^>]*>/g, ""), // Plain text fallback
+      text: options.text || options.html.replace(/<[^>]*>/g, ""),
       attachments: options.attachments || [],
     };
 
     const info = await transporter.sendMail(mailOptions);
 
-    console.log(`Email sent successfully to ${options.email}:`, info.messageId);
     return info;
   } catch (error) {
     console.error("Email sending error:", error);

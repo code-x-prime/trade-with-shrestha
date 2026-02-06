@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { BookOpen, Globe, ShoppingCart, Play, CheckCircle2, Lock, Star, MessageSquare,  Award} from 'lucide-react';
+import { BookOpen, Globe, ShoppingCart, Play, CheckCircle2, Lock, Star, MessageSquare, Award, Calendar, Video } from 'lucide-react';
 import Image from 'next/image';
 import Breadcrumb from '@/components/Breadcrumb';
 import { toast } from 'sonner';
@@ -17,10 +17,11 @@ import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
 import PricingBox from '@/components/detail/PricingBox';
 import SectionContainer from '@/components/detail/SectionContainer';
+import BookDemoDialog from '@/components/BookDemoDialog';
 
 export default function CourseDetailClient({ course: initialCourse }) {
   const course = initialCourse;
-  const { isAuthenticated} = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const router = useRouter();
   const [enrollmentStatus, setEnrollmentStatus] = useState({ isEnrolled: false, loading: true });
   const [progress, setProgress] = useState(null);
@@ -29,6 +30,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewForm, setReviewForm] = useState({ rating: 0, comment: '' });
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [bookDemoOpen, setBookDemoOpen] = useState(false);
 
   useEffect(() => {
     if (course?.id) {
@@ -199,6 +201,10 @@ export default function CourseDetailClient({ course: initialCourse }) {
   const completedChapters = progress?.completedChapters || 0;
   const overallProgress = progress?.overallProgress || 0;
   const averageRating = reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0;
+  const deliveryMode = course.deliveryMode || 'BOTH';
+  const showBookDemo = deliveryMode === 'ONLINE' || deliveryMode === 'BOTH';
+  const showSelfPaced = deliveryMode === 'SELF_PACED' || deliveryMode === 'BOTH';
+  const benefitsList = course.benefits && Array.isArray(course.benefits) ? course.benefits : [];
 
   if (!course) {
     return (
@@ -276,17 +282,19 @@ export default function CourseDetailClient({ course: initialCourse }) {
             </div>
 
             {/* Pricing Box - Sticky */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 space-y-4">
               <PricingBox
                 price={course.price}
                 salePrice={course.salePrice}
                 pricing={course.pricing}
                 isFree={course.isFree}
                 features={[
-                  `${totalChapters} Video Chapters`,
-                  'Lifetime Access',
-                  'Progress Tracking',
-                  'Certificate of Completion'
+                  ...(benefitsList.length > 0 ? benefitsList : [
+                    `${totalChapters} Video Chapters`,
+                    'Lifetime Access',
+                    'Progress Tracking',
+                    'Certificate of Completion'
+                  ])
                 ]}
                 ctaLabel={enrollmentStatus.loading ? 'Checking...' : enrollmentStatus.isEnrolled ? 'Continue Learning' : course.isFree ? 'Enroll for Free' : 'Add to Cart'}
                 onCtaClick={enrollmentStatus.isEnrolled ? () => router.push(`/courses/${course.slug}/learn`) : course.isFree ? handleEnrollFree : addToCart}
@@ -304,22 +312,41 @@ export default function CourseDetailClient({ course: initialCourse }) {
                       Continue Learning
                     </Button>
                   </Link>
-                ) : course.isFree ? (
-                  <Button
-                    className="w-full bg-brand-600 hover:bg-brand-700"
-                    onClick={handleEnrollFree}
-                  >
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Enroll for Free
-                  </Button>
                 ) : (
-                  <Button
-                    className="w-full bg-brand-600 hover:bg-brand-700"
-                    onClick={addToCart}
-                  >
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Add to Cart
-                  </Button>
+                  <div className="space-y-2">
+                    {showBookDemo && (
+                      <>
+                        <Button
+                          variant="outline"
+                          className="w-full border-brand-600 text-brand-600 hover:bg-brand-50 dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-900/30"
+                          onClick={() => setBookDemoOpen(true)}
+                        >
+                          <Calendar className="h-4 w-4 mr-2" />
+                          Book a Demo
+                        </Button>
+                        <BookDemoDialog
+                          open={bookDemoOpen}
+                          onOpenChange={setBookDemoOpen}
+                          courseId={course.id}
+                          courseTitle={course.title}
+                          defaultName={isAuthenticated && user?.name ? user.name : ''}
+                          defaultEmail={isAuthenticated && user?.email ? user.email : ''}
+                          defaultPhone={isAuthenticated && user?.phone ? user.phone || '' : ''}
+                        />
+                      </>
+                    )}
+                    {course.isFree ? (
+                      <Button className="w-full bg-brand-600 hover:bg-brand-700" onClick={handleEnrollFree}>
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Enroll for Free
+                      </Button>
+                    ) : showSelfPaced && (
+                      <Button className="w-full bg-brand-600 hover:bg-brand-700" onClick={addToCart}>
+                        <ShoppingCart className="h-4 w-4 mr-2" />
+                        Self-paced Purchase
+                      </Button>
+                    )}
+                  </div>
                 )}
               </PricingBox>
             </div>
@@ -352,9 +379,29 @@ export default function CourseDetailClient({ course: initialCourse }) {
               />
             </SectionContainer>
 
-            {/* Course Curriculum */}
-            {course.sessions && course.sessions.length > 0 && (
-              <SectionContainer title="Course Curriculum">
+            {/* Benefits */}
+            {benefitsList.length > 0 && (
+              <SectionContainer title="Benefits">
+                <ul className="grid gap-2 sm:grid-cols-1">
+                  {benefitsList.map((benefit, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-muted-foreground dark:text-gray-400">
+                      <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </SectionContainer>
+            )}
+
+            {/* Course Curriculum – same area: online = text curriculum, self-paced = video + lecture names */}
+            <SectionContainer title="Curriculum">
+              {(deliveryMode === 'ONLINE' || deliveryMode === 'BOTH') && course.curriculumText && (
+                <div
+                  className="prose prose-lg max-w-none text-muted-foreground dark:text-gray-400 dark:prose-invert mb-6"
+                  dangerouslySetInnerHTML={{ __html: course.curriculumText }}
+                />
+              )}
+              {course.sessions && course.sessions.length > 0 && (
                 <div className="space-y-4">
                   {course.sessions.map((session) => (
                     <Card key={session.id} className="border-2 hover:border-brand-200 transition-colors dark:bg-gray-900 dark:border-gray-800 dark:hover:border-brand-800">
@@ -371,7 +418,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                             </div>
                             <h3 className="text-xl font-bold mb-2 dark:text-white">{session.title}</h3>
                             {session.description && (
-                              <div 
+                              <div
                                 className="text-muted-foreground line-clamp-2 dark:text-gray-400 prose prose-sm max-w-none dark:prose-invert"
                                 dangerouslySetInnerHTML={{ __html: session.description }}
                               />
@@ -380,20 +427,21 @@ export default function CourseDetailClient({ course: initialCourse }) {
                         </div>
                         {session.chapters && session.chapters.length > 0 && (
                           <div className="mt-4 space-y-2 border-t pt-4">
-                            {session.chapters.map((chapter, idx) => {
+                            {session.chapters.map((chapter) => {
                               const isLocked = !chapter.isFreePreview && !enrollmentStatus.isEnrolled;
                               const chapterProgress = progress?.progress?.find(p => p.chapter.id === chapter.id);
                               const isCompleted = chapterProgress?.completed || false;
-                              
+                              const showVideoIcon = deliveryMode === 'SELF_PACED' || deliveryMode === 'BOTH';
                               return (
                                 <div
                                   key={chapter.id}
-                                  className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
-                                    isLocked ? 'bg-muted/50 opacity-60 dark:bg-gray-800/50 dark:border-gray-800' : isCompleted ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : 'hover:bg-muted border-border dark:border-gray-800 dark:hover:bg-gray-800'
-                                  }`}
+                                  className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isLocked ? 'bg-muted/50 opacity-60 dark:bg-gray-800/50 dark:border-gray-800' : isCompleted ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : 'hover:bg-muted border-border dark:border-gray-800 dark:hover:bg-gray-800'
+                                    }`}
                                 >
                                   <div className="flex items-center gap-3 flex-1">
-                                    {isCompleted ? (
+                                    {showVideoIcon ? (
+                                      <Video className="h-5 w-5 text-brand-600 dark:text-brand-400 flex-shrink-0" />
+                                    ) : isCompleted ? (
                                       <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0" />
                                     ) : isLocked ? (
                                       <Lock className="h-5 w-5 text-muted-foreground dark:text-gray-500 flex-shrink-0" />
@@ -426,8 +474,8 @@ export default function CourseDetailClient({ course: initialCourse }) {
                     </Card>
                   ))}
                 </div>
-              </SectionContainer>
-            )}
+              )}
+            </SectionContainer>
 
             {/* Reviews Section */}
             <SectionContainer title={`Reviews (${reviews.length})`}>
@@ -467,11 +515,10 @@ export default function CourseDetailClient({ course: initialCourse }) {
                                 className="focus:outline-none"
                               >
                                 <Star
-                                  className={`h-6 w-6 ${
-                                    star <= reviewForm.rating
+                                  className={`h-6 w-6 ${star <= reviewForm.rating
                                       ? 'fill-yellow-400 text-yellow-400'
                                       : 'text-gray-300'
-                                  }`}
+                                    }`}
                                 />
                               </button>
                             ))}
@@ -544,11 +591,10 @@ export default function CourseDetailClient({ course: initialCourse }) {
                                 {[1, 2, 3, 4, 5].map((star) => (
                                   <Star
                                     key={star}
-                                    className={`h-4 w-4 ${
-                                      star <= review.rating
+                                    className={`h-4 w-4 ${star <= review.rating
                                         ? 'fill-yellow-400 text-yellow-400'
                                         : 'text-gray-300 dark:text-gray-600'
-                                    }`}
+                                      }`}
                                   />
                                 ))}
                               </div>

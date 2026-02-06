@@ -118,11 +118,11 @@ function AuthContent() {
       const result = await login(formData.email, formData.password, redirectUrl);
       if (!result.success) {
         setError(result.error || 'Login failed');
+        setLoading(false);
       }
-      // Success redirect happens in AuthContext
+      // Success: loading rehne do, redirect tak button disable rahega
     } catch (err) {
       setError(err.message || 'Something went wrong');
-    } finally {
       setLoading(false);
     }
   };
@@ -136,11 +136,11 @@ function AuthContent() {
       const result = await verifyOTP(formData.email, formData.otp, 'EMAIL_VERIFY', redirectUrl);
       if (!result.success) {
         setError(result.error || 'OTP verification failed');
+        setLoading(false);
       }
-      // Success redirect happens in AuthContext
+      // Success: loading rehne do, redirect tak button disable
     } catch (err) {
       setError(err.message || 'Something went wrong');
-    } finally {
       setLoading(false);
     }
   };
@@ -351,6 +351,7 @@ function AuthContent() {
         setError(result.error || 'Google login failed');
         setLoading(false);
       }
+      // Success: loading rehne do, redirect tak button/UI disable
     } catch (err) {
       setError(err.message || 'Google login failed');
       setLoading(false);
@@ -416,6 +417,7 @@ function AuthContent() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -427,22 +429,32 @@ function AuthContent() {
                   onChange={handleInputChange}
                   placeholder="••••••••"
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="flex items-center justify-end">
                 <button
                   type="button"
                   onClick={() => {
+                    if (loading) return;
                     router.push('/auth?mode=forgot-password');
                     setMode('forgot-password');
                   }}
-                  className="text-sm text-brand-600 hover:underline"
+                  disabled={loading}
+                  className="text-sm text-brand-600 hover:underline disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Forgot Password?
                 </button>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Logging in...
+                  </>
+                ) : (
+                  'Login'
+                )}
               </Button>
             </form>
           )}
@@ -459,6 +471,7 @@ function AuthContent() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -471,6 +484,7 @@ function AuthContent() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -482,6 +496,7 @@ function AuthContent() {
                   placeholder="+1234567890"
                   value={formData.phone}
                   onChange={handleInputChange}
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -494,10 +509,18 @@ function AuthContent() {
                   placeholder="••••••••"
                   required
                   showStrength={true}
+                  disabled={loading}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Signing up...' : 'Sign Up'}
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Signing up...
+                  </>
+                ) : (
+                  'Sign Up'
+                )}
               </Button>
             </form>
           )}
@@ -516,11 +539,18 @@ function AuthContent() {
                   required
                   maxLength={6}
                   className="text-center text-2xl tracking-widest"
+                  disabled={loading}
                 />
-                
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Verifying...' : 'Verify OTP'}
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Verifying...
+                  </>
+                ) : (
+                  'Verify OTP'
+                )}
               </Button>
               <Button
                 type="button"
@@ -546,10 +576,18 @@ function AuthContent() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
+                  disabled={loading}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Sending OTP...' : 'Send OTP'}
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Sending OTP...
+                  </>
+                ) : (
+                  'Send OTP'
+                )}
               </Button>
               <Button
                 type="button"
@@ -579,6 +617,7 @@ function AuthContent() {
                   required
                   maxLength={6}
                   className="text-center text-2xl tracking-widest"
+                  disabled={loading}
                 />
                 {otpTimer > 0 && (
                   <p className="text-xs text-center text-muted-foreground">
@@ -596,6 +635,7 @@ function AuthContent() {
                   placeholder="••••••••"
                   required
                   showStrength={true}
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -607,10 +647,18 @@ function AuthContent() {
                   onChange={handleInputChange}
                   placeholder="••••••••"
                   required
+                  disabled={loading}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Resetting...' : 'Reset Password'}
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Resetting...
+                  </>
+                ) : (
+                  'Reset Password'
+                )}
               </Button>
               <Button
                 type="button"

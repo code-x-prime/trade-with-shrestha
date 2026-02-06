@@ -27,6 +27,11 @@ const nextConfig = {
                 hostname: 'pub-ea068395076f48558e674cdcaf6fd536.r2.dev',
                 pathname: '/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'ui-avatars.com',
+                pathname: '/api/**',
+            },
         ],
     },
 };

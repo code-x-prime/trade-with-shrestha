@@ -17,7 +17,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, XCircle, Loader2, Search, FileSpreadsheet, Mail, Trash2, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, XCircle, Loader2, Search, Mail, Trash2, AlertTriangle, RefreshCw } from 'lucide-react';
+import DataExport from '@/components/admin/DataExport';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import {
@@ -147,43 +148,6 @@ export default function AdminUsersPage() {
     return true;
   });
 
-  // Export to Excel (CSV format)
-  const exportToExcel = () => {
-    if (filteredUsers.length === 0) {
-      toast.error('No users to export');
-      return;
-    }
-
-    // CSV headers
-    const headers = ['Name', 'Email', 'Phone', 'Role', 'Verified', 'Active', 'Created At'];
-    
-    // CSV rows
-    const rows = filteredUsers.map(u => [
-      u.name || 'N/A',
-      u.email || 'N/A',
-      u.phone || u.mobile || 'N/A',
-      u.role || 'USER',
-      u.isVerified ? 'Yes' : 'No',
-      u.isActive ? 'Yes' : 'No',
-      u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN') : 'N/A',
-    ]);
-
-    // Create CSV content
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-    ].join('\n');
-
-    // Download
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `users_${filter}_${new Date().toISOString().slice(0, 10)}.csv`;
-    link.click();
-    
-    toast.success(`Exported ${filteredUsers.length} users to Excel`);
-  };
-
   if (authLoading) {
     return (
       <div className="space-y-6">
@@ -212,10 +176,32 @@ export default function AdminUsersPage() {
           <h1 className="text-3xl font-bold mb-2">Users</h1>
           <p className="text-muted-foreground">Manage and verify users</p>
         </div>
-        <Button onClick={exportToExcel} className="gap-2 bg-green-600 hover:bg-green-700">
-          <FileSpreadsheet className="h-4 w-4" />
-          Export to Excel
+        <Button variant="outline" size="sm" onClick={fetchUsers} disabled={loading} className="gap-2">
+          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
         </Button>
+        <DataExport
+          data={users}
+          columns={[
+            { key: 'name', label: 'Name' },
+            { key: 'email', label: 'Email' },
+            { key: 'phone', label: 'Phone' },
+            { key: 'role', label: 'Role' },
+            { key: 'isVerified', label: 'Verified' },
+            { key: 'isActive', label: 'Active' },
+            { key: 'createdAt', label: 'Created at' },
+          ]}
+          dateKey="createdAt"
+          statusKey="role"
+          statusOptions={['ADMIN', 'USER']}
+          filename="users"
+          fetchAllData={async () => {
+            const r = await adminAPI.getUsers({ page: 1, limit: 99999 });
+            return r?.data?.users ?? [];
+          }}
+          disabled={loading}
+          buttonLabel="Export to Excel"
+        />
       </div>
 
       {/* Filters */}

@@ -465,7 +465,6 @@ export default function AdminCouponsPage() {
                       <SelectItem value="SUBSCRIPTION">Subscriptions Only</SelectItem>
                       <SelectItem value="WEBINAR">Webinars Only</SelectItem>
                       <SelectItem value="GUIDANCE">1:1 Guidance Only</SelectItem>
-                      <SelectItem value="MENTORSHIP">Live Mentorship Only</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -619,10 +618,8 @@ export default function AdminCouponsPage() {
                         <SelectItem value="BUNDLE">Bundles</SelectItem>
                         <SelectItem value="EBOOK">E-Books</SelectItem>
                         <SelectItem value="WEBINAR">Webinars</SelectItem>
-                        <SelectItem value="MENTORSHIP">Mentorship</SelectItem>
                         <SelectItem value="GUIDANCE">1:1 Guidance</SelectItem>
                         <SelectItem value="OFFLINE_BATCH">Offline Batches</SelectItem>
-                        <SelectItem value="INDICATOR">Indicators</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -869,8 +866,7 @@ export default function AdminCouponsPage() {
                                   coupon.applicableTo === 'OFFLINE_BATCH' ? 'Offline Batches Only' :
                                     coupon.applicableTo === 'SUBSCRIPTION' ? 'Subscriptions Only' :
                                       coupon.applicableTo === 'WEBINAR' ? 'Webinars Only' :
-                                        coupon.applicableTo === 'GUIDANCE' ? '1:1 Guidance Only' :
-                                          coupon.applicableTo === 'MENTORSHIP' ? 'Live Mentorship Only' : 'Unknown'}
+                                        coupon.applicableTo === 'GUIDANCE' ? '1:1 Guidance Only' : 'Unknown'}
                         </Badge>
                       </TableCell>
                       <TableCell>

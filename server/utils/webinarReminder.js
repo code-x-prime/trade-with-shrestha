@@ -115,7 +115,6 @@ export const sendWebinarReminders = async () => {
  * Start the webinar reminder scheduler (runs every minute)
  */
 export const startWebinarReminderScheduler = () => {
-  console.log("📧 Webinar reminder scheduler started");
 
   // Run immediately, then every minute
   sendWebinarReminders().catch(console.error);

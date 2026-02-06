@@ -27,10 +27,10 @@ export default function ResourceCard({
         <motion.div
             whileHover={{ y: -4, scale: 1.02 }}
             transition={{ duration: 0.2 }}
-            className="h-full"
+            className="h-full min-h-[240px]"
         >
-            <Link href={href}>
-                <div className={`relative rounded-2xl bg-gradient-to-br ${gradientFrom} ${gradientVia} ${gradientTo} p-6 h-full flex flex-col overflow-hidden group cursor-pointer`}>
+            <Link href={href} className="block h-full">
+                <div className={`relative rounded-2xl bg-gradient-to-br ${gradientFrom} ${gradientVia} ${gradientTo} p-5 md:p-6 h-full min-h-[240px] flex flex-col overflow-hidden group cursor-pointer`}>
                     {/* Background Pattern */}
                     <div className="absolute inset-0 opacity-10">
                         <div className="absolute inset-0" style={{

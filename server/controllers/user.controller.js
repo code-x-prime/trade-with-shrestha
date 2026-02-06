@@ -287,21 +287,6 @@ export const getPurchaseStatus = asyncHandler(async (req, res) => {
     });
   }
 
-  // Check mentorship orders
-  if (itemsByType.MENTORSHIP && itemsByType.MENTORSHIP.length > 0) {
-    const mentorshipOrders = await prisma.mentorshipOrder.findMany({
-      where: {
-        userId,
-        mentorshipId: { in: itemsByType.MENTORSHIP },
-        paymentStatus: 'PAID',
-      },
-      select: { mentorshipId: true },
-    });
-    mentorshipOrders.forEach(mo => {
-      purchaseStatus[`MENTORSHIP_${mo.mentorshipId}`] = true;
-    });
-  }
-
   // Check ebook orders (from order items)
   if (itemsByType.EBOOK && itemsByType.EBOOK.length > 0) {
     const orders = await prisma.order.findMany({
@@ -354,36 +339,6 @@ export const getPurchaseStatus = asyncHandler(async (req, res) => {
     batchEnrollments.forEach(be => {
       purchaseStatus[`OFFLINE_BATCH_${be.batchId}`] = true;
     });
-  }
-
-  // Check indicator access (through subscriptions - indicators are accessed via global subscription)
-  if (itemsByType.INDICATOR && itemsByType.INDICATOR.length > 0) {
-    // Indicators are accessed through global subscriptions, not order items
-    const activeSubscriptions = await prisma.subscription.findMany({
-      where: {
-        userId,
-        status: 'ACTIVE',
-        OR: [
-          { endDate: null }, // Lifetime
-          { endDate: { gte: new Date() } }, // Not expired
-        ],
-      },
-      include: {
-        plan: {
-          select: {
-            planType: true,
-          },
-        },
-      },
-    });
-
-    // If user has active subscription, they have access to all indicators
-    const hasActiveSubscription = activeSubscriptions.length > 0;
-    if (hasActiveSubscription) {
-      itemsByType.INDICATOR.forEach(indicatorId => {
-        purchaseStatus[`INDICATOR_${indicatorId}`] = true;
-      });
-    }
   }
 
   // Set false for items not found

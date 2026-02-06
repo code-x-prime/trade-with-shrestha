@@ -4,9 +4,9 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, Loader2 } from 'lucide-react';
-import { courseAPI, webinarAPI, mentorshipAPI, ebookAPI, indicatorAPI, offlineBatchAPI, bundleAPI, guidanceAPI } from '@/lib/api';
+import { courseAPI, webinarAPI, ebookAPI, offlineBatchAPI, bundleAPI, guidanceAPI } from '@/lib/api';
 import { Input } from '@/components/ui/input';
-import { CourseCard, WebinarCard, MentorshipCard, EbookCard, IndicatorCard, BundleCard, GuidanceCard } from '@/components/cards';
+import { CourseCard, WebinarCard, EbookCard, BundleCard, GuidanceCard } from '@/components/cards';
 import SearchInput from '@/components/SearchInput';
 
 function SearchContent() {
@@ -16,9 +16,7 @@ function SearchContent() {
   const [results, setResults] = useState({
     courses: [],
     webinars: [],
-    mentorships: [],
     ebooks: [],
-    indicators: [],
     bundles: [],
     offlineBatches: [],
     guidance: [],
@@ -37,12 +35,10 @@ function SearchContent() {
   const performSearch = async (searchQuery) => {
     try {
       setLoading(true);
-      const [coursesRes, webinarsRes, mentorshipsRes, ebooksRes, indicatorsRes, bundlesRes, guidanceRes] = await Promise.all([
+      const [coursesRes, webinarsRes, ebooksRes, bundlesRes, guidanceRes] = await Promise.all([
         courseAPI.getCourses({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
         webinarAPI.getWebinars({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
-        mentorshipAPI.getMentorship({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
         ebookAPI.getEbooks({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
-        indicatorAPI.getIndicators({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
         bundleAPI.getBundles({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
         guidanceAPI.getGuidance({ search: searchQuery, limit: 10 }).catch(() => ({ success: false, data: {} })),
       ]);
@@ -50,9 +46,7 @@ function SearchContent() {
       setResults({
         courses: coursesRes.success ? coursesRes.data.courses || [] : [],
         webinars: webinarsRes.success ? webinarsRes.data.webinars || [] : [],
-        mentorships: mentorshipsRes.success ? (mentorshipsRes.data.mentorships || mentorshipsRes.data.mentorship || []) : [],
         ebooks: ebooksRes.success ? ebooksRes.data.ebooks || [] : [],
-        indicators: indicatorsRes.success ? indicatorsRes.data.indicators || [] : [],
         bundles: bundlesRes.success ? bundlesRes.data.bundles || [] : [],
         guidance: guidanceRes.success ? guidanceRes.data.guidance || [] : [],
         offlineBatches: [], // Offline batches don't have search in API yet
@@ -64,17 +58,17 @@ function SearchContent() {
     }
   };
 
-  const totalResults = results.courses.length + results.webinars.length + results.mentorships.length + results.ebooks.length + results.indicators.length + results.bundles.length + results.guidance.length + results.offlineBatches.length;
+  const totalResults = (results.courses?.length ?? 0) + (results.webinars?.length ?? 0) + (results.ebooks?.length ?? 0) + (results.bundles?.length ?? 0) + (results.guidance?.length ?? 0) + (results.offlineBatches?.length ?? 0);
 
   if (!query) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <Search className="h-16 w-16 text-gray-400 mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-2">Search</h1>
-        <p className="text-gray-500 mb-8">Enter a search query to find courses, webinars, ebooks, indicators, bundles, and more</p>
+        <p className="text-gray-500 mb-8">Enter a search query to find courses, webinars, ebooks, bundles, and more</p>
         <div className="max-w-2xl mx-auto">
           <SearchInput
-            placeholder="Search courses, webinars, ebooks, indicators, bundles..."
+            placeholder="Search courses, webinars, ebooks, bundles..."
             onSearch={setSearchValue}
             debounceMs={500}
           />
@@ -100,7 +94,7 @@ function SearchContent() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search courses, webinars, ebooks, indicators, bundles..."
+              placeholder="Search courses, webinars, ebooks, bundles..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               className="pl-10 h-12 text-base"
@@ -162,18 +156,6 @@ function SearchContent() {
             </section>
           )}
 
-          {/* Mentorships */}
-          {results.mentorships.length > 0 && (
-            <section>
-              <h2 className="text-2xl font-bold mb-6">Mentorship Programs ({results.mentorships.length})</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {results.mentorships.map((mentorship) => (
-                  <MentorshipCard key={mentorship.id} program={mentorship} />
-                ))}
-              </div>
-            </section>
-          )}
-
           {/* E-Books */}
           {results.ebooks.length > 0 && (
             <section>
@@ -181,18 +163,6 @@ function SearchContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {results.ebooks.map((ebook) => (
                   <EbookCard key={ebook.id} ebook={ebook} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Indicators */}
-          {results.indicators.length > 0 && (
-            <section>
-              <h2 className="text-2xl font-bold mb-6">Indicators ({results.indicators.length})</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {results.indicators.map((indicator) => (
-                  <IndicatorCard key={indicator.id} indicator={indicator} />
                 ))}
               </div>
             </section>

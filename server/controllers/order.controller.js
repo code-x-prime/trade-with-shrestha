@@ -751,88 +751,6 @@ export const verifyPayment = asyncHandler(async (req, res) => {
         }
     }
 
-    // Handle mentorship orders if orderType is MENTORSHIP
-    if (order.orderType === "MENTORSHIP") {
-        // Find mentorship order linked to this order
-        const mentorshipOrder = await prisma.mentorshipOrder.findFirst({
-            where: {
-                userId,
-                paymentId: order.id,
-            },
-            include: {
-                mentorship: true,
-            },
-        });
-
-        if (mentorshipOrder) {
-            // Update with payment info
-            await prisma.mentorshipOrder.update({
-                where: { id: mentorshipOrder.id },
-                data: {
-                    paymentStatus: "PAID",
-                    paymentMode: "RAZORPAY",
-                    // Keep paymentId as order.id to maintain link to Order
-                },
-            });
-
-            // Create enrollment if not exists
-            const existingEnrollment = await prisma.mentorshipEnrollment.findUnique({
-                where: {
-                    mentorshipId_userId: {
-                        mentorshipId: mentorshipOrder.mentorshipId,
-                        userId,
-                    },
-                },
-            });
-
-            if (!existingEnrollment) {
-                await prisma.mentorshipEnrollment.create({
-                    data: {
-                        mentorshipId: mentorshipOrder.mentorshipId,
-                        userId,
-                    },
-                });
-            }
-
-            // Send enrollment emails
-            try {
-                const adminEmail = process.env.ADMIN_EMAIL || process.env.FROM_EMAIL;
-
-                // Admin notification
-                await sendEmail({
-                    email: adminEmail,
-                    subject: `New Mentorship Enrollment - ${order.orderNumber}`,
-                    html: getAdminNotificationTemplate({
-                        type: 'mentorship',
-                        orderNumber: order.orderNumber,
-                        customerName: order.user.name,
-                        customerEmail: order.user.email,
-                        customerPhone: order.user.phone,
-                        itemName: mentorshipOrder.mentorship.title,
-                        amount: order.finalAmount,
-                        additionalInfo: `Instructor: ${mentorshipOrder.mentorship.instructorName}`,
-                        dashboardUrl: `${process.env.CLIENT_URL || 'http://localhost:3000'}/admin/mentorship`,
-                    }),
-                });
-
-                // User confirmation
-                await sendEmail({
-                    email: order.user.email,
-                    subject: `Mentorship Enrollment Confirmed - ${mentorshipOrder.mentorship.title}`,
-                    html: getMentorshipEnrollmentTemplate({
-                        userName: order.user.name,
-                        mentorshipTitle: mentorshipOrder.mentorship.title,
-                        instructorName: mentorshipOrder.mentorship.instructorName,
-                        orderNumber: order.orderNumber,
-                        accessUrl: `${process.env.CLIENT_URL || 'http://localhost:3000'}/profile/enrolled`,
-                    }),
-                });
-            } catch (emailError) {
-                console.error("Error sending enrollment emails:", emailError);
-            }
-        }
-    }
-
     // Handle course orders if orderType is COURSE
     if (order.orderType === "COURSE") {
         // Find course order linked to this order
@@ -1266,18 +1184,6 @@ export const getUserOrders = asyncHandler(async (req, res) => {
                     },
                 },
             },
-            subscriptions: {
-                include: {
-                    plan: {
-                        select: {
-                            id: true,
-                            planType: true,
-                            price: true,
-                            salePrice: true,
-                        },
-                    },
-                },
-            },
         },
         orderBy: { createdAt: "desc" },
     });
@@ -1358,31 +1264,6 @@ export const getUserOrders = asyncHandler(async (req, res) => {
         orderBy: { createdAt: "desc" },
     });
 
-    // Fetch mentorship orders separately
-    const mentorshipOrders = await prisma.mentorshipOrder.findMany({
-        where: {
-            userId,
-            ...(status && { paymentStatus: "PAID" }), // Only paid if status filter
-        },
-        include: {
-            mentorship: {
-                select: {
-                    id: true,
-                    title: true,
-                    slug: true,
-                    coverImage: true,
-                    instructorName: true,
-                    instructorImage: true,
-                    googleMeetLink: true,
-                    startDate: true,
-                    endDate: true,
-                    totalSessions: true,
-                },
-            },
-        },
-        orderBy: { createdAt: "desc" },
-    });
-
     // Fetch offline batch orders separately
     const offlineBatchOrders = await prisma.offlineBatchOrder.findMany({
         where: {
@@ -1448,8 +1329,6 @@ export const getUserOrders = asyncHandler(async (req, res) => {
     const ordersWithUrls = filteredOrders.map((order) => {
         // Find guidance orders linked to this order
         const linkedGuidanceOrders = guidanceOrders.filter(go => go.paymentId === order.id);
-        // Find mentorship orders linked to this order
-        const linkedMentorshipOrders = mentorshipOrders.filter(mo => mo.paymentId === order.id);
         // Find course orders linked to this order
         const linkedCourseOrders = courseOrders.filter(co => co.orderId === order.id);
         // Find offline batch orders linked to this order
@@ -1468,12 +1347,7 @@ export const getUserOrders = asyncHandler(async (req, res) => {
                     pdfUrl: item.ebook.pdfFile ? getPublicUrl(item.ebook.pdfFile) : null,
                 },
             })),
-            subscriptions: order.subscriptions ? order.subscriptions.map((sub) => ({
-                ...sub,
-                plan: {
-                    ...sub.plan,
-                },
-            })) : [],
+            subscriptions: [],
             webinarOrders: type === "all" || type === "webinar" || type === "enrolled"
                 ? webinarOrders
                     .filter(wo => wo.paymentId === order.id && (!status || wo.paymentId))
@@ -1496,18 +1370,7 @@ export const getUserOrders = asyncHandler(async (req, res) => {
                         },
                     }))
                 : [],
-            mentorshipOrders: (type === "all" || type === "mentorship")
-                ? linkedMentorshipOrders
-                    .filter(mo => !status || mo.paymentStatus === "PAID")
-                    .map(mo => ({
-                        ...mo,
-                        mentorship: {
-                            ...mo.mentorship,
-                            coverImageUrl: mo.mentorship.coverImage ? getPublicUrl(mo.mentorship.coverImage) : null,
-                            instructorImageUrl: mo.mentorship.instructorImage ? getPublicUrl(mo.mentorship.instructorImage) : null,
-                        },
-                    }))
-                : [],
+            mentorshipOrders: [],
             courseOrders: (type === "all" || type === "course" || type === "courses")
                 ? linkedCourseOrders
                     .filter(co => !status || co.paymentStatus === "PAID")
@@ -1597,47 +1460,7 @@ export const getUserOrders = asyncHandler(async (req, res) => {
         );
     }
 
-    // For mentorship type, return standalone mentorship orders (not linked to any order) as separate entries
-    if (type === "mentorship") {
-        const orderIdsSet = new Set(orderIds);
-        const standaloneMentorshipOrders = mentorshipOrders
-            .filter(mo => !mo.paymentId || !orderIdsSet.has(mo.paymentId))
-            .filter(mo => !status || mo.paymentStatus === "PAID")
-            .map(mo => ({
-                id: mo.id,
-                orderNumber: mo.paymentId ? `MENT-${mo.id.slice(0, 8).toUpperCase()}` : `MENT-${mo.id.slice(0, 8).toUpperCase()}`,
-                orderType: "MENTORSHIP",
-                status: mo.paymentStatus === "PAID" ? "COMPLETED" : "PENDING",
-                paymentStatus: mo.paymentStatus,
-                totalAmount: mo.amountPaid,
-                finalAmount: mo.amountPaid,
-                createdAt: mo.createdAt,
-                items: [],
-                subscriptions: [],
-                webinarOrders: [],
-                guidanceOrders: [],
-                mentorshipOrders: [{
-                    ...mo,
-                    mentorship: {
-                        ...mo.mentorship,
-                        coverImageUrl: mo.mentorship.coverImage ? getPublicUrl(mo.mentorship.coverImage) : null,
-                        instructorImageUrl: mo.mentorship.instructorImage ? getPublicUrl(mo.mentorship.instructorImage) : null,
-                    },
-                }],
-            }));
-
-        // Combine orders with mentorship orders and standalone mentorship orders
-        const allMentorshipOrders = [
-            ...ordersWithUrls.filter(o => o.orderType === "MENTORSHIP"),
-            ...standaloneMentorshipOrders
-        ];
-
-        return res.status(200).json(
-            new ApiResponsive(200, { orders: allMentorshipOrders }, "Orders fetched successfully")
-        );
-    }
-
-    // For "all" type, include standalone mentorship orders, course orders, and guidance orders
+    // For "all" type, include standalone course orders, guidance orders, etc.
     const orderIdsSet = new Set(orderIds);
 
     // Get standalone guidance orders
@@ -1664,34 +1487,6 @@ export const getUserOrders = asyncHandler(async (req, res) => {
                 },
             }],
             mentorshipOrders: [],
-            courseOrders: [],
-        }));
-
-    // Get standalone mentorship orders
-    const standaloneMentorshipOrders = mentorshipOrders
-        .filter(mo => !mo.paymentId || !orderIdsSet.has(mo.paymentId))
-        .filter(mo => !status || mo.paymentStatus === "PAID")
-        .map(mo => ({
-            id: mo.id,
-            orderNumber: mo.paymentId ? `MENT-${mo.id.slice(0, 8).toUpperCase()}` : `MENT-${mo.id.slice(0, 8).toUpperCase()}`,
-            orderType: "MENTORSHIP",
-            status: mo.paymentStatus === "PAID" ? "COMPLETED" : "PENDING",
-            paymentStatus: mo.paymentStatus,
-            totalAmount: mo.amountPaid,
-            finalAmount: mo.amountPaid,
-            createdAt: mo.createdAt,
-            items: [],
-            subscriptions: [],
-            webinarOrders: [],
-            guidanceOrders: [],
-            mentorshipOrders: [{
-                ...mo,
-                mentorship: {
-                    ...mo.mentorship,
-                    coverImageUrl: mo.mentorship.coverImage ? getPublicUrl(mo.mentorship.coverImage) : null,
-                    instructorImageUrl: mo.mentorship.instructorImage ? getPublicUrl(mo.mentorship.instructorImage) : null,
-                },
-            }],
             courseOrders: [],
         }));
 
@@ -1822,7 +1617,6 @@ export const getUserOrders = asyncHandler(async (req, res) => {
                 ...ordersWithUrls,
                 ...standaloneWebinarOrders,
                 ...standaloneGuidanceOrders,
-                ...standaloneMentorshipOrders,
                 ...standaloneCourseOrders,
                 ...standaloneOfflineBatchOrders,
                 ...standaloneBundleOrders
@@ -1887,17 +1681,6 @@ export const getAllOrders = asyncHandler(async (req, res) => {
                         },
                     },
                 },
-                subscriptions: {
-                    include: {
-                        plan: {
-                            select: {
-                                id: true,
-                                planType: true,
-                                price: true,
-                            },
-                        },
-                    },
-                },
             },
             orderBy: { createdAt: "desc" },
             skip,
@@ -1957,31 +1740,6 @@ export const getAllOrders = asyncHandler(async (req, res) => {
                     date: true,
                     startTime: true,
                     endTime: true,
-                },
-            },
-        },
-        orderBy: { createdAt: "desc" },
-    });
-
-    // Get all mentorship orders
-    const mentorshipOrders = await prisma.mentorshipOrder.findMany({
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    phone: true,
-                },
-            },
-            mentorship: {
-                select: {
-                    id: true,
-                    title: true,
-                    slug: true,
-                    coverImage: true,
-                    price: true,
-                    salePrice: true,
                 },
             },
         },
@@ -2121,15 +1879,6 @@ export const getAllOrders = asyncHandler(async (req, res) => {
         },
     }));
 
-    // Format mentorship orders
-    const mentorshipOrdersWithUrls = mentorshipOrders.map((mo) => ({
-        ...mo,
-        mentorship: {
-            ...mo.mentorship,
-            coverImageUrl: mo.mentorship.coverImage ? getPublicUrl(mo.mentorship.coverImage) : null,
-        },
-    }));
-
     // Format course orders - exclude bundle-linked course orders
     const standaloneCourseOrders = courseOrders.filter(co => co.paymentMode !== 'BUNDLE');
     const courseOrdersWithUrls = standaloneCourseOrders.map((co) => ({
@@ -2172,7 +1921,6 @@ export const getAllOrders = asyncHandler(async (req, res) => {
             orders: ordersWithUrls,
             webinarOrders: webinarOrdersWithUrls,
             guidanceOrders: guidanceOrdersWithUrls,
-            mentorshipOrders: mentorshipOrdersWithUrls,
             courseOrders: courseOrdersWithUrls,
             offlineBatchOrders: offlineBatchOrdersWithUrls,
             bundleOrders: bundleOrdersWithUrls,
@@ -2717,184 +2465,6 @@ export const checkGuidanceBooking = asyncHandler(async (req, res) => {
 });
 
 /**
- * Create mentorship order (enrollment)
- */
-export const createMentorshipOrder = asyncHandler(async (req, res) => {
-    const { mentorshipId, couponCode } = req.body;
-    const userId = req.user.id;
-
-    if (!mentorshipId) {
-        throw new ApiError(400, "Mentorship ID is required");
-    }
-
-    // Get mentorship
-    const mentorship = await prisma.liveMentorshipProgram.findUnique({
-        where: { id: mentorshipId },
-    });
-
-    if (!mentorship) {
-        throw new ApiError(404, "Mentorship program not found");
-    }
-
-    if (mentorship.status !== "PUBLISHED") {
-        throw new ApiError(400, "Mentorship program is not published");
-    }
-
-    // Check if user is already enrolled
-    const existingEnrollment = await prisma.mentorshipEnrollment.findUnique({
-        where: {
-            mentorshipId_userId: {
-                mentorshipId,
-                userId,
-            },
-        },
-    });
-
-    if (existingEnrollment) {
-        throw new ApiError(400, "You are already enrolled in this program");
-    }
-
-    // Get flash sale pricing
-    const pricing = await getItemPricing('MENTORSHIP', mentorship.id, mentorship.price, mentorship.salePrice);
-    const totalAmount = mentorship.isFree ? 0 : pricing.effectivePrice;
-
-    // Apply coupon if provided
-    let discountAmount = 0;
-    let coupon = null;
-    if (couponCode && !mentorship.isFree) {
-        coupon = await prisma.coupon.findFirst({
-            where: {
-                code: couponCode.toUpperCase(),
-                isActive: true,
-                validFrom: { lte: new Date() },
-                validUntil: { gte: new Date() },
-                OR: [
-                    { applicableTo: "ALL" },
-                    { applicableTo: "MENTORSHIP" },
-                ],
-            },
-        });
-
-        if (coupon) {
-            if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
-                throw new ApiError(400, "Coupon usage limit exceeded");
-            }
-
-            if (coupon.discountType === "PERCENTAGE") {
-                discountAmount = (totalAmount * coupon.discountValue) / 100;
-                if (coupon.maxDiscount) {
-                    discountAmount = Math.min(discountAmount, coupon.maxDiscount);
-                }
-            } else {
-                discountAmount = coupon.discountValue;
-            }
-
-            if (coupon.minAmount && totalAmount < coupon.minAmount) {
-                throw new ApiError(400, `Minimum order amount is ₹${coupon.minAmount}`);
-            }
-        } else {
-            throw new ApiError(400, "Invalid coupon code");
-        }
-    }
-
-    const finalAmount = Math.max(0, totalAmount - discountAmount);
-
-    // If free, create enrollment directly
-    if (mentorship.isFree || finalAmount === 0) {
-        // Create enrollment
-        await prisma.mentorshipEnrollment.create({
-            data: {
-                mentorshipId,
-                userId,
-            },
-        });
-
-        // Create free order
-        const order = await prisma.order.create({
-            data: {
-                userId,
-                orderNumber: `MENT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-                orderType: "MENTORSHIP",
-                totalAmount: 0,
-                discountAmount: 0,
-                finalAmount: 0,
-                status: "COMPLETED",
-                paymentStatus: "FREE",
-                couponCode: couponCode || null,
-            },
-        });
-
-        // Create mentorship order
-        await prisma.mentorshipOrder.create({
-            data: {
-                mentorshipId,
-                userId,
-                amountPaid: 0,
-                paymentId: order.id,
-                paymentStatus: "PAID",
-                paymentMode: "FREE",
-            },
-        });
-
-        return res.status(201).json(
-            new ApiResponsive(201, { order, enrollment: true }, "Enrollment completed successfully")
-        );
-    }
-
-    // Create Razorpay order
-    const orderNumber = `MENT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-    const razorpayOrder = await createRazorpayOrder(finalAmount, "INR", orderNumber);
-
-    // Create Order record
-    const order = await prisma.order.create({
-        data: {
-            userId,
-            orderNumber,
-            orderType: "MENTORSHIP",
-            totalAmount,
-            discountAmount,
-            finalAmount,
-            status: "PENDING",
-            paymentStatus: "PENDING",
-            razorpayOrderId: razorpayOrder.id,
-            couponCode: couponCode || null,
-        },
-    });
-
-    // Create MentorshipOrder (temporary, will be updated after payment)
-    const mentorshipOrder = await prisma.mentorshipOrder.create({
-        data: {
-            mentorshipId,
-            userId,
-            amountPaid: finalAmount,
-            paymentId: order.id, // Link to Order.id
-            paymentStatus: "CREATED",
-            paymentMode: "RAZORPAY",
-        },
-        include: {
-            mentorship: true,
-        },
-    });
-
-    return res.status(201).json(
-        new ApiResponsive(
-            201,
-            {
-                order,
-                mentorshipOrder,
-                razorpayOrder: {
-                    id: razorpayOrder.id,
-                    amount: razorpayOrder.amount,
-                    currency: razorpayOrder.currency,
-                    key: process.env.RAZORPAY_KEY_ID,
-                },
-            },
-            "Order created successfully"
-        )
-    );
-});
-
-/**
  * Create course order
  */
 export const createCourseOrder = asyncHandler(async (req, res) => {
@@ -3318,14 +2888,13 @@ export const initPayment = asyncHandler(async (req, res) => {
         ebookIds = [],
         webinarIds = [],
         guidanceSlotIds = [],
-        mentorshipIds = [],
         courseIds = [],
         offlineBatchIds = [],
         bundleIds = [],
     } = items;
 
     const totalItems = ebookIds.length + webinarIds.length + guidanceSlotIds.length +
-        mentorshipIds.length + courseIds.length + offlineBatchIds.length + bundleIds.length;
+        courseIds.length + offlineBatchIds.length + bundleIds.length;
 
     if (totalItems === 0) {
         throw new ApiError(400, "At least one item is required");
@@ -3336,7 +2905,6 @@ export const initPayment = asyncHandler(async (req, res) => {
         ebooks: [],
         webinars: [],
         guidanceSlots: [],
-        mentorships: [],
         courses: [],
         offlineBatches: [],
         bundles: [],
@@ -3399,26 +2967,6 @@ export const initPayment = asyncHandler(async (req, res) => {
                 guidanceId: slot.guidance.id,
                 title: slot.guidance.title,
                 price: slot.guidance.price,
-                effectivePrice: pricing.effectivePrice,
-            });
-        }
-    }
-
-    // Calculate mentorship totals
-    if (mentorshipIds.length > 0) {
-        const mentorships = await prisma.liveMentorshipProgram.findMany({
-            where: { id: { in: mentorshipIds }, status: "PUBLISHED" },
-        });
-
-        for (const mentorship of mentorships) {
-            if (mentorship.isFree) continue;
-
-            const pricing = await getItemPricing('MENTORSHIP', mentorship.id, mentorship.price, mentorship.salePrice);
-            totalAmount += pricing.effectivePrice;
-            itemDetails.mentorships.push({
-                id: mentorship.id,
-                title: mentorship.title,
-                price: mentorship.price,
                 effectivePrice: pricing.effectivePrice,
             });
         }
@@ -3696,7 +3244,6 @@ export const completePayment = asyncHandler(async (req, res) => {
         ebookIds = [],
         webinarIds = [],
         guidanceSlotIds = [],
-        mentorshipIds = [],
         courseIds = [],
         offlineBatchIds = [],
         bundleIds = [],
@@ -3870,66 +3417,6 @@ export const completePayment = asyncHandler(async (req, res) => {
             });
 
             orders.push({ type: 'GUIDANCE', order });
-        }
-    }
-
-    // Process mentorships
-    if (mentorshipIds.length > 0) {
-        for (const mentorshipId of mentorshipIds) {
-            const mentorship = await prisma.liveMentorshipProgram.findUnique({
-                where: { id: mentorshipId },
-            });
-
-            if (!mentorship || mentorship.isFree) continue;
-
-            const pricing = await getItemPricing('MENTORSHIP', mentorship.id, mentorship.price, mentorship.salePrice);
-
-            const order = await prisma.order.create({
-                data: {
-                    userId,
-                    orderNumber: `MENT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-                    orderType: "MENTORSHIP",
-                    totalAmount: pricing.effectivePrice,
-                    discountAmount: 0,
-                    finalAmount: pricing.effectivePrice,
-                    status: "COMPLETED",
-                    paymentStatus: "PAID",
-                    razorpayOrderId,
-                    razorpayPaymentId: paymentId,
-                    razorpaySignature: signature,
-                    couponCode: couponCode || null,
-                },
-            });
-
-            // Create mentorship order and enrollment
-            await prisma.mentorshipOrder.create({
-                data: {
-                    mentorshipId,
-                    userId,
-                    paymentId: order.id,
-                    amountPaid: pricing.effectivePrice,
-                    paymentStatus: "PAID",
-                    paymentMode: "RAZORPAY",
-                },
-            });
-
-            await prisma.mentorshipEnrollment.upsert({
-                where: {
-                    mentorshipId_userId: {
-                        mentorshipId,
-                        userId
-                    }
-                },
-                update: {
-                    enrolledAt: new Date(),
-                },
-                create: {
-                    mentorshipId,
-                    userId,
-                },
-            });
-
-            orders.push({ type: 'MENTORSHIP', order });
         }
     }
 
@@ -4345,12 +3832,6 @@ export const completePayment = asyncHandler(async (req, res) => {
                     include: { course: { select: { title: true } } }
                 });
                 itemNames = courseOrders.map(c => c.course?.title).filter(Boolean);
-            } else if (type === 'MENTORSHIP') {
-                const mentorshipOrders = await prisma.mentorshipOrder.findMany({
-                    where: { paymentId: order.id },
-                    include: { mentorship: { select: { title: true } } }
-                });
-                itemNames = mentorshipOrders.map(m => m.mentorship?.title).filter(Boolean);
             } else if (type === 'GUIDANCE') {
                 const guidanceOrders = await prisma.guidanceOrder.findMany({
                     where: { paymentId: order.id },

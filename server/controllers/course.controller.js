@@ -549,7 +549,7 @@ export const getCourseById = asyncHandler(async (req, res) => {
  * Create course
  */
 export const createCourse = asyncHandler(async (req, res) => {
-    const { title, slug, description, language, price, salePrice, isFree, isPublished, categoryIds, coverImageUrl: coverImageUrlFromBody } = req.body;
+    const { title, slug, description, language, price, salePrice, isFree, isPublished, categoryIds, coverImageUrl: coverImageUrlFromBody, benefits, curriculumText, deliveryMode } = req.body;
     let coverImageUrl = null;
 
     if (!title || !description) {
@@ -616,6 +616,14 @@ export const createCourse = asyncHandler(async (req, res) => {
         throw new ApiError(400, 'Slug already exists');
     }
 
+    let benefitsArray = [];
+    if (benefits !== undefined) {
+        if (Array.isArray(benefits)) benefitsArray = benefits;
+        else if (typeof benefits === 'string') {
+            try { benefitsArray = JSON.parse(benefits); } catch { benefitsArray = benefits ? [benefits] : []; }
+        }
+    }
+
     const course = await prisma.course.create({
         data: {
             title,
@@ -627,6 +635,9 @@ export const createCourse = asyncHandler(async (req, res) => {
             salePrice: salePrice ? parseFloat(salePrice) : null,
             isFree: isFree === 'true' || isFree === true,
             isPublished: isPublished === 'true' || isPublished === true,
+            benefits: benefitsArray,
+            curriculumText: curriculumText || null,
+            deliveryMode: deliveryMode && ['ONLINE', 'SELF_PACED', 'BOTH'].includes(deliveryMode) ? deliveryMode : 'BOTH',
             categories: {
                 create: categoryIdsArray.map(categoryId => ({
                     categoryId,
@@ -657,7 +668,7 @@ export const createCourse = asyncHandler(async (req, res) => {
  */
 export const updateCourse = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { title, slug, description, language, price, salePrice, isFree, isPublished, removeCoverImage, categoryIds } = req.body;
+    const { title, slug, description, language, price, salePrice, isFree, isPublished, removeCoverImage, categoryIds, benefits, curriculumText, deliveryMode } = req.body;
 
     const course = await prisma.course.findUnique({
         where: { id },
@@ -750,19 +761,32 @@ export const updateCourse = asyncHandler(async (req, res) => {
         }
     }
 
+    let benefitsArray;
+    if (benefits !== undefined) {
+        if (Array.isArray(benefits)) benefitsArray = benefits;
+        else if (typeof benefits === 'string') {
+            try { benefitsArray = JSON.parse(benefits); } catch { benefitsArray = benefits ? [benefits] : []; }
+        } else benefitsArray = course.benefits ?? [];
+    }
+
+    const updateData = {
+        title: title || course.title,
+        slug: slug || course.slug,
+        description: description || course.description,
+        coverImage: coverImageUrl,
+        language: language || course.language,
+        price: price !== undefined ? parseFloat(price) : course.price,
+        salePrice: salePrice !== undefined ? (salePrice ? parseFloat(salePrice) : null) : course.salePrice,
+        isFree: isFree !== undefined ? (isFree === 'true' || isFree === true) : course.isFree,
+        isPublished: isPublished !== undefined ? (isPublished === 'true' || isPublished === true) : course.isPublished,
+    };
+    if (benefits !== undefined) updateData.benefits = benefitsArray;
+    if (curriculumText !== undefined) updateData.curriculumText = curriculumText || null;
+    if (deliveryMode !== undefined && ['ONLINE', 'SELF_PACED', 'BOTH'].includes(deliveryMode)) updateData.deliveryMode = deliveryMode;
+
     const updatedCourse = await prisma.course.update({
         where: { id },
-        data: {
-            title: title || course.title,
-            slug: slug || course.slug,
-            description: description || course.description,
-            coverImage: coverImageUrl,
-            language: language || course.language,
-            price: price !== undefined ? parseFloat(price) : course.price,
-            salePrice: salePrice !== undefined ? (salePrice ? parseFloat(salePrice) : null) : course.salePrice,
-            isFree: isFree !== undefined ? (isFree === 'true' || isFree === true) : course.isFree,
-            isPublished: isPublished !== undefined ? (isPublished === 'true' || isPublished === true) : course.isPublished,
-        },
+        data: updateData,
         include: {
             categories: {
                 include: {

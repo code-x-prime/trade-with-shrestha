@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { orderAPI, subscriptionAPI } from '@/lib/api';
+import { orderAPI } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -48,19 +48,11 @@ function OrdersContent() {
       let apiType = undefined;
       if (activeTab === 'webinars') apiType = 'webinar';
       else if (activeTab === 'guidance') apiType = 'guidance';
-      else if (activeTab === 'mentorship') apiType = 'mentorship';
       else if (activeTab === 'courses') apiType = 'course';
 
       // Fetch orders
       const orderResponse = await orderAPI.getOrders({ type: apiType });
       const allOrders = orderResponse.success ? orderResponse.data.orders : [];
-
-      // Fetch subscriptions if needed
-      let subscriptions = [];
-      if (activeTab === 'all' || activeTab === 'subscriptions') {
-        const subscriptionResponse = await subscriptionAPI.getUserSubscriptions();
-        subscriptions = subscriptionResponse.success ? subscriptionResponse.data.subscriptions : [];
-      }
 
       // Process and combine all orders
       const processedOrders = [];
@@ -117,30 +109,6 @@ function OrdersContent() {
               discountAmount: 0,
               displayType: 'guidance',
               guidanceOrders: [go],
-              items: [],
-              subscriptions: [],
-            });
-          });
-        }
-
-        // Add mentorship orders as separate entries
-        if (order.mentorshipOrders && order.mentorshipOrders.length > 0) {
-          order.mentorshipOrders.forEach(mo => {
-            processedOrders.push({
-              id: mo.id,
-              orderNumber: order.orderNumber || `MENT-${mo.id.slice(0, 8).toUpperCase()}`,
-              orderType: 'MENTORSHIP',
-              status: mo.paymentStatus === 'PAID' ? 'COMPLETED' : 'PENDING',
-              paymentStatus: mo.paymentStatus || 'PENDING',
-              totalAmount: mo.amountPaid || 0,
-              finalAmount: mo.amountPaid || 0,
-              createdAt: mo.createdAt || order.createdAt,
-              razorpayPaymentId: order.razorpayPaymentId,
-              razorpayOrderId: order.razorpayOrderId,
-              couponCode: order.couponCode,
-              discountAmount: 0,
-              displayType: 'mentorship',
-              mentorshipOrders: [mo],
               items: [],
               subscriptions: [],
             });
@@ -221,25 +189,6 @@ function OrdersContent() {
         }
       });
 
-      // Add subscriptions
-      subscriptions.forEach(sub => {
-        processedOrders.push({
-          id: sub.id,
-          orderNumber: `SUB-${sub.id.slice(0, 8).toUpperCase()}`,
-          orderType: 'SUBSCRIPTION',
-          status: sub.status === 'ACTIVE' ? 'COMPLETED' : sub.status,
-          paymentStatus: sub.razorpayPaymentId ? 'PAID' : 'PENDING',
-          totalAmount: sub.totalAmount,
-          discountAmount: sub.discountAmount,
-          finalAmount: sub.finalAmount,
-          couponCode: sub.couponCode,
-          createdAt: sub.createdAt,
-          displayType: 'subscription',
-          subscriptions: [sub],
-          items: [],
-        });
-      });
-
       // Filter by active tab
       let filtered = processedOrders;
       if (activeTab === 'purchased') {
@@ -250,12 +199,8 @@ function OrdersContent() {
         filtered = processedOrders.filter(o => o.displayType === 'webinar');
       } else if (activeTab === 'guidance') {
         filtered = processedOrders.filter(o => o.displayType === 'guidance');
-      } else if (activeTab === 'mentorship') {
-        filtered = processedOrders.filter(o => o.displayType === 'mentorship');
       } else if (activeTab === 'courses') {
         filtered = processedOrders.filter(o => o.displayType === 'course');
-      } else if (activeTab === 'subscriptions') {
-        filtered = processedOrders.filter(o => o.displayType === 'subscription');
       } else if (activeTab === 'offlineBatches') {
         filtered = processedOrders.filter(o => o.displayType === 'offlineBatch');
       } else if (activeTab === 'bundles') {
@@ -370,15 +315,6 @@ function OrdersContent() {
             1:1 Guidance
           </button>
           <button
-            onClick={() => setActiveTab('mentorship')}
-            className={`px-3 sm:px-4 py-2 rounded-sm text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'mentorship'
-              ? 'bg-white text-brand-600 shadow-sm dark:bg-gray-700 dark:text-brand-400'
-              : 'text-muted-foreground hover:text-foreground dark:text-gray-400 dark:hover:text-white'
-              }`}
-          >
-            Mentorship
-          </button>
-          <button
             onClick={() => setActiveTab('courses')}
             className={`px-3 sm:px-4 py-2 rounded-sm text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'courses'
               ? 'bg-white text-brand-600 shadow-sm dark:bg-gray-700 dark:text-brand-400'
@@ -386,15 +322,6 @@ function OrdersContent() {
               }`}
           >
             Courses
-          </button>
-          <button
-            onClick={() => setActiveTab('subscriptions')}
-            className={`px-3 sm:px-4 py-2 rounded-sm text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'subscriptions'
-              ? 'bg-white text-brand-600 shadow-sm dark:bg-gray-700 dark:text-brand-400'
-              : 'text-muted-foreground hover:text-foreground dark:text-gray-400 dark:hover:text-white'
-              }`}
-          >
-            Subscriptions
           </button>
           <button
             onClick={() => setActiveTab('offlineBatches')}
@@ -446,7 +373,6 @@ function OrdersContent() {
                       <span className="truncate">Order #{order.orderNumber}</span>
                       {order.orderType === 'WEBINAR' && <Video className="h-4 w-4 text-brand-600 dark:text-brand-400" />}
                       {order.orderType === 'GUIDANCE' && <MessageCircle className="h-4 w-4 text-brand-600 dark:text-brand-400" />}
-                      {order.orderType === 'MENTORSHIP' && <Video className="h-4 w-4 text-brand-600 dark:text-brand-400" />}
                       {order.orderType === 'COURSE' && <BookOpen className="h-4 w-4 text-brand-600 dark:text-brand-400" />}
                       {order.orderType === 'COURSE' && <BookOpen className="h-4 w-4 text-brand-600 dark:text-brand-400" />}
                       {order.orderType === 'SUBSCRIPTION' && <TrendingUp className="h-4 w-4 text-brand-600 dark:text-brand-400" />}
@@ -722,35 +648,6 @@ function OrdersContent() {
                       </div>
                     );
                   })}
-
-                  {/* Subscription Orders */}
-                  {order.subscriptions && order.subscriptions.length > 0 && order.subscriptions.map((sub) => (
-                    <div key={sub.id} className="flex gap-4 pb-4 border-b last:border-0 dark:border-gray-800">
-                      <div className="w-20 h-28 relative rounded-md overflow-hidden border flex-shrink-0 bg-gradient-to-br from-[#4A50B0] to-[#5C64D7] flex items-center justify-center">
-                        <TrendingUp className="h-12 w-12 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold dark:text-white">Global Subscription - Access to All Indicators</h3>
-                        <p className="text-sm text-muted-foreground mt-1 dark:text-gray-400">
-                          Plan: {sub.plan?.planType?.replace('_', ' ') || sub.planType?.replace('_', ' ')}
-                        </p>
-                        {sub.tradingViewUsername && (
-                          <p className="text-sm text-muted-foreground mt-1 dark:text-gray-400">
-                            TradingView: <span className="font-mono">{sub.tradingViewUsername}</span>
-                          </p>
-                        )}
-                        <p className="text-brand-600 dark:text-brand-400 font-semibold mt-1">
-                          ₹{sub.finalAmount?.toFixed(2)}
-                        </p>
-                        <Badge className={`mt-2 ${sub.status === 'ACTIVE' ? 'bg-green-500' :
-                          sub.status === 'EXPIRED' ? 'bg-gray-500' :
-                            'bg-red-500'
-                          }`}>
-                          {sub.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
 
                   {/* Order Summary */}
                   <div className="pt-4 border-t dark:border-gray-800">

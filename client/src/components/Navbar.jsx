@@ -35,23 +35,24 @@ import {
   X,
   ChevronDown,
   Calendar,
-  UserCircle,
   BookOpen,
-  TrendingUp,
   Package,
   Sun,
-  Moon
+  Moon,
+  Award,
+  Briefcase,
+  Users,
+  MessageCircle,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { webinarAPI, mentorshipAPI, courseAPI, ebookAPI, indicatorAPI, offlineBatchAPI, bundleAPI, guidanceAPI } from '@/lib/api';
+import { webinarAPI, courseAPI, ebookAPI, bundleAPI, guidanceAPI } from '@/lib/api';
 
 const BRAND_COLOR = '#4A50B0';
 
 const SEARCH_PLACEHOLDERS = [
   "Search 'Web Development'",
   "Search 'Webinars'",
-  "Search 'Mentorship'",
   "Search 'Data Science'",
   "Search 'Python Mastery'",
   "Search 'Financial Markets'",
@@ -80,6 +81,7 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [desktopSearchOpen, setDesktopSearchOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
@@ -115,12 +117,10 @@ export default function Navbar() {
 
     const debounceTimer = setTimeout(async () => {
       try {
-        const [coursesRes, webinarsRes, mentorshipsRes, ebooksRes, indicatorsRes, bundlesRes, guidanceRes] = await Promise.all([
+        const [coursesRes, webinarsRes, ebooksRes, bundlesRes, guidanceRes] = await Promise.all([
           courseAPI.getCourses({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
           webinarAPI.getWebinars({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
-          mentorshipAPI.getMentorship({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
           ebookAPI.getEbooks({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
-          indicatorAPI.getIndicators({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
           bundleAPI.getBundles({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
           guidanceAPI.getGuidance({ search: searchQuery, limit: 3 }).catch(() => ({ success: false, data: {} })),
         ]);
@@ -149,39 +149,16 @@ export default function Navbar() {
           });
         }
 
-        if (mentorshipsRes.success && (mentorshipsRes.data.mentorships || mentorshipsRes.data.mentorship)?.length > 0) {
-          const mentorships = mentorshipsRes.data.mentorships || mentorshipsRes.data.mentorship || [];
-          suggestions.push({
-            type: 'Mentorship',
-            items: mentorships.map(m => ({
-              id: m.id,
-              title: m.title,
-              href: `/mentorship/${m.slug || m.id}`,
-            })),
-          });
-        }
-
-        if (ebooksRes.success && ebooksRes.data.ebooks?.length > 0) {
-          suggestions.push({
-            type: 'E-Books',
-            items: ebooksRes.data.ebooks.map(e => ({
-              id: e.id,
-              title: e.title,
-              href: `/ebooks/${e.slug || e.id}`,
-            })),
-          });
-        }
-
-        if (indicatorsRes.success && indicatorsRes.data.indicators?.length > 0) {
-          suggestions.push({
-            type: 'Indicators',
-            items: indicatorsRes.data.indicators.map(i => ({
-              id: i.id,
-              title: i.name,
-              href: `/indicators/${i.slug || i.id}`,
-            })),
-          });
-        }
+        // if (ebooksRes.success && ebooksRes.data.ebooks?.length > 0) {
+        //   suggestions.push({
+        //     type: 'E-Books',
+        //     items: ebooksRes.data.ebooks.map(e => ({
+        //       id: e.id,
+        //       title: e.title,
+        //       href: `/ebooks/${e.slug || e.id}`,
+        //     })),
+        //   });
+        // }
 
         if (bundlesRes.success && bundlesRes.data.bundles?.length > 0) {
           suggestions.push({
@@ -272,26 +249,19 @@ export default function Navbar() {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
       setSearchFocused(false);
+      setDesktopSearchOpen(false);
       setMobileSearchOpen(false);
     }
   };
 
   const menuItems = [
-    {
-      name: 'Courses',
-      href: '/courses',
-      icon: BookOpen,
-      hasMegaMenu: true,
-    },
-    {
-      name: 'Live',
-      href: '/webinars',
-      icon: Video,
-      hasMegaMenu: true,
-    },
-    { name: 'Indicators', href: '/indicators', icon: TrendingUp },
-    { name: 'E-Books', href: '/ebooks', icon: BookOpen },
-    { name: 'Blog', href: '/blog', icon: BookOpen },
+    { name: 'Courses', href: '/courses', icon: BookOpen, hasMegaMenu: true },
+    { name: 'Events', href: '/webinars', icon: Video, hasMegaMenu: true },
+    // { name: 'E-Books', href: '/ebooks', icon: BookOpen },
+    { name: 'Placement', href: '/placement', icon: Award },
+    { name: 'Career', href: '/career', icon: Briefcase, hasMegaMenu: true },
+    { name: 'Services', href: '/services/corporate-training', icon: Users, hasMegaMenu: true },
+    { name: 'Demo Schedule', href: '/training-schedule', icon: Calendar },
   ];
 
   const courseMenuItems = [
@@ -315,18 +285,12 @@ export default function Navbar() {
     },
   ];
 
-  const liveMenuItems = [
+  const eventsMenuItems = [
     {
-      title: 'Webinars',
-      description: 'Value packed interactive sessions',
+      title: 'Events',
+      description: 'Webinars & live sessions',
       href: '/webinars',
       icon: Video,
-    },
-    {
-      title: 'Mentorship Programs',
-      description: 'Structured live training programs',
-      href: '/mentorship',
-      icon: UserCircle,
     },
     {
       title: '1:1 Guidance',
@@ -335,6 +299,27 @@ export default function Navbar() {
       icon: Calendar,
     },
   ];
+
+  const servicesMenuItems = [
+    { title: 'Corporate Training', description: 'Upskill your teams', href: '/services/corporate-training', icon: Users },
+    { title: 'Hire From Us', description: 'Connect with job-ready talent', href: '/services/hire-from-us', icon: Briefcase },
+    { title: 'Mock Interview', description: 'Practice with expert feedback', href: '/services/mock-interview', icon: MessageCircle },
+    { title: 'Practice with Expert', description: 'Get expert feedback on your practice', href: '/services/practice-with-expert', icon: MessageCircle },
+  ];
+
+  const careerMenuItems = [
+    { title: 'Software Jobs', description: 'Browse job openings', href: '/career/software-jobs', icon: Briefcase },
+    { title: 'Interview Questions', description: 'Common Q&A and tips', href: '/career/interview-questions', icon: MessageCircle },
+    { title: 'Placement Training', description: 'Get job-ready', href: '/career/placement-training', icon: Award },
+  ];
+
+  const getDropdownItems = (itemName) => {
+    if (itemName === 'Courses') return courseMenuItems;
+    if (itemName === 'Events') return eventsMenuItems;
+    if (itemName === 'Services') return servicesMenuItems;
+    if (itemName === 'Career') return careerMenuItems;
+    return [];
+  };
 
   return (
     <motion.nav
@@ -349,14 +334,14 @@ export default function Navbar() {
         : 'bg-white/95 dark:bg-gray-900/95'
         }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-3 hover:opacity-90 transition-all duration-300 group"
           >
-            <Image src="/logo.png" alt="Shrestha Academy" width={120} height={120} className="w-full h-full object-contain dark:invert" />
+            <Image src={theme === 'dark' ? '/logo.png' : '/logob.png'} alt="Shrestha Academy" width={150} height={200} className="w-full h-14 object-contain " />
 
           </Link>
 
@@ -462,8 +447,8 @@ export default function Navbar() {
                     </motion.div>
                   )}
 
-                  {/* Mega Dropdown for Live */}
-                  {item.hasMegaMenu && item.name === 'Live' && openDropdown === 'live' && (
+                  {/* Mega Dropdown for Services */}
+                  {item.hasMegaMenu && item.name === 'Services' && openDropdown === 'services' && (
                     <motion.div
                       ref={dropdownRef}
                       initial={{ opacity: 0, y: 10 }}
@@ -471,17 +456,52 @@ export default function Navbar() {
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
                       className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
-                      onMouseEnter={() => setOpenDropdown('live')}
+                      onMouseEnter={() => setOpenDropdown('services')}
+                      onMouseLeave={() => setOpenDropdown(null)}
+                    >
+                      <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">Services</h3>
+                        <div className="space-y-2">
+                          {servicesMenuItems.map((menuItem, idx) => (
+                            <motion.div key={menuItem.href} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }}>
+                              <Link href={menuItem.href} className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 transition-all duration-300 group border border-transparent hover:border-[#4A50B0]/10 dark:hover:border-[#4A50B0]/30" onClick={() => setOpenDropdown(null)}>
+                                <div className="flex items-start gap-3">
+                                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#4A50B0]/10 to-purple-600/10 group-hover:from-[#4A50B0]/20 group-hover:to-purple-600/20 transition-all duration-300 shadow-sm">
+                                    <menuItem.icon className="h-5 w-5 text-[#4A50B0] dark:text-[#9ca0ff] group-hover:scale-110 transition-transform" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#4A50B0] dark:group-hover:text-[#9ca0ff] transition-colors">{menuItem.title}</h4>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{menuItem.description}</p>
+                                  </div>
+                                </div>
+                              </Link>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Mega Dropdown for Events */}
+                  {item.hasMegaMenu && item.name === 'Events' && openDropdown === 'events' && (
+                    <motion.div
+                      ref={dropdownRef}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
+                      onMouseEnter={() => setOpenDropdown('events')}
                       onMouseLeave={() => {
                         setOpenDropdown(null);
                       }}
                     >
                       <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
                         <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">
-                          Live Programs
+                          Events
                         </h3>
                         <div className="space-y-2">
-                          {liveMenuItems.map((menuItem, idx) => (
+                          {eventsMenuItems.map((menuItem, idx) => (
                             <motion.div
                               key={menuItem.href}
                               initial={{ opacity: 0, x: -10 }}
@@ -513,6 +533,41 @@ export default function Navbar() {
                       </div>
                     </motion.div>
                   )}
+
+                  {/* Mega Dropdown for Career */}
+                  {item.hasMegaMenu && item.name === 'Career' && openDropdown === 'career' && (
+                    <motion.div
+                      ref={dropdownRef}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
+                      onMouseEnter={() => setOpenDropdown('career')}
+                      onMouseLeave={() => setOpenDropdown(null)}
+                    >
+                      <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">Career</h3>
+                        <div className="space-y-2">
+                          {careerMenuItems.map((menuItem, idx) => (
+                            <motion.div key={menuItem.href} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }}>
+                              <Link href={menuItem.href} className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 transition-all duration-300 group border border-transparent hover:border-[#4A50B0]/10 dark:hover:border-[#4A50B0]/30" onClick={() => setOpenDropdown(null)}>
+                                <div className="flex items-start gap-3">
+                                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#4A50B0]/10 to-purple-600/10 group-hover:from-[#4A50B0]/20 group-hover:to-purple-600/20 transition-all duration-300 shadow-sm">
+                                    <menuItem.icon className="h-5 w-5 text-[#4A50B0] dark:text-[#9ca0ff] group-hover:scale-110 transition-transform" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#4A50B0] dark:group-hover:text-[#9ca0ff] transition-colors">{menuItem.title}</h4>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{menuItem.description}</p>
+                                  </div>
+                                </div>
+                              </Link>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
               );
             })}
@@ -520,39 +575,61 @@ export default function Navbar() {
 
           {/* Right Side - Desktop */}
           <div className="hidden lg:flex items-center gap-4">
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="relative">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
-                <Input
-                  ref={searchRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-                  placeholder={SEARCH_PLACEHOLDERS[placeholderIndex]}
-                  className="w-72 pl-11 pr-10 rounded-full border-2 border-gray-200/80 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:border-[#4A50B0] focus:ring-2 focus:ring-[#4A50B0]/20 focus:bg-white dark:focus:bg-gray-800 transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#4A50B0]/30 dark:text-white dark:placeholder:text-gray-400"
-                />
-                {searchQuery && (
-                  <button
+            {/* Search: icon only, click opens input with animation */}
+            <form onSubmit={handleSearch} className="relative flex items-center">
+              <motion.div
+                className="relative flex items-center"
+                initial={false}
+                animate={{ width: desktopSearchOpen ? 288 : 44 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              >
+                {!desktopSearchOpen ? (
+                  <Button
                     type="button"
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setDesktopSearchOpen(true)}
+                    className="h-11 w-11 rounded-full text-gray-600 dark:text-gray-300 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] hover:bg-[#4A50B0]/10 dark:hover:bg-[#4A50B0]/20 transition-all"
                   >
-                    <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-                  </button>
+                    <Search className="h-5 w-5" />
+                  </Button>
+                ) : (
+                  <>
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 shrink-0 pointer-events-none" />
+                    <Input
+                      ref={searchRef}
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onFocus={() => setSearchFocused(true)}
+                      onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
+                      placeholder={SEARCH_PLACEHOLDERS[placeholderIndex]}
+                      className="h-11 w-full pl-11 pr-11 rounded-full border-2 border-[#4A50B0]/30 dark:border-[#4A50B0]/40 bg-white dark:bg-gray-800 focus:border-[#4A50B0] focus:ring-2 focus:ring-[#4A50B0]/20 dark:text-white dark:placeholder:text-gray-400 shadow-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDesktopSearchOpen(false);
+                        setSearchQuery('');
+                        setSearchFocused(false);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </>
                 )}
-              </div>
+              </motion.div>
 
               {/* Search Suggestions Dropdown */}
               <AnimatePresence>
-                {searchFocused && searchQuery.length >= 2 && (
+                {desktopSearchOpen && searchFocused && searchQuery.length >= 2 && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute top-full left-0 mt-3 w-96 rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 z-50 overflow-hidden"
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full right-0 mt-2 w-96 rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 z-50 overflow-hidden"
                     onMouseDown={(e) => e.preventDefault()}
                   >
                     {searchSuggestions.length > 0 ? (
@@ -571,6 +648,7 @@ export default function Navbar() {
                                   onClick={() => {
                                     setSearchQuery('');
                                     setSearchFocused(false);
+                                    setDesktopSearchOpen(false);
                                   }}
                                 >
                                   {item.title}
@@ -624,7 +702,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-11 w-11 rounded-full hover:ring-2 hover:ring-[#4A50B0]/30 transition-all duration-300 p-0 overflow-hidden hover:scale-105 shadow-sm hover:shadow-md">
+                  <Button variant="ghost" className="relative h-11 w-11 rounded-full hover:ring-2 hover:ring-[#4A50B0]/30 transition-all duration-300 p-0 overflow-hidden hover:scale-105 shadow-sm hover:shadow-md Z-[100]">
                     {user?.avatarUrl ? (
                       <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-[#4A50B0]/20 ring-2 ring-white">
                         <Image
@@ -642,7 +720,7 @@ export default function Navbar() {
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuContent className="w-56 z-[200]" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">{user?.name || 'User'}</p>
@@ -660,12 +738,6 @@ export default function Navbar() {
                     <Link href="/profile/enrolled" className="cursor-pointer">
                       <Video className="mr-2 h-4 w-4" />
                       My Enrolled Items
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile/subscription" className="cursor-pointer">
-                      <Settings className="mr-2 h-4 w-4" />
-                      Subscriptions
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -694,14 +766,32 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-3">
-                <Button variant="ghost" asChild className="hover:text-[#4A50B0] dark:text-gray-200 dark:hover:text-[#9ca0ff] hover:bg-[#4A50B0]/5 dark:hover:bg-[#4A50B0]/20 transition-all duration-300 font-medium">
-                  <Link href="/auth?mode=login">Login</Link>
-                </Button>
-                <Button asChild className="text-white shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-[#4A50B0] to-purple-600 hover:from-[#4A50B0]/90 hover:to-purple-600/90 font-semibold px-6">
-                  <Link href="/auth?mode=signup">Sign Up</Link>
-                </Button>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-2 border-[#4A50B0]/30 dark:border-[#4A50B0]/50 text-[#4A50B0] dark:text-[#9ca0ff] hover:bg-[#4A50B0]/10 dark:hover:bg-[#4A50B0]/20 font-medium">
+                    <User className="h-4 w-4" />
+
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-48 p-1.5 min-h-0 z-[200]"
+                  align="end"
+                  side="top"
+                  sideOffset={8}
+                  alignOffset={0}
+                >
+                  <DropdownMenuItem asChild className="py-2.5 rounded-md">
+                    <Link href="/auth?mode=login" className="cursor-pointer">
+                      Login
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="py-2.5 rounded-md">
+                    <Link href="/auth?mode=signup" className="cursor-pointer font-semibold text-[#4A50B0] dark:text-[#9ca0ff]">
+                      Sign Up
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
 
@@ -853,7 +943,7 @@ export default function Navbar() {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#4A50B0]/10 w-full dark:border-gray-800">
                     <Link href="/" onClick={() => setMobileMenuOpen(false)}>
-                      <Image src="/logo.png" alt="Shrestha Academy" width={120} height={120} className="w-full h-full object-contain dark:invert" />
+                      <Image src={theme === 'dark' ? '/logo.png' : '/logob.png'} alt="Shrestha Academy" width={120} height={120} className="w-full h-16 object-contain " />
                     </Link>
                     <div className="flex items-center gap-2">
                       <button
@@ -904,7 +994,7 @@ export default function Navbar() {
                               </AccordionTrigger>
                               <AccordionContent>
                                 <div className="space-y-2 pl-4">
-                                  {(item.name === 'Courses' ? courseMenuItems : liveMenuItems).map((subItem) => (
+                                  {getDropdownItems(item.name).map((subItem) => (
                                     <Link
                                       key={subItem.href}
                                       href={subItem.href}
@@ -982,17 +1072,6 @@ export default function Navbar() {
                         >
                           <Video className="h-5 w-5" />
                           My Enrolled Items
-                        </Link>
-                        <Link
-                          href="/profile/subscription"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMobileMenuOpen(false);
-                          }}
-                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-[#4A50B0] transition-colors dark:text-gray-200 dark:hover:text-[#9ca0ff]"
-                        >
-                          <Settings className="h-5 w-5" />
-                          Subscriptions
                         </Link>
                         <Link
                           href="/profile/orders"

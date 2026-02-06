@@ -4,7 +4,6 @@ dotenv.config({ path: ".env" });
 import app from "./app.js";
 import { prisma } from "./config/db.js";
 import { startWebinarReminderScheduler } from "./utils/webinarReminder.js";
-import { startMentorshipReminderScheduler } from "./utils/mentorshipReminder.js";
 import { startGuidanceReminderScheduler } from "./utils/guidanceReminder.js";
 import { startWebinarCertificateScheduler } from "./utils/webinarCertificateScheduler.js";
 
@@ -51,7 +50,6 @@ prisma
 
       if (process.env.NODE_ENV !== "test") {
         startWebinarReminderScheduler();
-        startMentorshipReminderScheduler();
         startGuidanceReminderScheduler();
         startWebinarCertificateScheduler();
       }

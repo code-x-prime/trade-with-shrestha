@@ -19,7 +19,7 @@ export const validateCoupon = asyncHandler(async (req, res) => {
         ? {
             OR: [
                 { applicableTo: "ALL" },
-                { applicableTo: applicableTo.toUpperCase() }, // EBOOK, SUBSCRIPTION, WEBINAR, GUIDANCE, or MENTORSHIP
+                { applicableTo: applicableTo.toUpperCase() }, // EBOOK, SUBSCRIPTION, WEBINAR, GUIDANCE, COURSE, OFFLINE_BATCH, BUNDLE
             ],
         }
         : {}; // If not specified, allow all coupons

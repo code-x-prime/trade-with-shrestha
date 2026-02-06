@@ -19,7 +19,6 @@ const menuItems = [
   { label: 'My Courses', href: '/profile/enrolled', icon: BookOpen },
   { label: 'Certificates', href: '/profile/certificates', icon: Award },
   { label: 'Orders', href: '/profile/orders', icon: ShoppingBag },
-  { label: 'Subscriptions', href: '/profile/subscription', icon: CreditCard },
   { label: 'Available Coupons', href: '/cart', icon: Tag },
   { label: 'Settings', href: '/profile/settings', icon: Settings },
 ];

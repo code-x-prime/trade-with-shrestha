@@ -8,7 +8,7 @@ export default function WebinarsHero() {
     <ListingHero
       badge="Live Market Conversations"
       badgeColor="pink"
-      title="Live Webinars!"
+      title="Live Events!"
       description="Interactive sessions with market experts to decode live setups, strategies, and risk management."
       features={[
         { icon: MessageCircle, text: 'Real-time Q&A' },

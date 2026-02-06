@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Home, BookOpen, User, Video, TrendingUp } from 'lucide-react';
+import { Home, BookOpen, User, Video, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function BottomNavbar() {
@@ -13,18 +13,15 @@ export default function BottomNavbar() {
   const menuItems = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Courses', href: '/courses', icon: BookOpen },
-    { name: 'Live', href: '/webinars', icon: Video },
-    { name: 'Indicators', href: '/indicators', icon: TrendingUp },
-    { name: 'Profile', href: '/profile', icon: User, requiresAuth: true },
+    { name: 'Events', href: '/webinars', icon: Video },
+    { name: 'Demo', href: '/training-schedule', icon: Calendar },
+    { name: 'Profile', href: isAuthenticated ? '/profile' : '/auth', icon: User },
   ];
-
-  // Filter menu items based on authentication
-  const visibleItems = menuItems.filter(item => !item.requiresAuth || isAuthenticated);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-[90] lg:hidden bg-white border-t border-gray-200 shadow-lg safe-area-inset-bottom dark:bg-gray-900 dark:border-gray-800">
       <div className="flex items-center justify-around h-16 px-2">
-        {visibleItems.map((item) => {
+        {menuItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
           const Icon = item.icon;
 

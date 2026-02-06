@@ -40,7 +40,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { toast } from 'sonner';
-
+import DataExport from '@/components/admin/DataExport';
 import { contactAPI } from '@/lib/api';
 
 export default function AdminContactsPage() {
@@ -129,12 +129,32 @@ export default function AdminContactsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Contact Messages</h1>
-        <Button onClick={fetchContacts} variant="outline" size="sm">
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <DataExport
+            data={contacts}
+            columns={[
+              { key: 'name', label: 'Name' },
+              { key: 'email', label: 'Email' },
+              { key: 'subject', label: 'Subject' },
+              { key: 'message', label: 'Message' },
+              { key: 'isRead', label: 'Read' },
+              { key: 'createdAt', label: 'Date' },
+            ]}
+            dateKey="createdAt"
+            filename="contacts"
+            fetchAllData={async () => {
+              const r = await contactAPI.getContacts({ page: 1, limit: 99999 });
+              return r?.data?.contacts ?? [];
+            }}
+            disabled={loading}
+          />
+          <Button onClick={fetchContacts} variant="outline" size="sm">
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       <Card>

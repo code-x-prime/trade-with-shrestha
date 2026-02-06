@@ -818,6 +818,66 @@ export const getContactUserTemplate = (data) => {
     return getBaseTemplate(content, `We received your message: ${data.subject}`);
 };
 
+// ===================== DEMO REQUEST EMAIL TEMPLATES =====================
+export const getDemoRequestAdminTemplate = (data) => {
+    const content = `
+        ${getLogoHeader()}
+        ${getHeader('New Demo Request', '📅')}
+        <tr>
+            <td style="background-color: ${brandColors.white}; padding: 40px 32px;">
+                <p style="margin: 0 0 24px; font-size: 16px; color: ${brandColors.dark};">
+                    A new demo request has been submitted on Shrestha Academy.
+                </p>
+                <div style="background-color: ${brandColors.lightGray}; border-radius: 12px; padding: 24px; margin: 24px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        ${getDetailRow('Date', formatDateIST(data.createdAt || new Date()))}
+                        ${getDetailRow('Name', data.name)}
+                        ${getDetailRow('Email', `<a href="mailto:${data.email}" style="color: ${brandColors.primary}; text-decoration: none;">${data.email}</a>`)}
+                        ${getDetailRow('Phone', `<a href="tel:${data.phone}" style="color: ${brandColors.primary}; text-decoration: none;">${data.phone}</a>`)}
+                        ${data.courseId ? getDetailRow('Course ID', data.courseId) : ''}
+                        ${getDetailRow('Status', data.status || 'PENDING', true)}
+                    </table>
+                </div>
+                ${data.message ? `
+                <div style="background-color: #F8FAFC; padding: 20px; border-radius: 6px; border: 1px solid #E2E8F0; margin-bottom: 24px;">
+                    <h3 style="color: ${brandColors.dark}; margin-top: 0; margin-bottom: 10px; font-size: 16px;">Message:</h3>
+                    <p style="color: ${brandColors.gray}; white-space: pre-wrap; margin: 0; line-height: 1.6;">${data.message}</p>
+                </div>
+                ` : ''}
+                <div style="margin-top: 20px; font-size: 12px; color: ${brandColors.gray}; text-align: right;">
+                    ID: ${data.id || '–'} · <a href="${process.env.CLIENT_URL || ''}/admin/demo-requests" style="color: ${brandColors.primary}; text-decoration: none;">View in Admin</a>
+                </div>
+            </td>
+        </tr>
+        ${getFooter()}
+    `;
+    return getBaseTemplate(content, `New demo request from ${data.name}`);
+};
+
+export const getDemoRequestUserTemplate = (data) => {
+    const content = `
+        ${getLogoHeader()}
+        ${getHeader('We Received Your Demo Request', '✅')}
+        <tr>
+            <td style="background-color: ${brandColors.white}; padding: 40px 32px;">
+                <p style="margin: 0 0 24px; font-size: 16px; color: ${brandColors.dark};">
+                    Hi <strong>${data.name}</strong>,
+                </p>
+                ${getSuccessBox('Thank you for your interest! We have received your demo request.')}
+                <p style="margin: 0 0 24px; font-size: 16px; color: ${brandColors.gray}; line-height: 1.6;">
+                    Our team will get in touch with you shortly (usually within 24 hours) to schedule your demo.
+                </p>
+                <p style="margin: 0 0 24px; font-size: 16px; color: ${brandColors.gray}; line-height: 1.6;">
+                    In the meantime, feel free to explore our courses and resources.
+                </p>
+                ${getButton('Explore Courses', `${process.env.CLIENT_URL || 'https://shrestha.academy'}/courses`, brandColors.primary)}
+            </td>
+        </tr>
+        ${getFooter()}
+    `;
+    return getBaseTemplate(content, 'We received your demo request');
+};
+
 export const getSubscriptionStatusChangeTemplate = (data) => {
     const statusConfig = {
         CANCELLED: {

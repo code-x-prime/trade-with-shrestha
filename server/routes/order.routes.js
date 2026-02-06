@@ -3,7 +3,6 @@ import {
     createOrder,
     createWebinarOrder,
     createGuidanceOrder,
-    createMentorshipOrder,
     createCourseOrder,
     createOfflineBatchOrder,
     createBundleOrder,
@@ -37,8 +36,6 @@ router.post("/webinar", createWebinarOrder);
 // Create guidance order
 router.post("/guidance", createGuidanceOrder);
 
-// Create mentorship order
-router.post("/mentorship", createMentorshipOrder);
 
 // Create course order
 router.post("/course", createCourseOrder);

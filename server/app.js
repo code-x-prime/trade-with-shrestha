@@ -10,12 +10,8 @@ import adminRoutes from "./routes/admin.routes.js";
 import ebookRoutes from "./routes/ebook.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import couponRoutes from "./routes/coupon.routes.js";
-import indicatorRoutes from "./routes/indicator.routes.js";
-import subscriptionRoutes from "./routes/subscription.routes.js";
-import subscriptionPlanRoutes from "./routes/subscriptionPlan.routes.js";
 import webinarRoutes from "./routes/webinar.routes.js";
 import guidanceRoutes from "./routes/guidance.routes.js";
-import mentorshipRoutes from "./routes/mentorship.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
@@ -27,6 +23,15 @@ import footerRoutes from "./routes/footer.routes.js";
 import offlineBatchRoutes from "./routes/offlineBatch.routes.js";
 import bundleRoutes from "./routes/bundle.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
+import invoiceRoutes from "./routes/invoice.routes.js";
+import bannerRoutes from "./routes/banner.routes.js";
+import placementRoutes from "./routes/placement.routes.js";
+import trainingScheduleRoutes from "./routes/trainingSchedule.routes.js";
+import demoRequestRoutes from "./routes/demoRequest.routes.js";
+import mockInterviewRoutes from "./routes/mockInterview.routes.js";
+import expertPracticeRoutes from "./routes/expertPractice.routes.js";
+import hireFromUsRoutes from "./routes/hireFromUs.routes.js";
+import placementTrainingRoutes from "./routes/placementTraining.routes.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -120,12 +125,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/ebooks", ebookRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/coupons", couponRoutes);
-app.use("/api/indicators", indicatorRoutes);
-app.use("/api/subscriptions", subscriptionRoutes);
-app.use("/api/subscription-plans", subscriptionPlanRoutes);
 app.use("/api/webinars", webinarRoutes);
 app.use("/api/guidance", guidanceRoutes);
-app.use("/api/mentorship", mentorshipRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/analytics", analyticsRoutes);
@@ -137,6 +138,15 @@ app.use("/api/footer", footerRoutes);
 app.use("/api/offline-batches", offlineBatchRoutes);
 app.use("/api/bundles", bundleRoutes);
 app.use("/api/media", mediaRoutes);
+app.use("/api/invoice", invoiceRoutes);
+app.use("/api/banners", bannerRoutes);
+app.use("/api/placement", placementRoutes);
+app.use("/api/training-schedule", trainingScheduleRoutes);
+app.use("/api/demo-requests", demoRequestRoutes);
+app.use("/api/mock-interview", mockInterviewRoutes);
+app.use("/api/expert-practice", expertPracticeRoutes);
+app.use("/api/hire-from-us", hireFromUsRoutes);
+app.use("/api/placement-training", placementTrainingRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

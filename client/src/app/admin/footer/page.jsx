@@ -250,7 +250,7 @@ export default function AdminFooterPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Footer Settings</h1>
+          <h1 className="text-3xl font-bold mb-2">Social Settings</h1>
           <p className="text-muted-foreground">Manage footer social media links (Max 6)</p>
         </div>
         <Button
@@ -307,8 +307,8 @@ export default function AdminFooterPage() {
                     value={formData.icon || 'none'}
                     onValueChange={(value) => {
                       const selectedIcon = SOCIAL_ICONS.find(icon => icon.value === value);
-                      setFormData({ 
-                        ...formData, 
+                      setFormData({
+                        ...formData,
                         icon: value,
                         color: selectedIcon ? selectedIcon.color : formData.color
                       });
@@ -403,9 +403,8 @@ export default function AdminFooterPage() {
                   onDragOver={(e) => handleDragOver(e, index)}
                   onDrop={(e) => handleDrop(e, index)}
                   onDragEnd={handleDragEnd}
-                  className={`flex items-center gap-4 p-4 border rounded-lg cursor-move transition-colors ${
-                    draggedIndex === index ? 'opacity-50' : ''
-                  } ${dragOverIndex === index ? 'border-brand-600 bg-brand-50' : 'hover:bg-muted/50'}`}
+                  className={`flex items-center gap-4 p-4 border rounded-lg cursor-move transition-colors ${draggedIndex === index ? 'opacity-50' : ''
+                    } ${dragOverIndex === index ? 'border-brand-600 bg-brand-50' : 'hover:bg-muted/50'}`}
                 >
                   <GripVertical className="h-5 w-5 text-muted-foreground" />
                   <div className="flex-1 grid grid-cols-4 gap-4 items-center">

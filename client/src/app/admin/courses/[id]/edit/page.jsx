@@ -35,7 +35,11 @@ export default function EditCoursePage() {
     salePrice: '',
     isFree: false,
     isPublished: false,
+    deliveryMode: 'BOTH',
+    curriculumText: '',
   });
+  const [benefits, setBenefits] = useState([]);
+  const [benefitInput, setBenefitInput] = useState('');
   const [coverImage, setCoverImage] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
   const [removeCoverImage, setRemoveCoverImage] = useState(false);
@@ -91,7 +95,10 @@ export default function EditCoursePage() {
           salePrice: courseData.salePrice?.toString() || '',
           isFree: courseData.isFree || false,
           isPublished: courseData.isPublished || false,
+          deliveryMode: courseData.deliveryMode || 'BOTH',
+          curriculumText: courseData.curriculumText || '',
         });
+        setBenefits(Array.isArray(courseData.benefits) ? courseData.benefits : []);
         if (courseData.coverImageUrl || courseData.coverImage) {
           setCoverImagePreview(getPublicUrl(courseData.coverImageUrl || courseData.coverImage) || courseData.coverImageUrl || courseData.coverImage);
         }
@@ -147,6 +154,9 @@ export default function EditCoursePage() {
       }
       submitData.append('isFree', formData.isFree);
       submitData.append('isPublished', formData.isPublished);
+      submitData.append('deliveryMode', formData.deliveryMode);
+      submitData.append('curriculumText', formData.curriculumText);
+      submitData.append('benefits', JSON.stringify(benefits));
 
       if (selectedCategories.length === 0) {
         toast.error('Please select at least one category');
@@ -261,6 +271,82 @@ export default function EditCoursePage() {
                     <SelectItem value="MIXED">Mixed</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label>Delivery mode</Label>
+                <Select
+                  value={formData.deliveryMode}
+                  onValueChange={(value) => setFormData({ ...formData, deliveryMode: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ONLINE">Online classes (curriculum text, book demo)</SelectItem>
+                    <SelectItem value="SELF_PACED">Self-paced (video + lecture names, purchase)</SelectItem>
+                    <SelectItem value="BOTH">Both (book demo + self-paced purchase)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>Benefits (one per line or add below)</Label>
+                <div className="mt-2 flex gap-2">
+                  <Input
+                    placeholder="Add a benefit..."
+                    value={benefitInput}
+                    onChange={(e) => setBenefitInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (benefitInput.trim()) {
+                          setBenefits([...benefits, benefitInput.trim()]);
+                          setBenefitInput('');
+                        }
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (benefitInput.trim()) {
+                        setBenefits([...benefits, benefitInput.trim()]);
+                        setBenefitInput('');
+                      }
+                    }}
+                  >
+                    Add
+                  </Button>
+                </div>
+                {benefits.length > 0 && (
+                  <ul className="mt-2 space-y-1">
+                    {benefits.map((b, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-sm">
+                        <span>{b}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 text-destructive"
+                          onClick={() => setBenefits(benefits.filter((_, i) => i !== idx))}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <Label>Curriculum (text for online) – optional</Label>
+                <RichTextEditor
+                  value={formData.curriculumText}
+                  onChange={(value) => setFormData({ ...formData, curriculumText: value })}
+                  placeholder="Outline or curriculum text shown for online classes..."
+                />
               </div>
 
               <div>

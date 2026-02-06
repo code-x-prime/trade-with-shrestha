@@ -125,7 +125,6 @@ export const sendGuidanceReminders = async () => {
  * Start the guidance reminder scheduler (runs every minute)
  */
 export const startGuidanceReminderScheduler = () => {
-    console.log("📧 Guidance reminder scheduler started");
 
     // Run immediately on start
     sendGuidanceReminders().catch((error) => {

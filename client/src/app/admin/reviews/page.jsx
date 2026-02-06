@@ -59,17 +59,16 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import DataExport from '@/components/admin/DataExport';
 
 const TYPE_ICONS = {
     EBOOK: BookOpen,
     COURSE: GraduationCap,
-    INDICATOR: TrendingUp,
 };
 
 const TYPE_COLORS = {
     EBOOK: 'bg-blue-100 text-blue-800',
     COURSE: 'bg-green-100 text-green-800',
-    INDICATOR: 'bg-purple-100 text-purple-800',
 };
 
 export default function AdminReviewsPage() {
@@ -200,9 +199,32 @@ export default function AdminReviewsPage() {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold">Reviews Management</h1>
-                <p className="text-muted-foreground">Manage all reviews across courses, ebooks and indicators</p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold">Reviews Management</h1>
+                    <p className="text-muted-foreground">Manage all reviews across courses, ebooks and indicators</p>
+                </div>
+                <DataExport
+                    data={reviews}
+                    columns={[
+                        { key: 'reviewType', label: 'Type' },
+                        { key: 'itemTitle', label: 'Item' },
+                        { key: 'user.name', label: 'User name' },
+                        { key: 'user.email', label: 'User email' },
+                        { key: 'rating', label: 'Rating' },
+                        { key: 'comment', label: 'Comment' },
+                        { key: 'createdAt', label: 'Date' },
+                    ]}
+                    dateKey="createdAt"
+                    statusKey="reviewType"
+                    statusOptions={['EBOOK', 'COURSE', 'INDICATOR']}
+                    filename="reviews"
+                    fetchAllData={async () => {
+                        const r = await reviewAPI.getAll({ page: 1, limit: 99999, type: 'all' });
+                        return r?.data?.reviews ?? [];
+                    }}
+                    disabled={loading}
+                />
             </div>
 
             {/* Stats Cards */}

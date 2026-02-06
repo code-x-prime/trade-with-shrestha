@@ -157,8 +157,6 @@ export default function AdminOrdersPage() {
         return 'Webinar';
       case 'GUIDANCE':
         return 'Guidance';
-      case 'MENTORSHIP':
-        return 'Mentorship';
       default:
         return 'E-Book'; // Default fallback
     }

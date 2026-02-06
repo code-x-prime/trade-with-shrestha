@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { analyticsAPI, adminAPI, courseAPI, ebookAPI, webinarAPI, mentorshipAPI, guidanceAPI, indicatorAPI, subscriptionAPI, couponAPI } from '@/lib/api';
-import { 
-  Users, BookOpen, Video, CreditCard,  TrendingUp, 
+import { analyticsAPI, adminAPI, couponAPI } from '@/lib/api';
+import {
+  Users, BookOpen, Video, CreditCard,
   MessageCircle, GraduationCap, Tag, Database, Server, Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -22,10 +22,7 @@ export default function AdminSettingsPage() {
     courses: 0,
     ebooks: 0,
     webinars: 0,
-    mentorship: 0,
     guidance: 0,
-    indicators: 0,
-    subscriptions: 0,
     coupons: 0,
     revenue: 0,
   });
@@ -45,20 +42,16 @@ export default function AdminSettingsPage() {
   const fetchAllStats = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch analytics first (contains most stats)
       const analyticsRes = await analyticsAPI.getAnalytics({ days: 30 });
-      
+
       // Fetch additional stats in parallel
       const [
         usersRes,
-        indicatorsRes,
-        subscriptionsRes,
         couponsRes,
       ] = await Promise.all([
         adminAPI.getUsers({ limit: 1 }),
-        indicatorAPI.getIndicators({ limit: 1 }),
-        subscriptionAPI.getAllSubscriptions({ limit: 1 }),
         couponAPI.getCoupons({ limit: 1 }),
       ]);
 
@@ -69,10 +62,7 @@ export default function AdminSettingsPage() {
         courses: overview.totalCourses || 0,
         ebooks: overview.totalEbooks || 0,
         webinars: overview.totalWebinars || 0,
-        mentorship: overview.totalMentorships || 0,
         guidance: overview.totalGuidance || 0,
-        indicators: indicatorsRes.success ? indicatorsRes.data.pagination?.total || 0 : 0,
-        subscriptions: overview.totalSubscriptions || (subscriptionsRes.success ? (subscriptionsRes.data.pagination?.total || subscriptionsRes.data.subscriptions?.length || 0) : 0),
         coupons: couponsRes.success ? (couponsRes.data.pagination?.total || couponsRes.data.coupons?.length || 0) : 0,
         revenue: overview.totalRevenue || 0,
       });
@@ -169,34 +159,10 @@ export default function AdminSettingsPage() {
 
               <div className="p-4 border-2 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Mentorship</span>
-                  <Video className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div className="text-2xl font-bold">{stats.mentorship}</div>
-              </div>
-
-              <div className="p-4 border-2 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground">1:1 Guidance</span>
                   <MessageCircle className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="text-2xl font-bold">{stats.guidance}</div>
-              </div>
-
-              <div className="p-4 border-2 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Indicators</span>
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div className="text-2xl font-bold">{stats.indicators}</div>
-              </div>
-
-              <div className="p-4 border-2 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Subscriptions</span>
-                  <CreditCard className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div className="text-2xl font-bold">{stats.subscriptions}</div>
               </div>
 
               <div className="p-4 border-2 rounded-lg">

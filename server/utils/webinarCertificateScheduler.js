@@ -9,7 +9,7 @@ let schedulerInterval = null;
 const processEndedWebinars = async () => {
     try {
         const now = new Date();
-        
+
         // Find webinars that have ended (startDate + duration < now)
         const webinars = await prisma.webinar.findMany({
             where: {
@@ -62,15 +62,12 @@ export const startWebinarCertificateScheduler = () => {
         return;
     }
 
-    console.log('[Webinar Certificate] Starting scheduler...');
-
     // Run immediately on start
     processEndedWebinars();
 
     // Then run every 5 minutes
     schedulerInterval = setInterval(processEndedWebinars, 5 * 60 * 1000);
 
-    console.log('[Webinar Certificate] Scheduler started (runs every 5 minutes)');
 };
 
 /**

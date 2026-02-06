@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { orderAPI, webinarAPI, mentorshipAPI, courseAPI, bundleAPI, offlineBatchAPI } from '@/lib/api';
+import { orderAPI, webinarAPI, courseAPI, bundleAPI, offlineBatchAPI } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -25,8 +25,6 @@ const TABS = [
   { id: 'books', label: 'Books', icon: BookOpen },
   { id: 'sessions', label: 'Sessions', icon: MessageCircle },
   { id: 'webinars', label: 'Webinars', icon: Video },
-  { id: 'live', label: 'Live', icon: Users },
-  { id: 'indicators', label: 'Indicators', icon: BarChart3 },
   { id: 'bundles', label: 'Bundles', icon: Package },
   { id: 'offline', label: 'Offline Classes', icon: GraduationCap },
 ];
@@ -71,12 +69,6 @@ export default function EnrolledPage() {
           break;
         case 'webinars':
           tabItems = await fetchWebinars();
-          break;
-        case 'live':
-          tabItems = await fetchMentorship();
-          break;
-        case 'indicators':
-          tabItems = await fetchIndicators();
           break;
         case 'bundles':
           tabItems = await fetchBundles();
@@ -283,108 +275,6 @@ export default function EnrolledPage() {
     return items;
   };
 
-  const fetchMentorship = async () => {
-    const orderResponse = await orderAPI.getOrders({ type: 'mentorship' });
-    const allOrders = orderResponse.success ? orderResponse.data.orders : [];
-    const items = [];
-
-    for (const order of allOrders) {
-      if (order.mentorshipOrders && order.mentorshipOrders.length > 0) {
-        for (const mo of order.mentorshipOrders) {
-          if (mo.mentorship) {
-            const mentorship = mo.mentorship;
-
-            try {
-              const sessionsResponse = await mentorshipAPI.getSessions(mentorship.id);
-              const sessions = sessionsResponse.success ? sessionsResponse.data.sessions : [];
-
-              if (sessions.length > 0) {
-                const now = new Date();
-                let activeSession = null;
-
-                for (const session of sessions) {
-                  const sessionDate = new Date(session.sessionDate);
-                  const [hours, minutes] = session.startTime.split(':').map(Number);
-                  sessionDate.setHours(hours, minutes, 0, 0);
-
-                  const [endHours, endMinutes] = session.endTime.split(':').map(Number);
-                  const sessionEnd = new Date(sessionDate);
-                  sessionEnd.setHours(endHours, endMinutes, 0, 0);
-
-                  if (now <= sessionEnd) {
-                    activeSession = {
-                      ...session,
-                      startDate: sessionDate,
-                      endDate: sessionEnd,
-                    };
-                    break;
-                  }
-                }
-
-                if (activeSession) {
-                  let status = 'upcoming';
-                  if (now > activeSession.endDate) {
-                    status = 'ended';
-                  } else if (now >= activeSession.startDate) {
-                    status = 'live';
-                  }
-
-                  const tenMinutesBefore = new Date(activeSession.startDate.getTime() - 10 * 60 * 1000);
-                  const canAccessLink = now >= tenMinutesBefore && now <= activeSession.endDate;
-
-                  items.push({
-                    id: mo.id,
-                    type: 'mentorship',
-                    title: mentorship.title,
-                    slug: mentorship.slug,
-                    image: mentorship.coverImage,
-                    instructor: mentorship.instructorName,
-                    startDate: activeSession.startDate,
-                    endDate: activeSession.endDate,
-                    duration: null,
-                    status,
-                    canAccessLink,
-                    enrolledAt: mo.createdAt,
-                    mentorshipId: mentorship.id,
-                    sessionTitle: activeSession.title,
-                  });
-                }
-              }
-            } catch (error) {
-              console.error('Error fetching mentorship sessions:', error);
-            }
-          }
-        }
-      }
-    }
-    return items;
-  };
-
-  const fetchIndicators = async () => {
-    const orderResponse = await orderAPI.getOrders();
-    const allOrders = orderResponse.success ? orderResponse.data.orders : [];
-    const items = [];
-
-    for (const order of allOrders) {
-      if (order.items && order.items.length > 0) {
-        for (const item of order.items) {
-          if (item.indicator && order.status === 'COMPLETED') {
-            items.push({
-              id: item.id,
-              type: 'indicator',
-              indicatorId: item.indicator.id,
-              title: item.indicator.title,
-              slug: item.indicator.slug,
-              image: item.indicator.image,
-              purchasedAt: order.createdAt,
-            });
-          }
-        }
-      }
-    }
-    return items;
-  };
-
   const fetchBundles = async () => {
     // Fetch bundle enrollments
     const orderResponse = await orderAPI.getOrders();
@@ -448,11 +338,6 @@ export default function EnrolledPage() {
         }
       } else if (item.type === 'guidance') {
         const response = await orderAPI.checkGuidanceBooking(item.slotId);
-        if (response.success && response.data.canAccessLink) {
-          link = response.data.googleMeetLink;
-        }
-      } else if (item.type === 'mentorship') {
-        const response = await mentorshipAPI.checkEnrollment(item.mentorshipId);
         if (response.success && response.data.canAccessLink) {
           link = response.data.googleMeetLink;
         }

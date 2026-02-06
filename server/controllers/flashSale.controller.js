@@ -101,44 +101,6 @@ export const getActiveFlashSale = asyncHandler(async (req, res) => {
             link: `/guidance/${guidance.slug}`,
             salePrice: null,
         })));
-    } else if (flashSale.type === 'MENTORSHIP') {
-        const mentorships = await prisma.liveMentorshipProgram.findMany({
-            where: { id: { in: flashSale.referenceIds } },
-            select: {
-                id: true,
-                title: true,
-                slug: true,
-                coverImage: true,
-                price: true,
-                salePrice: true,
-            },
-        });
-        items.push(...mentorships.map(mentorship => ({
-            ...mentorship,
-            imageUrl: mentorship.coverImage ? getPublicUrl(mentorship.coverImage) : null,
-            itemType: 'MENTORSHIP',
-            link: `/mentorship/${mentorship.slug}`,
-        })));
-    } else if (flashSale.type === 'INDICATOR') {
-        const indicators = await prisma.indicator.findMany({
-            where: { id: { in: flashSale.referenceIds } },
-            select: {
-                id: true,
-                name: true,
-                slug: true,
-                image: true,
-                description: true,
-            },
-        });
-        items.push(...indicators.map(indicator => ({
-            ...indicator,
-            title: indicator.name,
-            imageUrl: indicator.image ? getPublicUrl(indicator.image) : null,
-            itemType: 'INDICATOR',
-            link: `/indicators/${indicator.slug}`,
-            price: 0,
-            salePrice: null,
-        })));
     } else if (flashSale.type === 'BUNDLE') {
         const bundles = await prisma.bundle.findMany({
             where: { id: { in: flashSale.referenceIds } },
@@ -237,24 +199,6 @@ export const getAllFlashSales = asyncHandler(async (req, res) => {
                         itemTitles.push(guidance.title);
                         if (guidance.expertImage) itemImages.push(getPublicUrl(guidance.expertImage));
                     });
-                } else if (sale.type === 'MENTORSHIP') {
-                    const mentorships = await prisma.liveMentorshipProgram.findMany({
-                        where: { id: { in: sale.referenceIds } },
-                        select: { title: true, coverImage: true, slug: true },
-                    });
-                    mentorships.forEach(mentorship => {
-                        itemTitles.push(mentorship.title);
-                        if (mentorship.coverImage) itemImages.push(getPublicUrl(mentorship.coverImage));
-                    });
-                } else if (sale.type === 'INDICATOR') {
-                    const indicators = await prisma.indicator.findMany({
-                        where: { id: { in: sale.referenceIds } },
-                        select: { name: true, image: true, slug: true },
-                    });
-                    indicators.forEach(indicator => {
-                        itemTitles.push(indicator.name);
-                        if (indicator.image) itemImages.push(getPublicUrl(indicator.image));
-                    });
                 } else if (sale.type === 'BUNDLE') {
                     const bundles = await prisma.bundle.findMany({
                         where: { id: { in: sale.referenceIds } },
@@ -324,12 +268,6 @@ export const createFlashSale = asyncHandler(async (req, res) => {
         itemsExist = count === referenceIds.length;
     } else if (type === 'GUIDANCE') {
         const count = await prisma.guidance.count({ where: { id: { in: referenceIds } } });
-        itemsExist = count === referenceIds.length;
-    } else if (type === 'MENTORSHIP') {
-        const count = await prisma.liveMentorshipProgram.count({ where: { id: { in: referenceIds } } });
-        itemsExist = count === referenceIds.length;
-    } else if (type === 'INDICATOR') {
-        const count = await prisma.indicator.count({ where: { id: { in: referenceIds } } });
         itemsExist = count === referenceIds.length;
     } else if (type === 'BUNDLE') {
         const count = await prisma.bundle.count({ where: { id: { in: referenceIds } } });
@@ -408,12 +346,6 @@ export const updateFlashSale = asyncHandler(async (req, res) => {
             itemsExist = count === referenceIds.length;
         } else if (saleType === 'GUIDANCE') {
             const count = await prisma.guidance.count({ where: { id: { in: referenceIds } } });
-            itemsExist = count === referenceIds.length;
-        } else if (saleType === 'MENTORSHIP') {
-            const count = await prisma.liveMentorshipProgram.count({ where: { id: { in: referenceIds } } });
-            itemsExist = count === referenceIds.length;
-        } else if (saleType === 'INDICATOR') {
-            const count = await prisma.indicator.count({ where: { id: { in: referenceIds } } });
             itemsExist = count === referenceIds.length;
         } else if (saleType === 'BUNDLE') {
             const count = await prisma.bundle.count({ where: { id: { in: referenceIds } } });
@@ -563,35 +495,6 @@ export const getItemsByType = asyncHandler(async (req, res) => {
             image: g.expertImage ? getPublicUrl(g.expertImage) : null,
             price: g.price,
             salePrice: null, // Guidance doesn't have salePrice
-        }));
-    } else if (type === 'MENTORSHIP') {
-        // Mentorship is liveMentorshipProgram, uses status instead of isPublished
-        // Only paid mentorship (price > 0 or isFree = false)
-        const mentorships = await prisma.liveMentorshipProgram.findMany({
-            where: { status: 'PUBLISHED', price: { gt: 0 } },
-            select: { id: true, title: true, coverImage: true, price: true, salePrice: true },
-            orderBy: { title: 'asc' },
-        });
-        items = mentorships.map(m => ({
-            id: m.id,
-            title: m.title,
-            image: m.coverImage ? getPublicUrl(m.coverImage) : null,
-            price: m.price,
-            salePrice: m.salePrice,
-        }));
-    } else if (type === 'INDICATOR') {
-        // Indicators are typically free, but we'll still filter
-        const indicators = await prisma.indicator.findMany({
-            where: { isPublished: true },
-            select: { id: true, name: true, image: true },
-            orderBy: { name: 'asc' },
-        });
-        items = indicators.map(i => ({
-            id: i.id,
-            title: i.name,
-            image: i.image ? getPublicUrl(i.image) : null,
-            price: 0,
-            salePrice: null,
         }));
     } else if (type === 'BUNDLE') {
         // Get published bundles with price > 0

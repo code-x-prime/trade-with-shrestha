@@ -24,7 +24,6 @@ function CheckoutContent() {
   const [cartItems, setCartItems] = useState([]);
   const [webinarCartItems, setWebinarCartItems] = useState([]);
   const [guidanceCartItems, setGuidanceCartItems] = useState([]);
-  const [mentorshipCartItems, setMentorshipCartItems] = useState([]);
   const [courseCartItems, setCourseCartItems] = useState([]);
   const [offlineBatchCartItems, setOfflineBatchCartItems] = useState([]);
   const [bundleCartItems, setBundleCartItems] = useState([]);
@@ -61,7 +60,7 @@ function CheckoutContent() {
   useEffect(() => {
     const urlCoupon = searchParams.get('coupon');
     const hasItems = cartItems.length > 0 || webinarCartItems.length > 0 ||
-      guidanceCartItems.length > 0 || mentorshipCartItems.length > 0 ||
+      guidanceCartItems.length > 0 ||
       courseCartItems.length > 0 || offlineBatchCartItems.length > 0 ||
       bundleCartItems.length > 0;
 
@@ -78,12 +77,11 @@ function CheckoutContent() {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
       const webinarCart = JSON.parse(localStorage.getItem('webinarCart') || '[]');
       const guidanceCart = JSON.parse(localStorage.getItem('guidanceCart') || '[]');
-      const mentorshipCart = JSON.parse(localStorage.getItem('mentorshipCart') || '[]');
       const courseCart = JSON.parse(localStorage.getItem('courseCart') || '[]');
       const offlineBatchCart = JSON.parse(localStorage.getItem('offlineBatchCart') || '[]');
       const bundleCart = JSON.parse(localStorage.getItem('bundleCart') || '[]');
 
-      if (cart.length === 0 && webinarCart.length === 0 && guidanceCart.length === 0 && mentorshipCart.length === 0 && courseCart.length === 0 && offlineBatchCart.length === 0 && bundleCart.length === 0) {
+      if (cart.length === 0 && webinarCart.length === 0 && guidanceCart.length === 0 && courseCart.length === 0 && offlineBatchCart.length === 0 && bundleCart.length === 0) {
         router.push('/cart');
         return;
       }
@@ -116,12 +114,6 @@ function CheckoutContent() {
       const guidanceItems = guidanceCart.map(item => ({
         ...item,
         type: 'guidance',
-      }));
-
-      // Load mentorship (already have all data in localStorage)
-      const mentorshipItems = mentorshipCart.map(item => ({
-        ...item,
-        type: 'mentorship',
       }));
 
       // Load courses
@@ -196,7 +188,6 @@ function CheckoutContent() {
       setCartItems(ebookItems.filter(Boolean));
       setWebinarCartItems(webinarItems.filter(Boolean));
       setGuidanceCartItems(guidanceItems);
-      setMentorshipCartItems(mentorshipItems);
       setCourseCartItems(courseItems.filter(Boolean));
       setOfflineBatchCartItems(offlineBatchItems.filter(Boolean));
       setBundleCartItems(bundleItems.filter(Boolean));
@@ -233,12 +224,6 @@ function CheckoutContent() {
     // Add guidance items
     guidanceCartItems.forEach(item => {
       total += item.pricing?.effectivePrice || (item.price || 0); // Guidance slots are always paid
-    });
-    // Add mentorship items
-    mentorshipCartItems.forEach(item => {
-      if (!item.isFree) {
-        total += getEffectivePrice(item);
-      }
     });
     // Add course items (ONLY ONCE)
     courseCartItems.forEach(item => {
@@ -278,24 +263,21 @@ function CheckoutContent() {
       const hasEbooks = cartItems.length > 0;
       const hasWebinars = webinarCartItems.length > 0;
       const hasGuidance = guidanceCartItems.length > 0;
-      const hasMentorship = mentorshipCartItems.length > 0;
       const hasCourses = courseCartItems.length > 0;
       const hasOfflineBatches = offlineBatchCartItems.length > 0;
       const hasBundles = bundleCartItems.length > 0;
 
-      if (hasEbooks && !hasWebinars && !hasGuidance && !hasMentorship && !hasCourses && !hasOfflineBatches && !hasBundles) {
+      if (hasEbooks && !hasWebinars && !hasGuidance && !hasCourses && !hasOfflineBatches && !hasBundles) {
         applicableTo = 'EBOOK';
-      } else if (hasWebinars && !hasEbooks && !hasGuidance && !hasMentorship && !hasCourses && !hasOfflineBatches && !hasBundles) {
+      } else if (hasWebinars && !hasEbooks && !hasGuidance && !hasCourses && !hasOfflineBatches && !hasBundles) {
         applicableTo = 'WEBINAR';
-      } else if (hasGuidance && !hasEbooks && !hasWebinars && !hasMentorship && !hasCourses && !hasOfflineBatches && !hasBundles) {
+      } else if (hasGuidance && !hasEbooks && !hasWebinars && !hasCourses && !hasOfflineBatches && !hasBundles) {
         applicableTo = 'GUIDANCE';
-      } else if (hasMentorship && !hasEbooks && !hasWebinars && !hasGuidance && !hasCourses && !hasOfflineBatches && !hasBundles) {
-        applicableTo = 'MENTORSHIP';
-      } else if (hasCourses && !hasEbooks && !hasWebinars && !hasGuidance && !hasMentorship && !hasOfflineBatches && !hasBundles) {
+      } else if (hasCourses && !hasEbooks && !hasWebinars && !hasGuidance && !hasOfflineBatches && !hasBundles) {
         applicableTo = 'COURSE';
-      } else if (hasOfflineBatches && !hasEbooks && !hasWebinars && !hasGuidance && !hasMentorship && !hasCourses && !hasBundles) {
+      } else if (hasOfflineBatches && !hasEbooks && !hasWebinars && !hasGuidance && !hasCourses && !hasBundles) {
         applicableTo = 'OFFLINE_BATCH';
-      } else if (hasBundles && !hasEbooks && !hasWebinars && !hasGuidance && !hasMentorship && !hasCourses && !hasOfflineBatches) {
+      } else if (hasBundles && !hasEbooks && !hasWebinars && !hasGuidance && !hasCourses && !hasOfflineBatches) {
         applicableTo = 'BUNDLE';
       } else {
         applicableTo = 'ALL'; // Mixed cart
@@ -338,7 +320,6 @@ function CheckoutContent() {
         ebookIds: cartItems.map(item => item.id),
         webinarIds: webinarCartItems.map(item => item.id),
         guidanceSlotIds: guidanceCartItems.map(item => item.slotId),
-        mentorshipIds: mentorshipCartItems.map(item => item.id),
         courseIds: courseCartItems.map(item => item.id),
         bundleIds: bundleCartItems.map(item => item.id),
         offlineBatchIds: offlineBatchCartItems.map(item => item.id),
@@ -440,7 +421,6 @@ function CheckoutContent() {
     sessionStorage.removeItem('ebookOrderId');
     sessionStorage.removeItem('webinarOrderId');
     sessionStorage.removeItem('guidanceOrderId');
-    sessionStorage.removeItem('mentorshipOrderId');
     sessionStorage.removeItem('courseOrderId');
     sessionStorage.removeItem('bundleOrderId');
     sessionStorage.removeItem('offlineBatchOrderId');
@@ -560,35 +540,6 @@ function CheckoutContent() {
                         <p className="text-brand-600 font-semibold">
                           ₹{item.price}
                         </p>
-                      </div>
-                    </div>
-                  ))}
-                  {mentorshipCartItems.map((item) => (
-                    <div key={item.id} className="flex gap-4 pb-4 border-b">
-                      <div className="w-20 h-28 relative rounded-md overflow-hidden border flex-shrink-0">
-                        {item.coverImageUrl ? (
-                          <Image
-                            src={getPublicUrl(item.coverImageUrl) || item.coverImageUrl}
-                            alt={item.title}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="h-full flex items-center justify-center bg-muted">
-                            <span className="text-xs">No Image</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground">Live Mentorship</p>
-                        {item.isFree ? (
-                          <p className="text-green-600 font-semibold">Free</p>
-                        ) : (
-                          <p className="text-brand-600 font-semibold">
-                            ₹{item.price}
-                          </p>
-                        )}
                       </div>
                     </div>
                   ))}
@@ -744,22 +695,18 @@ function CheckoutContent() {
                             const hasEbooks = cartItems.length > 0;
                             const hasWebinars = webinarCartItems.length > 0;
                             const hasGuidance = guidanceCartItems.length > 0;
-                            const hasMentorship = mentorshipCartItems.length > 0;
                             let applicableTo = 'ALL';
-                            if (hasEbooks && !hasWebinars && !hasGuidance && !hasMentorship) {
+                            if (hasEbooks && !hasWebinars && !hasGuidance) {
                               applicableTo = 'EBOOK';
-                            } else if (hasWebinars && !hasEbooks && !hasGuidance && !hasMentorship) {
+                            } else if (hasWebinars && !hasEbooks && !hasGuidance) {
                               applicableTo = 'WEBINAR';
-                            } else if (hasGuidance && !hasEbooks && !hasWebinars && !hasMentorship) {
+                            } else if (hasGuidance && !hasEbooks && !hasWebinars) {
                               applicableTo = 'GUIDANCE';
-                            } else if (hasMentorship && !hasEbooks && !hasWebinars && !hasGuidance) {
-                              applicableTo = 'MENTORSHIP';
                             }
                             const typeText = applicableTo === 'ALL' ? 'All Products' :
                               applicableTo === 'EBOOK' ? 'E-Books Only' :
                                 applicableTo === 'WEBINAR' ? 'Webinars Only' :
-                                  applicableTo === 'GUIDANCE' ? '1:1 Guidance Only' :
-                                    applicableTo === 'MENTORSHIP' ? 'Live Mentorship Only' : 'All Products';
+                                  applicableTo === 'GUIDANCE' ? '1:1 Guidance Only' : 'All Products';
                             return `Applied to: ${typeText}`;
                           })()}
                         </div>

@@ -17,7 +17,6 @@ import { getPublicUrl } from '@/lib/imageUtils';
 const TYPE_CONFIG = {
   COURSE: { label: 'Course', icon: BookOpen, color: 'bg-blue-500' },
   WEBINAR: { label: 'Webinar', icon: Video, color: 'bg-purple-500' },
-  MENTORSHIP: { label: 'Mentorship', icon: Users, color: 'bg-indigo-500' },
   GUIDANCE: { label: '1:1 Guidance', icon: FileText, color: 'bg-green-500' },
   OFFLINE_BATCH: { label: 'Offline Batch', icon: GraduationCap, color: 'bg-orange-500' },
   BUNDLE: { label: 'Bundle', icon: Award, color: 'bg-pink-500' },
