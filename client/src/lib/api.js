@@ -2222,6 +2222,65 @@ export const subscriptionPlanAPI = {
     delete: async (id) => apiRequest(`/subscription-plans/${id}`, { method: 'DELETE' }),
 };
 
+// ==================== INTERVIEW CATEGORY APIs ====================
+export const interviewCategoryAPI = {
+    // Public
+    getAll: async () => apiRequest('/interview-categories', { method: 'GET' }),
+
+    // Admin
+    getAllAdmin: async () => apiRequest('/interview-categories/admin/all', { method: 'GET' }),
+    getById: async (id) => apiRequest(`/interview-categories/admin/${id}`, { method: 'GET' }),
+    create: async (data) => apiRequest('/interview-categories', { method: 'POST', body: JSON.stringify(data) }),
+    update: async (id, data) => apiRequest(`/interview-categories/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/interview-categories/${id}`, { method: 'DELETE' }),
+    toggleActive: async (id) => apiRequest(`/interview-categories/${id}/toggle-active`, { method: 'PATCH' }),
+};
+
+// ==================== INTERVIEW QUESTION APIs ====================
+export const interviewQuestionAPI = {
+    // Public
+    getAll: async (params = {}) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/interview-questions${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    getBySlug: async (slug) => apiRequest(`/interview-questions/slug/${slug}`, { method: 'GET' }),
+
+    // Admin
+    getAllAdmin: async (params = {}) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/interview-questions/admin/all${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    getById: async (id) => apiRequest(`/interview-questions/admin/${id}`, { method: 'GET' }),
+    create: async (data) => apiRequest('/interview-questions', { method: 'POST', body: JSON.stringify(data) }),
+    createBulk: async (questions) => apiRequest('/interview-questions/bulk', { method: 'POST', body: JSON.stringify({ questions }) }),
+    update: async (id, data) => apiRequest(`/interview-questions/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/interview-questions/${id}`, { method: 'DELETE' }),
+    togglePublish: async (id) => apiRequest(`/interview-questions/${id}/toggle-publish`, { method: 'PATCH' }),
+};
+
+// ==================== CORPORATE TRAINING APIs ====================
+export const corporateTrainingAPI = {
+    // Public
+    getAll: async () => apiRequest('/corporate-training', { method: 'GET' }),
+    getBySlug: async (slug) => apiRequest(`/corporate-training/${slug}`, { method: 'GET' }),
+    createInquiry: async (data) => apiRequest('/corporate-training/inquiry', { method: 'POST', body: JSON.stringify(data) }),
+
+    // Admin
+    getAllAdmin: async () => apiRequest('/corporate-training/admin/all', { method: 'GET' }),
+    getById: async (id) => apiRequest(`/corporate-training/admin/${id}`, { method: 'GET' }),
+    create: async (data) => apiRequest('/corporate-training', { method: 'POST', body: JSON.stringify(data) }),
+    update: async (id, data) => apiRequest(`/corporate-training/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/corporate-training/${id}`, { method: 'DELETE' }),
+    toggleActive: async (id) => apiRequest(`/corporate-training/${id}/toggle-active`, { method: 'PATCH' }),
+
+    // Admin Inquiries
+    getInquiries: async (params = {}) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/corporate-training/admin/inquiries/all${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    updateInquiryStatus: async (id, status) => apiRequest(`/corporate-training/admin/inquiries/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+};
+
 // Export default for convenience
 export const api = {
     get: (endpoint, options = {}) => apiRequest(endpoint, { ...options, method: 'GET' }),
@@ -2264,6 +2323,11 @@ export const api = {
     mentorship: mentorshipAPI,
     subscription: subscriptionAPI,
     subscriptionPlan: subscriptionPlanAPI,
+    interviewCategory: interviewCategoryAPI,
+    interviewQuestion: interviewQuestionAPI,
+    corporateTraining: corporateTrainingAPI,
 };
+
+
 
 export default api;

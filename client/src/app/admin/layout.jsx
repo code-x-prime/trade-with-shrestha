@@ -35,6 +35,8 @@ import {
   Mail,
   FileSpreadsheet,
   Image as ImageIcon,
+  HelpCircle,
+  FolderOpen,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -46,38 +48,50 @@ const menuItems = [
     href: '/admin',
   },
   {
-    title: 'Users',
+    title: 'User Management',
     icon: Users,
-    href: '/admin/users',
-  },
-  {
-    title: 'Courses',
-    icon: GraduationCap,
     subItems: [
-      { title: 'All Courses', icon: GraduationCap, href: '/admin/courses' },
-      { title: 'Categories', icon: Tag, href: '/admin/categories' },
-      { title: 'Course Progress', icon: BarChart3, href: '/admin/course-progress' },
+      { title: 'All Users', icon: Users, href: '/admin/users' },
       { title: 'Manual Enroll', icon: UserPlus, href: '/admin/manual-enroll' },
     ],
   },
   {
-    title: 'Content',
-    icon: FolderTree,
+    title: 'Learning & Content',
+    icon: GraduationCap,
     subItems: [
-      { title: 'Jobs', icon: Briefcase, href: '/admin/jobs' },
+      { title: 'Courses', icon: GraduationCap, href: '/admin/courses' },
+      { title: 'Categories', icon: Tag, href: '/admin/categories' },
+      { title: 'Course Progress', icon: BarChart3, href: '/admin/course-progress' },
       { title: 'Bundles', icon: Package, href: '/admin/bundles' },
-      { title: 'Offline Batches', icon: Calendar, href: '/admin/offline-batches' },
       { title: 'Webinars', icon: Video, href: '/admin/webinars' },
-      { title: '1:1 Guidance', icon: MessageCircle, href: '/admin/guidance' },
-      // { title: 'Ebooks', icon: BookOpen, href: '/admin/ebooks' },
-      { title: 'Practice with Expert', icon: MessageCircle, href: '/admin/expert-practice' },
-      { title: 'Expert Practice Bookings', icon: CalendarCheck, href: '/admin/expert-practice-bookings' },
+      { title: 'Corporate Training', icon: Briefcase, href: '/admin/corporate-training' },
+      { title: 'Training Inquiries', icon: Mail, href: '/admin/corporate-training/inquiries' },
+      { title: 'Offline Batches', icon: Calendar, href: '/admin/offline-batches' },
       { title: 'Certificates', icon: Award, href: '/admin/certificates' },
-      { title: 'Reviews', icon: Star, href: '/admin/reviews' },
     ],
   },
   {
-    title: 'Commerce',
+    title: 'Career Center',
+    icon: Briefcase,
+    subItems: [
+      { title: 'Jobs', icon: Briefcase, href: '/admin/jobs' },
+      { title: 'Mock Interviews', icon: MessageCircle, href: '/admin/mock-interview' },
+      { title: 'Placement Training', icon: GraduationCap, href: '/admin/placement-training-registrations' },
+      { title: 'Interview Qs', icon: HelpCircle, href: '/admin/interview-questions' },
+      { title: 'Question Categories', icon: FolderOpen, href: '/admin/interview-categories' },
+    ],
+  },
+  {
+    title: 'Mentorship',
+    icon: Star,
+    subItems: [
+      { title: '1:1 Guidance', icon: MessageCircle, href: '/admin/guidance' },
+      { title: 'Expert Practice', icon: Users, href: '/admin/expert-practice' },
+      { title: 'Bookings', icon: CalendarCheck, href: '/admin/expert-practice-bookings' },
+    ],
+  },
+  {
+    title: 'Sales & Finance',
     icon: ShoppingBag,
     subItems: [
       { title: 'Orders', icon: ShoppingBag, href: '/admin/orders' },
@@ -87,25 +101,24 @@ const menuItems = [
     ],
   },
   {
-    title: 'Support',
+    title: 'Communications',
     icon: Mail,
     subItems: [
       { title: 'Contacts', icon: Mail, href: '/admin/contacts' },
       { title: 'Demo Requests', icon: Calendar, href: '/admin/demo-requests' },
-      { title: 'Hire From Us', icon: Briefcase, href: '/admin/hire-from-us' },
-      { title: 'Placement Training', icon: GraduationCap, href: '/admin/placement-training-registrations' },
-      { title: 'Training Schedule', icon: Video, href: '/admin/training-schedule' },
-      { title: 'Mock Interview', icon: Calendar, href: '/admin/mock-interview' },
+      { title: 'Hire From Us', icon: UserPlus, href: '/admin/hire-from-us' },
+      { title: 'Training Schedule', icon: CalendarCheck, href: '/admin/training-schedule' },
+      { title: 'Reviews', icon: Star, href: '/admin/reviews' },
     ],
   },
   {
-    title: 'System',
+    title: 'System & Media',
     icon: Settings,
     subItems: [
       { title: 'Media Library', icon: HardDrive, href: '/admin/media' },
       { title: 'Banners', icon: ImageIcon, href: '/admin/banners' },
       { title: 'Settings', icon: Settings, href: '/admin/settings' },
-      { title: 'Social Settings', icon: Settings, href: '/admin/footer' },
+      { title: 'Footer & Social', icon: Settings, href: '/admin/footer' },
     ],
   },
 ];

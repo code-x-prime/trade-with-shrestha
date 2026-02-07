@@ -37,6 +37,9 @@ import indicatorRoutes from "./routes/indicator.routes.js";
 import mentorshipRoutes from "./routes/mentorship.routes.js";
 import subscriptionRoutes from "./routes/subscription.routes.js";
 import subscriptionPlanRoutes from "./routes/subscriptionPlan.routes.js";
+import interviewCategoryRoutes from "./routes/interviewCategory.routes.js";
+import interviewQuestionRoutes from "./routes/interviewQuestion.routes.js";
+import corporateTrainingRoutes from "./routes/corporateTraining.routes.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -157,6 +160,9 @@ app.use("/api/indicators", indicatorRoutes);
 app.use("/api/mentorship", mentorshipRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/subscription-plans", subscriptionPlanRoutes);
+app.use("/api/interview-categories", interviewCategoryRoutes);
+app.use("/api/interview-questions", interviewQuestionRoutes);
+app.use("/api/corporate-training", corporateTrainingRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

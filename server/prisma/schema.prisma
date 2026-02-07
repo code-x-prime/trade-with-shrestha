@@ -1328,3 +1328,108 @@ model JobApplication {
   @@index([jobId])
   @@index([userId])
 }
+
+// ==================== INTERVIEW QUESTIONS ====================
+
+model InterviewCategory {
+  id          String  @id @default(uuid())
+  name        String  @unique // Category name (Python, Java, etc.)
+  slug        String  @unique // URL-friendly slug
+  description String? // Optional description
+  icon        String? // Optional icon name
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  questions InterviewQuestion[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model InterviewQuestion {
+  id String @id @default(uuid())
+
+  // Core fields
+  title  String // Question text
+  slug   String @unique // URL-friendly slug
+  answer String @db.Text // Rich HTML answer content
+
+  // Categorization
+  categoryId String
+  category   InterviewCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  // Optional fields
+  difficulty String? // Easy, Medium, Hard
+  tags       String[] @default([]) // Additional tags for filtering
+
+  // Meta  
+  isPublished Boolean @default(true)
+  sortOrder   Int     @default(0) // For custom ordering
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([isPublished])
+  @@index([slug])
+}
+
+// ==================== CORPORATE TRAINING ====================
+
+model CorporateTraining {
+  id          String  @id @default(uuid())
+  title       String
+  slug        String  @unique
+  description String  @db.Text
+  image       String?
+
+  // Program Details
+  curriculum Json    @default("[]") // Array of modules/topics
+  features   Json    @default("[]") // Key highlights
+  duration   String?
+  mode       String? // "Online", "On-site", "Hybrid"
+  price      Float? // Optional price
+
+  // Meta
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inquiries CorporateTrainingInquiry[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model CorporateTrainingInquiry {
+  id          String  @id @default(uuid())
+  name        String
+  email       String
+  phone       String
+  companyName String?
+  message     String? @db.Text
+
+  // Training Interest (Optional)
+  trainingId String?
+  training   CorporateTraining? @relation(fields: [trainingId], references: [id], onDelete: SetNull)
+
+  status    InquiryStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([email])
+  @@index([status])
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  CLOSED
+}
