@@ -64,6 +64,7 @@ const menuItems = [
     title: 'Content',
     icon: FolderTree,
     subItems: [
+      { title: 'Jobs', icon: Briefcase, href: '/admin/jobs' },
       { title: 'Bundles', icon: Package, href: '/admin/bundles' },
       { title: 'Offline Batches', icon: Calendar, href: '/admin/offline-batches' },
       { title: 'Webinars', icon: Video, href: '/admin/webinars' },

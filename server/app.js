@@ -32,6 +32,7 @@ import mockInterviewRoutes from "./routes/mockInterview.routes.js";
 import expertPracticeRoutes from "./routes/expertPractice.routes.js";
 import hireFromUsRoutes from "./routes/hireFromUs.routes.js";
 import placementTrainingRoutes from "./routes/placementTraining.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -147,6 +148,7 @@ app.use("/api/mock-interview", mockInterviewRoutes);
 app.use("/api/expert-practice", expertPracticeRoutes);
 app.use("/api/hire-from-us", hireFromUsRoutes);
 app.use("/api/placement-training", placementTrainingRoutes);
+app.use("/api/jobs", jobRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

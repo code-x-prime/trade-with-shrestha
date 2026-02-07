@@ -37,7 +37,10 @@ async function apiRequest(endpoint, options = {}) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || 'An error occurred');
+            // Create error with response data for better error handling
+            const error = new Error(data.message || 'An error occurred');
+            error.response = { data, status: response.status };
+            throw error;
         }
 
         return data;
@@ -2133,7 +2136,13 @@ export const placementTrainingAPI = {
 };
 
 // Export default for convenience
-const api = {
+export const api = {
+    get: (endpoint, options = {}) => apiRequest(endpoint, { ...options, method: 'GET' }),
+    post: (endpoint, body, options = {}) => apiRequest(endpoint, { ...options, method: 'POST', body }),
+    put: (endpoint, body, options = {}) => apiRequest(endpoint, { ...options, method: 'PUT', body }),
+    patch: (endpoint, body, options = {}) => apiRequest(endpoint, { ...options, method: 'PATCH', body }),
+    delete: (endpoint, options = {}) => apiRequest(endpoint, { ...options, method: 'DELETE' }),
+
     auth: authAPI,
     user: userAPI,
     upload: uploadAPI,
@@ -2167,4 +2176,3 @@ const api = {
 };
 
 export default api;
-

@@ -61,7 +61,7 @@ export default function AdminHireFromUsPage() {
   if (!isAuthenticated || !isAdmin) return null;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-4 flex-wrap">
           <CardTitle className="flex items-center gap-2">

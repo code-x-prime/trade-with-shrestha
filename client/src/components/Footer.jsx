@@ -51,6 +51,7 @@ const FOOTER_LINKS = {
     { name: 'About Us', href: '/about' },
     { name: 'Contact', href: '/contact' },
     { name: 'Blog', href: '/blog' },
+    { name: 'Post a Job', href: '/career/post-job' },
   ],
   legal: [
     { name: 'Terms of Service', href: '/terms' },
