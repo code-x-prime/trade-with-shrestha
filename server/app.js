@@ -33,6 +33,10 @@ import expertPracticeRoutes from "./routes/expertPractice.routes.js";
 import hireFromUsRoutes from "./routes/hireFromUs.routes.js";
 import placementTrainingRoutes from "./routes/placementTraining.routes.js";
 import jobRoutes from "./routes/job.routes.js";
+import indicatorRoutes from "./routes/indicator.routes.js";
+import mentorshipRoutes from "./routes/mentorship.routes.js";
+import subscriptionRoutes from "./routes/subscription.routes.js";
+import subscriptionPlanRoutes from "./routes/subscriptionPlan.routes.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -149,6 +153,10 @@ app.use("/api/expert-practice", expertPracticeRoutes);
 app.use("/api/hire-from-us", hireFromUsRoutes);
 app.use("/api/placement-training", placementTrainingRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use("/api/indicators", indicatorRoutes);
+app.use("/api/mentorship", mentorshipRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/subscription-plans", subscriptionPlanRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

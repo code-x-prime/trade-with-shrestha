@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { trainingScheduleAPI } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Video, MessageCircle } from 'lucide-react';
+import { Search, Video, MessageCircle, Loader2 } from 'lucide-react';
 import BookDemoDialog from '@/components/BookDemoDialog';
 import TrainingScheduleHero from '@/components/listing-heroes/TrainingScheduleHero';
 
@@ -26,7 +26,7 @@ function getInitialFilter(searchParams) {
   return type != null && VALID_TYPES.includes(type) ? type : '';
 }
 
-export default function TrainingSchedulePage() {
+function TrainingScheduleContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [schedules, setSchedules] = useState([]);
@@ -221,5 +221,22 @@ export default function TrainingSchedulePage() {
         defaultMessage={selectedDemoMessage}
       />
     </div>
+  );
+}
+
+export default function TrainingSchedulePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
+          <TrainingScheduleHero />
+        </div>
+        <div className="max-w-5xl mx-auto px-4 py-6 pb-10 flex justify-center items-center">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
+        </div>
+      </div>
+    }>
+      <TrainingScheduleContent />
+    </Suspense>
   );
 }

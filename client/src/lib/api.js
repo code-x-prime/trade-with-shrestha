@@ -2135,6 +2135,93 @@ export const placementTrainingAPI = {
     },
 };
 
+// ==================== INDICATOR APIs ====================
+export const indicatorAPI = {
+    getAll: async (params = {}) => {
+        const queryParams = new URLSearchParams();
+        if (params.page) queryParams.append('page', params.page);
+        if (params.limit) queryParams.append('limit', params.limit);
+        if (params.search) queryParams.append('search', params.search);
+        if (params.isPublished !== undefined) queryParams.append('isPublished', params.isPublished);
+        const queryString = queryParams.toString();
+        return apiRequest(`/indicators${queryString ? `?${queryString}` : ''}`, { method: 'GET' });
+    },
+    getBySlug: async (slug) => apiRequest(`/indicators/slug/${slug}`, { method: 'GET' }),
+    getById: async (id) => apiRequest(`/indicators/${id}`, { method: 'GET' }),
+    create: async (formData) => apiRequest('/indicators', { method: 'POST', body: formData }),
+    update: async (id, formData) => apiRequest(`/indicators/${id}`, { method: 'PATCH', body: formData }),
+    delete: async (id) => apiRequest(`/indicators/${id}`, { method: 'DELETE' }),
+    togglePublish: async (id, isPublished) => apiRequest(`/indicators/${id}/publish`, { method: 'PATCH', body: JSON.stringify({ isPublished }) }),
+};
+
+// ==================== MENTORSHIP APIs ====================
+export const mentorshipAPI = {
+    getAll: async (params = {}) => {
+        const queryParams = new URLSearchParams();
+        if (params.page) queryParams.append('page', params.page);
+        if (params.limit) queryParams.append('limit', params.limit);
+        if (params.search) queryParams.append('search', params.search);
+        const queryString = queryParams.toString();
+        return apiRequest(`/mentorship${queryString ? `?${queryString}` : ''}`, { method: 'GET' });
+    },
+    getById: async (id) => apiRequest(`/mentorship/${id}`, { method: 'GET' }),
+    getBySlug: async (slug) => apiRequest(`/mentorship/slug/${slug}`, { method: 'GET' }),
+    getSessions: async (id) => apiRequest(`/mentorship/${id}/sessions`, { method: 'GET' }),
+    checkEnrollment: async (id) => apiRequest(`/mentorship/${id}/enrollment`, { method: 'GET' }),
+
+    // Admin
+    create: async (formData) => apiRequest('/mentorship', { method: 'POST', body: formData }),
+    update: async (id, formData) => apiRequest(`/mentorship/${id}`, { method: 'PATCH', body: formData }),
+    delete: async (id) => apiRequest(`/mentorship/${id}`, { method: 'DELETE' }),
+    togglePublish: async (id) => apiRequest(`/mentorship/${id}/publish`, { method: 'PATCH' }),
+
+    // Sessions (Admin)
+    createSession: async (mentorshipId, data) => apiRequest(`/mentorship/${mentorshipId}/sessions`, { method: 'POST', body: JSON.stringify(data) }),
+    updateSession: async (sessionId, data) => apiRequest(`/mentorship/sessions/${sessionId}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    deleteSession: async (sessionId) => apiRequest(`/mentorship/sessions/${sessionId}`, { method: 'DELETE' }),
+};
+
+// ==================== SUBSCRIPTION APIs ====================
+export const subscriptionAPI = {
+    checkActive: async () => apiRequest('/subscriptions/check-active', { method: 'GET' }),
+    create: async (data) => apiRequest('/subscriptions', { method: 'POST', body: JSON.stringify(data) }),
+    verifyPayment: async (data) => apiRequest('/subscriptions/verify-payment', { method: 'POST', body: JSON.stringify(data) }),
+    getUserSubscriptions: async (status) => {
+        const queryParams = new URLSearchParams();
+        if (status) queryParams.append('status', status);
+        return apiRequest(`/subscriptions?${queryParams.toString()}`, { method: 'GET' });
+    },
+    cancel: async (id) => apiRequest(`/subscriptions/${id}/cancel`, { method: 'POST' }),
+    renew: async (id, data) => apiRequest(`/subscriptions/${id}/renew`, { method: 'POST', body: JSON.stringify(data) }),
+
+    // Admin
+    getAll: async (params = {}) => {
+        const queryParams = new URLSearchParams();
+        if (params.page) queryParams.append('page', params.page);
+        if (params.limit) queryParams.append('limit', params.limit);
+        if (params.status) queryParams.append('status', params.status);
+        const queryString = queryParams.toString();
+        return apiRequest(`/subscriptions/all${queryString ? `?${queryString}` : ''}`, { method: 'GET' });
+    },
+    updateTradingViewUsername: async (id, username) => apiRequest(`/subscriptions/${id}/tradingview`, { method: 'PATCH', body: JSON.stringify({ tradingViewUsername: username }) }),
+    updateStatus: async (id, status) => apiRequest(`/subscriptions/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+    changePlan: async (id, planId) => apiRequest(`/subscriptions/${id}/plan`, { method: 'PATCH', body: JSON.stringify({ planId }) }),
+    stop: async (id) => apiRequest(`/subscriptions/${id}/stop`, { method: 'POST' }),
+    adminRenew: async (id, data) => apiRequest(`/subscriptions/${id}/renew`, { method: 'POST', body: JSON.stringify(data) }),
+};
+
+// ==================== SUBSCRIPTION PLAN APIs ====================
+export const subscriptionPlanAPI = {
+    getGlobalPlans: async () => apiRequest('/subscription-plans', { method: 'GET' }),
+
+    // Admin
+    getAll: async () => apiRequest('/subscription-plans/all', { method: 'GET' }),
+    getById: async (id) => apiRequest(`/subscription-plans/${id}`, { method: 'GET' }),
+    upsert: async (data) => apiRequest('/subscription-plans', { method: 'POST', body: JSON.stringify(data) }),
+    update: async (id, data) => apiRequest(`/subscription-plans/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: async (id) => apiRequest(`/subscription-plans/${id}`, { method: 'DELETE' }),
+};
+
 // Export default for convenience
 export const api = {
     get: (endpoint, options = {}) => apiRequest(endpoint, { ...options, method: 'GET' }),
@@ -2173,6 +2260,10 @@ export const api = {
     expertPractice: expertPracticeAPI,
     hireFromUs: hireFromUsAPI,
     placementTraining: placementTrainingAPI,
+    indicator: indicatorAPI,
+    mentorship: mentorshipAPI,
+    subscription: subscriptionAPI,
+    subscriptionPlan: subscriptionPlanAPI,
 };
 
 export default api;
