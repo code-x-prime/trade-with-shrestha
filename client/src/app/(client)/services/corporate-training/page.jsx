@@ -74,7 +74,7 @@ export default function CorporateTrainingPage() {
               Empower Your Workforce with <span className="text-blue-300">Expert-Led Training</span>
             </h1>
             <p className="text-lg text-blue-100 max-w-xl">
-              Customized corporate training programs designed to upskill your team in the latest technologies and methodologies. From React to Cloud Architecture, we've got you covered.
+              Customized corporate training programs designed to upskill your team in the latest technologies and methodologies. From React to Cloud Architecture, we&apos;ve got you covered.
             </p>
             <div className="flex gap-4">
               <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50" onClick={() => document.getElementById('inquiry-form').scrollIntoView({ behavior: 'smooth' })}>
@@ -107,7 +107,7 @@ export default function CorporateTrainingPage() {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Our Training Programs</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Choose from our wide range of specialized courses or request a custom curriculum tailored to your organization's needs.
+            Choose from our wide range of specialized courses or request a custom curriculum tailored to your organization&apos;s needs.
           </p>
         </div>
 
@@ -181,7 +181,7 @@ export default function CorporateTrainingPage() {
             <div className="p-8 md:p-12 bg-primary text-primary-foreground">
                 <h3 className="text-2xl font-bold mb-4">Get a Quote</h3>
                 <p className="mb-8 opacity-90">
-                    Tell us about your training needs, and we'll create a customized proposal for your team.
+                    Tell us about your training needs, and we&apos;ll create a customized proposal for your team.
                 </p>
                 
                 <div className="space-y-6">

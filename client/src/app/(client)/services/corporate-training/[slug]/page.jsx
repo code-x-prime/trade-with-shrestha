@@ -184,7 +184,7 @@ export default function CorporateTrainingDetailPage() {
                 <div className="bg-card border rounded-xl shadow-lg p-6">
                     <h3 className="text-xl font-bold mb-2">Request a Proposal</h3>
                     <p className="text-sm text-muted-foreground mb-6">
-                        Get a customized quote tailored to your team's size and needs.
+                        Get a customized quote tailored to your team&apos;s size and needs.
                     </p>
                     
                     <form onSubmit={handleSubmit} className="space-y-4">

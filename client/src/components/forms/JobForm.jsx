@@ -5,7 +5,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -18,8 +17,6 @@ import RichTextEditor from '@/components/RichTextEditor';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { FiUpload, FiX } from 'react-icons/fi';
-import Image from 'next/image';
 
 const JOB_TYPES = [
   'FULL_TIME',
@@ -84,17 +81,6 @@ export default function JobForm({ initialData = null, isAdmin = false }) {
         }
       });
 
-      // Handle Skills (comma separated string -> array if needed by backend, 
-      // but our controller might expect JSON string or we parse it there? 
-      // Let's check controller. Controller expects array of strings in body if JSON, 
-      // but since we send FormData, we might need to send them as individual entries or JSON string.
-      // Easiest is to send as JSON string if backend parses it, OR simple logic in backend.
-      // Looking at controller: `const { skills, type ... } = req.body`. 
-      // If we use multer for files, req.body fields are strings.
-      // So we should format `skills` as an array or verify backend handles string splitting.
-      // Backend controller: `skills: Array.isArray(skills) ? skills : skills.split(',').map(s => s.trim())` (Assumption or Standard)
-      // Actually my controller implementation: `skills: skills ? (Array.isArray(skills) ? skills : skills.split(',').map(s => s.trim())) : []`
-      // So passing the string directly is fine!
       formData.append('skills', data.skills);
 
       // Handle Type (Array)
