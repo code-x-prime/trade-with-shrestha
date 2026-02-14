@@ -10,9 +10,11 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import RichTextEditor from '@/components/RichTextEditor';
 import { Loader2, ArrowLeft, X, Settings, ImageIcon } from 'lucide-react';
 import MediaPicker from '@/components/admin/MediaPicker';
+import CategoryManager from '@/components/admin/CategoryManager';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'sonner';
@@ -45,6 +47,7 @@ export default function EditCoursePage() {
   const [removeCoverImage, setRemoveCoverImage] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categoryManagerOpen, setCategoryManagerOpen] = useState(false);
 
   // MediaPicker state
   const [showImagePicker, setShowImagePicker] = useState(false);
@@ -135,6 +138,11 @@ export default function EditCoursePage() {
 
     if (!formData.title || !formData.description) {
       toast.error('Title and description are required');
+      return;
+    }
+
+    if (!formData.isFree && (!formData.price || parseFloat(formData.price) < 1)) {
+      toast.error('Paid courses must have a price of at least 1');
       return;
     }
 
@@ -350,28 +358,50 @@ export default function EditCoursePage() {
               </div>
 
               <div>
-                <Label htmlFor="categories">Categories *</Label>
-                <div className="mt-2 space-y-2">
-                  {categories.map((category) => (
-                    <div key={category.id} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`category-${category.id}`}
-                        checked={selectedCategories.includes(category.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedCategories([...selectedCategories, category.id]);
-                          } else {
-                            setSelectedCategories(selectedCategories.filter(id => id !== category.id));
-                          }
-                        }}
-                        className="rounded border-gray-300"
-                      />
-                      <label htmlFor={`category-${category.id}`} className="text-sm font-medium">
-                        {category.name}
-                      </label>
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor="categories">Categories *</Label>
+                  <Dialog open={categoryManagerOpen} onOpenChange={setCategoryManagerOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm" type="button">
+                        <Settings className="h-4 w-4 mr-2" />
+                        Manage Categories
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Manage Course Categories</DialogTitle>
+                      </DialogHeader>
+                      <CategoryManager onUpdate={fetchCategories} />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <div className="space-y-2 border rounded-md p-3">
+                  {categories.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      No categories found. Click "Manage Categories" to create one.
+                    </p>
+                  ) : (
+                    categories.map((category) => (
+                      <div key={category.id} className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id={`category-${category.id}`}
+                          checked={selectedCategories.includes(category.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedCategories([...selectedCategories, category.id]);
+                            } else {
+                              setSelectedCategories(selectedCategories.filter(id => id !== category.id));
+                            }
+                          }}
+                          className="rounded border-gray-300"
+                        />
+                        <label htmlFor={`category-${category.id}`} className="text-sm font-medium cursor-pointer select-none">
+                          {category.name}
+                        </label>
+                      </div>
+                    ))
+                  )}
                 </div>
                 {selectedCategories.length === 0 && (
                   <p className="text-xs text-destructive mt-1">At least one category is required</p>

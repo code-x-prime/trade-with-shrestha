@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { BookOpen, TrendingUp, Award, ArrowRight, Video, Star, Loader2, Download, CheckCircle2, Target, UserCheck, BarChart3, Zap, Users, Calendar, MessageCircle, Briefcase, HelpCircle } from 'lucide-react';
+import { BookOpen, TrendingUp, Award, ArrowRight, Video, Star, Loader2, Download, CheckCircle2, Target, UserCheck, Calendar, MessageCircle, Briefcase, HelpCircle } from 'lucide-react';
 import { ebookAPI, courseAPI } from '@/lib/api';
 
 import FlashSaleSection from '@/components/FlashSaleSection';
@@ -25,6 +25,7 @@ import CTABanner from '@/components/sections/CTABanner';
 import { toast } from 'sonner';
 import HomeBannerCarousel from '@/components/HomeBannerCarousel';
 import HomeCategoryBar from '@/components/HomeCategoryBar';
+import Image from 'next/image';
 
 const EBOOK_CATEGORIES = [
     { value: 'FEATURED', label: 'Featured Books', icon: Award },
@@ -257,47 +258,15 @@ function HomeContent() {
                     </div>
                     <div className="grid gap-6 md:grid-cols-3">
                         <Link href="/career/software-jobs">
-                            <Card className="h-full border-2 hover:border-brand-500/40 dark:hover:border-brand-400/40 transition-colors group">
-                                <CardContent className="p-6">
-                                    <div className="h-12 w-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-4 group-hover:bg-brand-500/20 transition-colors">
-                                        <Briefcase className="h-6 w-6 text-brand-600 dark:text-brand-400" />
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-foreground mb-2">Software Jobs</h3>
-                                    <p className="text-muted-foreground text-sm">Browse software and tech job openings. Find roles that match your skills.</p>
-                                    <span className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-brand-600 dark:text-brand-400">
-                                        Explore <ArrowRight className="h-4 w-4" />
-                                    </span>
-                                </CardContent>
-                            </Card>
+                            <Image src="/card1.png" alt="Software Jobs" width={400} height={400} />
                         </Link>
                         <Link href="/career/interview-questions">
-                            <Card className="h-full border-2 hover:border-brand-500/40 dark:hover:border-brand-400/40 transition-colors group">
-                                <CardContent className="p-6">
-                                    <div className="h-12 w-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-4 group-hover:bg-brand-500/20 transition-colors">
-                                        <HelpCircle className="h-6 w-6 text-brand-600 dark:text-brand-400" />
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-foreground mb-2">Interview Questions</h3>
-                                    <p className="text-muted-foreground text-sm">Practice common interview Q&A for technical and HR rounds.</p>
-                                    <span className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-brand-600 dark:text-brand-400">
-                                        Explore <ArrowRight className="h-4 w-4" />
-                                    </span>
-                                </CardContent>
-                            </Card>
+                            <Image src="/card2.png" alt="Interview Questions" width={400} height={400} />
                         </Link>
                         <Link href="/career/placement-training">
-                            <Card className="h-full border-2 hover:border-brand-500/40 dark:hover:border-brand-400/40 transition-colors group">
-                                <CardContent className="p-6">
-                                    <div className="h-12 w-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-4 group-hover:bg-brand-500/20 transition-colors">
-                                        <Award className="h-6 w-6 text-brand-600 dark:text-brand-400" />
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-foreground mb-2">Placement Training</h3>
-                                    <p className="text-muted-foreground text-sm">Get job-ready with resume, interviews, and soft skills training.</p>
-                                    <span className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-brand-600 dark:text-brand-400">
-                                        Explore <ArrowRight className="h-4 w-4" />
-                                    </span>
-                                </CardContent>
-                            </Card>
+                            <Image src="/card3.png" alt="Placement Training" width={400} height={400} />
                         </Link>
+
                     </div>
                     <div className="text-center mt-8">
                         <Button asChild variant="outline" className="border-brand-600 text-brand-600 hover:bg-brand-50 dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-900/30">

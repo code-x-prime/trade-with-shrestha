@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo, useEffect, useState } from 'react';
+import { useRef, useMemo} from 'react';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
@@ -25,16 +25,6 @@ export default function RichTextEditor({
   maxHeight = 800,
 }) {
   const editorRef = useRef(null);
-  const [content, setContent] = useState(value);
-  const [isFocused, setIsFocused] = useState(false);
-
-  // Sync internal state with external value prop
-  // Only sync when not focused to prevent typing issues
-  useEffect(() => {
-    if (!isFocused && value !== content) {
-      setContent(value);
-    }
-  }, [value, isFocused]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const config = useMemo(
     () => ({
@@ -45,19 +35,29 @@ export default function RichTextEditor({
       maxHeight,
       toolbar: true,
       toolbarButtonSize: 'medium',
-      toolbarAdaptive: true,
+      toolbarAdaptive: true, 
+      toolbarSticky: false, 
+      toolbarStickyOffset: 0,
       showCharsCounter: true,
       showWordsCounter: true,
       showXPathInStatusbar: false,
       askBeforePasteHTML: false,
       askBeforePasteFromWord: false,
       defaultActionOnPaste: 'insert_as_html',
+      useNativeTooltip: true, 
+      disablePlugins: ['fullsize'], 
+      allowResizeY: false, 
+      iframe: false, 
+      iframeCSSLinks: [],
+      iframeStyle: '',
       buttons: [
-        'source',
-        '|',
         'bold',
         'italic',
         'underline',
+        'strikethrough',
+        'superscript',
+        'subscript',
+        'eraser',
         '|',
         'ul',
         'ol',
@@ -72,126 +72,200 @@ export default function RichTextEditor({
         '|',
         'image',
         'link',
+        'table',
         '|',
         'align',
         '|',
         'undo',
         'redo',
         '|',
+        'cut',
+        'copy',
+        'paste',
+        'selectall',
+        'print',
+        'preview',
+        'find',
+        'replace',
+        '|',
         'hr',
-        'eraser',
-        'fullsize',
       ],
       uploader: {
         insertImageAsBase64URI: true,
       },
       style: {
         background: 'transparent',
+        color: 'hsl(var(--foreground))',
       },
       editorCssClass: 'rich-text-editor-content',
       statusbar: true,
-      spellcheck: true,
+      spellcheck: false, 
       language: 'en',
       direction: 'ltr',
+      zIndex: 10000, 
     }),
     [placeholder, height, minHeight, maxHeight, readonly]
   );
 
-  const handleChange = (newContent) => {
-    // Always update internal state immediately for UI responsiveness
-    // This prevents typing issues where text disappears
-    if (newContent !== content) {
-      setContent(newContent);
-      
-      // Call onChange callback if provided
-      // This allows parent to update its state
-      if (onChange) {
-        onChange(newContent);
-      }
-    }
-  };
-
   const handleBlur = (newContent) => {
-    setIsFocused(false);
-    // Ensure content is synced on blur
-    if (newContent !== content) {
-      setContent(newContent);
-      if (onChange) {
-        onChange(newContent);
-      }
+    if (onChange) {
+      onChange(newContent);
     }
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
   };
 
   return (
     <div
       className={cn(
-        'rich-text-editor-wrapper border rounded-md overflow-hidden transition-all',
-        isFocused && 'ring-2 ring-brand-600 ring-offset-2',
+        'rich-text-editor-wrapper border rounded-md overflow-hidden transition-all bg-card',
         className
       )}
     >
       <style jsx global>{`
         .rich-text-editor-content {
-          min-height: ${minHeight}px;
-          padding: 16px;
-          font-family: inherit;
+          min-height: ${minHeight}px !important;
+          padding: 16px !important;
+          font-family: inherit !important;
+          color: hsl(var(--foreground)) !important;
+          font-size: 1rem !important;
+          line-height: 1.6 !important;
         }
+        
         .rich-text-editor-content p {
-          margin: 0.5em 0;
+          margin: 0.5em 0 !important;
         }
-        .rich-text-editor-content h1,
-        .rich-text-editor-content h2,
+
+        .rich-text-editor-content h1 {
+          font-size: 2.25rem !important;
+          line-height: 1.2 !important;
+          margin: 1em 0 0.5em 0 !important;
+          font-weight: 800 !important;
+          color: hsl(var(--foreground)) !important;
+        }
+
+        .rich-text-editor-content h2 {
+          font-size: 1.875rem !important;
+          line-height: 1.3 !important;
+          margin: 1em 0 0.5em 0 !important;
+          font-weight: 700 !important;
+          color: hsl(var(--foreground)) !important;
+        }
+
         .rich-text-editor-content h3 {
-          margin: 0.8em 0 0.4em 0;
-          font-weight: 600;
+          font-size: 1.5rem !important;
+          line-height: 1.4 !important;
+          margin: 1em 0 0.5em 0 !important;
+          font-weight: 600 !important;
+          color: hsl(var(--foreground)) !important;
         }
-        .rich-text-editor-content ul,
+
+        .rich-text-editor-content h4 {
+          font-size: 1.25rem !important;
+          margin: 1em 0 0.5em 0 !important;
+          font-weight: 600 !important;
+          color: hsl(var(--foreground)) !important;
+        }
+
+        .rich-text-editor-content ul {
+          list-style-type: disc !important;
+          margin: 0.5em 0 !important;
+          padding-left: 2em !important;
+        }
+
         .rich-text-editor-content ol {
-          margin: 0.5em 0;
-          padding-left: 1.5em;
+          list-style-type: decimal !important;
+          margin: 0.5em 0 !important;
+          padding-left: 2em !important;
         }
+
+        .rich-text-editor-content li {
+          /* display: list-item !important; - Let browser handle default display */
+        }
+
+        .rich-text-editor-content strong, 
+        .rich-text-editor-content b {
+          font-weight: 700 !important;
+        }
+
+        .rich-text-editor-content em, 
+        .rich-text-editor-content i {
+          font-style: italic !important;
+        }
+
+        .rich-text-editor-content u {
+          text-decoration: underline !important;
+        }
+
+        /* Jodit Theme Overrides */
         .jodit-container {
           border: none !important;
+          background: transparent !important;
+        }
+        .jodit-wysiwyg {
+          background: transparent !important;
+          color: hsl(var(--foreground)) !important;
         }
         .jodit-toolbar-editor-collection {
           border-bottom: 1px solid hsl(var(--border)) !important;
-          background: hsl(var(--background)) !important;
+          background: hsl(var(--card)) !important;
+          z-index: 10 !important;
         }
         .jodit-workplace {
-          background: hsl(var(--background)) !important;
+          background: transparent !important;
+          border: none !important;
         }
         .jodit-statusbar {
           border-top: 1px solid hsl(var(--border)) !important;
           background: hsl(var(--muted)) !important;
+          color: hsl(var(--muted-foreground)) !important;
         }
         .jodit-toolbar-button {
           color: hsl(var(--foreground)) !important;
         }
         .jodit-toolbar-button:hover {
-          background: hsl(var(--muted)) !important;
+          background: hsl(var(--accent)) !important;
+          color: hsl(var(--accent-foreground)) !important;
         }
         .jodit-toolbar-button_active {
-          background: rgba(92, 100, 215, 0.1) !important;
-          color: #5C64D7 !important;
+          background: hsl(var(--primary) / 0.1) !important;
+          color: hsl(var(--primary)) !important;
         }
-        .jodit-toolbar-button_active:hover {
-          background: rgba(92, 100, 215, 0.15) !important;
+        .jodit-toolbar-button__text {
+          color: inherit !important;
+        }
+        .jodit-popup {
+          background: hsl(var(--popover)) !important;
+          color: hsl(var(--popover-foreground)) !important;
+          border: 1px solid hsl(var(--border)) !important;
+          z-index: 10000 !important; /* Ensure popups are above other elements */
+        }
+        .jodit-popup__content {
+          background: transparent !important;
+        }
+        .jodit-ui-button_active {
+             background-color: hsl(var(--primary)) !important;
+             color: hsl(var(--primary-foreground)) !important;
+        }
+        /* Ensure dropdown items are visible */
+        .jodit-ui-list {
+          background: hsl(var(--popover)) !important;
+          color: hsl(var(--popover-foreground)) !important;
+        }
+        .jodit-ui-list__item:hover {
+          background: hsl(var(--accent)) !important;
+        }
+        .jodit-ui-list__item_active {
+          background: hsl(var(--primary) / 0.1) !important;
+          color: hsl(var(--primary)) !important;
         }
       `}</style>
       <JoditEditor
         ref={editorRef}
-        value={content}
+        value={value}
         config={config}
         tabIndex={1}
         onBlur={handleBlur}
-        onChange={handleChange}
-        onFocus={handleFocus}
+        onChange={(newContent) => {}} // Empty onChange to allow internal Jodit state to manage typing without interruptions
       />
     </div>
   );
 }
-

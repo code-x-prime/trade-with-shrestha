@@ -19,7 +19,6 @@ import {
   MessageCircle,
   GraduationCap,
   Settings,
-  FolderTree,
   BarChart3,
   Award,
   Briefcase,
