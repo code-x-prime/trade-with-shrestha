@@ -379,7 +379,7 @@ export default function CreateCoursePage() {
                 <div className="space-y-2 border rounded-md p-3">
                   {categories.length === 0 ? (
                     <p className="text-sm text-muted-foreground text-center py-4">
-                      No categories found. Click "Manage Categories" to create one.
+                      No categories found. Click Manage Categories to create one.
                     </p>
                   ) : (
                     categories.map((category) => (
