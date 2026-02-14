@@ -4,9 +4,7 @@ import { useState, useEffect } from 'react';
 import { categoryAPI } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Edit, Trash2, Loader2, Plus, Save, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -209,7 +207,7 @@ export default function CategoryManager({ onUpdate }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Category?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete "{deleteDialog.category?.name}".
+              This will permanently delete {deleteDialog.category?.name}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
