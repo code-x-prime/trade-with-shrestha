@@ -64,16 +64,6 @@ function WebinarsPageContent() {
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
   }, [searchParams, router, pathname]);
 
-  useEffect(() => {
-    fetchWebinars();
-  }, [fetchWebinars]);
-
-  useEffect(() => {
-    if (isAuthenticated && webinars.length > 0) {
-      fetchPurchaseStatus();
-    }
-  }, [isAuthenticated, webinars, fetchPurchaseStatus]);
-
   const fetchWebinars = useCallback(async () => {
     try {
       setLoading(true);
@@ -134,6 +124,34 @@ function WebinarsPageContent() {
     }
   }, [page, limit, search, filters.type, sort]);
 
+  const fetchPurchaseStatus = useCallback(async () => {
+    if (!isAuthenticated || webinars.length === 0) return;
+
+    try {
+      const items = webinars.map(webinar => ({
+        type: 'WEBINAR',
+        id: webinar.id,
+      }));
+
+      const response = await userAPI.getPurchaseStatus(items);
+      if (response.success) {
+        setPurchaseStatus(response.data.purchaseStatus || {});
+      }
+    } catch (error) {
+      console.error('Failed to fetch purchase status:', error);
+    }
+  }, [isAuthenticated, webinars]);
+
+  useEffect(() => {
+    fetchWebinars();
+  }, [fetchWebinars]);
+
+  useEffect(() => {
+    if (isAuthenticated && webinars.length > 0) {
+      fetchPurchaseStatus();
+    }
+  }, [isAuthenticated, webinars, fetchPurchaseStatus]);
+
   const handleFilterChange = useCallback((key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
     setPage(1);
@@ -162,24 +180,6 @@ function WebinarsPageContent() {
     setPage(1);
     updateURL({ q: value || null, page: null });
   }, [updateURL]);
-
-  const fetchPurchaseStatus = useCallback(async () => {
-    if (!isAuthenticated || webinars.length === 0) return;
-
-    try {
-      const items = webinars.map(webinar => ({
-        type: 'WEBINAR',
-        id: webinar.id,
-      }));
-
-      const response = await userAPI.getPurchaseStatus(items);
-      if (response.success) {
-        setPurchaseStatus(response.data.purchaseStatus || {});
-      }
-    } catch (error) {
-      console.error('Failed to fetch purchase status:', error);
-    }
-  }, [isAuthenticated, webinars]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

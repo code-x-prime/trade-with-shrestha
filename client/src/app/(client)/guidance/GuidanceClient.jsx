@@ -52,10 +52,6 @@ function GuidancePageContent() {
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
   }, [searchParams, router, pathname]);
 
-  useEffect(() => {
-    fetchGuidance();
-  }, [fetchGuidance]);
-
   const fetchGuidance = useCallback(async () => {
     try {
       setLoading(true);
@@ -104,6 +100,10 @@ function GuidancePageContent() {
       setLoading(false);
     }
   }, [page, limit, search, sort]);
+
+  useEffect(() => {
+    fetchGuidance();
+  }, [fetchGuidance]);
 
   const handleSortChange = useCallback((value) => {
     setSort(value);

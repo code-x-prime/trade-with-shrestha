@@ -151,6 +151,86 @@ function HomeContent() {
 
             {/* Flash Sale Section */}
             <FlashSaleSection />
+
+            {coursesLoading ? (
+                <section className="max-w-7xl mx-auto px-4 py-12 space-y-12">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Skeleton className="h-10 w-10 rounded-lg" />
+                                    <Skeleton className="h-8 w-48" />
+                                </div>
+                                <Skeleton className="h-10 w-24" />
+                            </div>
+                            <div className="flex gap-4 overflow-hidden">
+                                {[1, 2, 3, 4].map((j) => (
+                                    <Card key={j} className="flex-shrink-0 w-[280px]">
+                                        <Skeleton className="aspect-video w-full rounded-t-lg" />
+                                        <CardContent className="p-4 space-y-2">
+                                            <Skeleton className="h-5 w-full" />
+                                            <Skeleton className="h-4 w-3/4" />
+                                            <div className="flex items-center justify-between mt-4">
+                                                <Skeleton className="h-6 w-20" />
+                                                <Skeleton className="h-9 w-20" />
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </section>
+            ) : Object.keys(categoryCourses).length > 0 && (
+                <section className="max-w-7xl mx-auto px-4 py-12 space-y-12">
+                    {COURSE_CATEGORIES.map((category) => {
+                        const courses = categoryCourses[category.value];
+                        if (!courses || courses.length === 0) return null;
+
+                        const Icon = category.icon;
+
+                        return (
+                            <div key={category.value} className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-10 w-10 rounded-lg bg-brand-600 flex items-center justify-center">
+                                            <Icon className="h-5 w-5 text-white" />
+                                        </div>
+                                        <h2 className="text-2xl md:text-3xl font-bold dark:text-white">{category.label}</h2>
+                                    </div>
+                                    <Button variant="ghost" asChild>
+                                        <Link href="/courses">
+                                            View All <ArrowRight className="ml-2 h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                </div>
+
+                                <Carousel
+                                    opts={{
+                                        align: "start",
+                                        loop: false,
+                                    }}
+                                    className="w-full"
+                                >
+                                    <CarouselContent className="-ml-2 md:-ml-4">
+                                        {courses.map((course) => (
+                                            <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                                                <CourseCard course={course} />
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                    {courses.length > 4 && (
+                                        <>
+                                            <CarouselPrevious className="hidden sm:flex -left-2 md:-left-4" />
+                                            <CarouselNext className="hidden sm:flex -right-2 md:-right-4" />
+                                        </>
+                                    )}
+                                </Carousel>
+                            </div>
+                        );
+                    })}
+                </section>
+            )}
             {/* Explore Learning Resources Section */}
             <section className="relative overflow-hidden dark:bg-[#08080E] bg-white py-8 md:py-10 px-4" id="learning-resources">
 
@@ -556,85 +636,7 @@ function HomeContent() {
             )}
 
             {/* Course Category Sections */}
-            {coursesLoading ? (
-                <section className="max-w-7xl mx-auto px-4 py-12 space-y-12">
-                    {[1, 2, 3].map((i) => (
-                        <div key={i} className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <Skeleton className="h-10 w-10 rounded-lg" />
-                                    <Skeleton className="h-8 w-48" />
-                                </div>
-                                <Skeleton className="h-10 w-24" />
-                            </div>
-                            <div className="flex gap-4 overflow-hidden">
-                                {[1, 2, 3, 4].map((j) => (
-                                    <Card key={j} className="flex-shrink-0 w-[280px]">
-                                        <Skeleton className="aspect-video w-full rounded-t-lg" />
-                                        <CardContent className="p-4 space-y-2">
-                                            <Skeleton className="h-5 w-full" />
-                                            <Skeleton className="h-4 w-3/4" />
-                                            <div className="flex items-center justify-between mt-4">
-                                                <Skeleton className="h-6 w-20" />
-                                                <Skeleton className="h-9 w-20" />
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </section>
-            ) : Object.keys(categoryCourses).length > 0 && (
-                <section className="max-w-7xl mx-auto px-4 py-12 space-y-12">
-                    {COURSE_CATEGORIES.map((category) => {
-                        const courses = categoryCourses[category.value];
-                        if (!courses || courses.length === 0) return null;
 
-                        const Icon = category.icon;
-
-                        return (
-                            <div key={category.value} className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded-lg bg-brand-600 flex items-center justify-center">
-                                            <Icon className="h-5 w-5 text-white" />
-                                        </div>
-                                        <h2 className="text-2xl md:text-3xl font-bold dark:text-white">{category.label}</h2>
-                                    </div>
-                                    <Button variant="ghost" asChild>
-                                        <Link href="/courses">
-                                            View All <ArrowRight className="ml-2 h-4 w-4" />
-                                        </Link>
-                                    </Button>
-                                </div>
-
-                                <Carousel
-                                    opts={{
-                                        align: "start",
-                                        loop: false,
-                                    }}
-                                    className="w-full"
-                                >
-                                    <CarouselContent className="-ml-2 md:-ml-4">
-                                        {courses.map((course) => (
-                                            <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                                                <CourseCard course={course} />
-                                            </CarouselItem>
-                                        ))}
-                                    </CarouselContent>
-                                    {courses.length > 4 && (
-                                        <>
-                                            <CarouselPrevious className="hidden sm:flex -left-2 md:-left-4" />
-                                            <CarouselNext className="hidden sm:flex -right-2 md:-right-4" />
-                                        </>
-                                    )}
-                                </Carousel>
-                            </div>
-                        );
-                    })}
-                </section>
-            )}
 
 
 

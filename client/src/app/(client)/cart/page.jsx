@@ -341,6 +341,46 @@ function CartContent() {
     }
   };
 
+  // Helper to get effective price (considers flash sale)
+  const getEffectivePrice = useCallback((item) => {
+    if (item.pricing?.effectivePrice !== undefined) {
+      return item.pricing.effectivePrice;
+    }
+    return item.salePrice || item.price || 0;
+  }, []);
+
+  // Helper to get total amount before discount
+  const calculateTotal = useCallback(() => {
+    let total = 0;
+    cartItems.forEach(item => {
+      if (!item.isFree) {
+        total += getEffectivePrice(item);
+      }
+    });
+    webinarCartItems.forEach(item => {
+      if (!item.isFree) {
+        total += getEffectivePrice(item);
+      }
+    });
+    guidanceCartItems.forEach(item => {
+      total += item.pricing?.effectivePrice || (item.price || 0);
+    });
+    courseCartItems.forEach(item => {
+      if (!item.isFree) {
+        total += getEffectivePrice(item);
+      }
+    });
+    offlineBatchCartItems.forEach(item => {
+      if (!item.isFree && item.pricingType !== 'FREE') {
+        total += getEffectivePrice(item);
+      }
+    });
+    bundleCartItems.forEach(item => {
+      total += getEffectivePrice(item);
+    });
+    return total;
+  }, [cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, getEffectivePrice]);
+
   // Helper to validate and apply coupon
   const validateAndApplyCoupon = useCallback(async (code, isAutoApply = false) => {
     if (!code.trim()) {
@@ -436,15 +476,7 @@ function CartContent() {
   }, [loading, cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, appliedCoupon, searchParams, validateAndApplyCoupon]);
 
 
-  // Helper to get effective price (considers flash sale)
-  const getEffectivePrice = useCallback((item) => {
-    if (item.pricing?.effectivePrice !== undefined) {
-      return item.pricing.effectivePrice;
-    }
-    return item.salePrice || item.price || 0;
-  }, []);
 
-  // Helper to render price with flash sale info
   const renderPrice = (item) => {
     if (item.isFree) {
       return <span className="text-xl font-bold text-green-600">Free</span>;
@@ -492,36 +524,6 @@ function CartContent() {
     );
   };
 
-  const calculateTotal = useCallback(() => {
-    let total = 0;
-    cartItems.forEach(item => {
-      if (!item.isFree) {
-        total += getEffectivePrice(item);
-      }
-    });
-    webinarCartItems.forEach(item => {
-      if (!item.isFree) {
-        total += getEffectivePrice(item);
-      }
-    });
-    guidanceCartItems.forEach(item => {
-      total += item.pricing?.effectivePrice || (item.price || 0); // Guidance slots are always paid
-    });
-    courseCartItems.forEach(item => {
-      if (!item.isFree) {
-        total += getEffectivePrice(item);
-      }
-    });
-    offlineBatchCartItems.forEach(item => {
-      if (!item.isFree && item.pricingType !== 'FREE') {
-        total += getEffectivePrice(item);
-      }
-    });
-    bundleCartItems.forEach(item => {
-      total += getEffectivePrice(item);
-    });
-    return total;
-  }, [cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, getEffectivePrice]);
 
   const calculateFinalTotal = () => {
     const subtotal = calculateTotal();

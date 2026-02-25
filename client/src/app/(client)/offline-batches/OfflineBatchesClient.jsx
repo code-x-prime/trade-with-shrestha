@@ -125,18 +125,23 @@ function OfflineBatchesPageContent() {
     }
   }, [cityFilter, page, search, sort]);
 
-  useEffect(() => {
-    fetchBatches();
-    fetchFlashSale();
-  }, [fetchBatches, fetchFlashSale]);
+  const fetchPurchaseStatus = useCallback(async () => {
+    if (!isAuthenticated || batches.length === 0) return;
 
-  useEffect(() => {
-    if (isAuthenticated && batches.length > 0) {
-      fetchPurchaseStatus();
+    try {
+      const items = batches.map(batch => ({
+        type: 'OFFLINE_BATCH',
+        id: batch.id,
+      }));
+
+      const response = await userAPI.getPurchaseStatus(items);
+      if (response.success) {
+        setPurchaseStatus(response.data.purchaseStatus || {});
+      }
+    } catch (error) {
+      console.error('Failed to fetch purchase status:', error);
     }
-  }, [isAuthenticated, batches, fetchPurchaseStatus]);
-
-
+  }, [isAuthenticated, batches]);
 
     const handleFilterChange = useCallback((key, value) => {
         if (key === 'city') {
@@ -169,23 +174,16 @@ function OfflineBatchesPageContent() {
         updateURL({ q: value || null, page: null });
     }, [updateURL]);
 
-  const fetchPurchaseStatus = useCallback(async () => {
-    if (!isAuthenticated || batches.length === 0) return;
+  useEffect(() => {
+    fetchBatches();
+    fetchFlashSale();
+  }, [fetchBatches, fetchFlashSale]);
 
-    try {
-      const items = batches.map(batch => ({
-        type: 'OFFLINE_BATCH',
-        id: batch.id,
-      }));
-
-      const response = await userAPI.getPurchaseStatus(items);
-      if (response.success) {
-        setPurchaseStatus(response.data.purchaseStatus || {});
-      }
-    } catch (error) {
-      console.error('Failed to fetch purchase status:', error);
+  useEffect(() => {
+    if (isAuthenticated && batches.length > 0) {
+      fetchPurchaseStatus();
     }
-  }, [isAuthenticated, batches]);
+  }, [isAuthenticated, batches, fetchPurchaseStatus]);
 
     // Get unique cities for filter
     const uniqueCities = Array.from(new Set(batches.map(b => b.city).filter(Boolean))).sort();

@@ -120,6 +120,23 @@ function BundlePageContent() {
         }
     }, [isAuthenticated, bundles]);
 
+    const handleSearch = useCallback((value) => {
+        setSearch(value);
+        setPage(1);
+        updateURL({ q: value || null, page: null });
+    }, [updateURL]);
+
+    const handleSortChange = useCallback((value) => {
+        setSort(value);
+        updateURL({ sort: value !== 'newest' ? value : null });
+    }, [updateURL]);
+
+    const handlePageChange = useCallback((newPage) => {
+        setPage(newPage);
+        updateURL({ page: newPage > 1 ? newPage : null });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [updateURL]);
+
     useEffect(() => {
         fetchBundles();
     }, [fetchBundles]);
