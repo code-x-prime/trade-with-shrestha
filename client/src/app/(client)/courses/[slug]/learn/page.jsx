@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { courseAPI } from '@/lib/api';
@@ -66,13 +66,13 @@ export default function CourseLearnPage({ params }) {
       }
       fetchCourse();
     }
-  }, [slug, isAuthenticated, authLoading]);
+  }, [slug, isAuthenticated, authLoading, router, fetchCourse]);
 
   useEffect(() => {
     if (course?.id && isAuthenticated) {
       fetchProgress();
     }
-  }, [course?.id, isAuthenticated]);
+  }, [course?.id, isAuthenticated, fetchProgress]);
 
   useEffect(() => {
     if (course && selectedChapterId) {
@@ -88,7 +88,7 @@ export default function CourseLearnPage({ params }) {
         }
       }
     }
-  }, [course, selectedChapterId, isEnrolled]);
+  }, [course, selectedChapterId, isEnrolled, slug, router, findChapterById]);
 
   useEffect(() => {
     // Reset states when chapter changes
@@ -97,9 +97,29 @@ export default function CourseLearnPage({ params }) {
       setIsProcessingComplete(false);
       // Don't reset hasShownCompletionMessage - keep it for the session
     }
-  }, [selectedChapter?.id]);
+  }, [selectedChapter]);
 
-  const fetchCourse = async () => {
+  const findChapterByIdInSessions = useCallback((sessions, chapterId) => {
+    if (!sessions) return null;
+    for (const session of sessions) {
+      if (session.chapters) {
+        const chapter = session.chapters.find(c => c.id === chapterId);
+        if (chapter) return chapter;
+      }
+    }
+    return null;
+  }, []);
+
+  const findFirstChapter = useCallback((sessions) => {
+    for (const session of sessions) {
+      if (session.chapters && session.chapters.length > 0) {
+        return session.chapters[0];
+      }
+    }
+    return null;
+  }, []);
+
+  const fetchCourse = useCallback(async () => {
     try {
       setLoading(true);
       const response = await courseAPI.getCourseBySlug(slug);
@@ -205,9 +225,9 @@ export default function CourseLearnPage({ params }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug, searchParams, router, findChapterByIdInSessions, findFirstChapter]);
 
-  const fetchProgress = async () => {
+  const fetchProgress = useCallback(async () => {
     if (!course?.id) return;
     try {
       const response = await courseAPI.getCourseProgress(course.id);
@@ -226,32 +246,12 @@ export default function CourseLearnPage({ params }) {
         console.error('Failed to fetch progress:', error);
       }
     }
-  };
+  }, [course?.id, selectedChapter]);
 
-  const findChapterById = (chapterId) => {
+  const findChapterById = useCallback((chapterId) => {
     if (!course?.sessions) return null;
     return findChapterByIdInSessions(course.sessions, chapterId);
-  };
-
-  const findChapterByIdInSessions = (sessions, chapterId) => {
-    if (!sessions) return null;
-    for (const session of sessions) {
-      if (session.chapters) {
-        const chapter = session.chapters.find(c => c.id === chapterId);
-        if (chapter) return chapter;
-      }
-    }
-    return null;
-  };
-
-  const findFirstChapter = (sessions) => {
-    for (const session of sessions) {
-      if (session.chapters && session.chapters.length > 0) {
-        return session.chapters[0];
-      }
-    }
-    return null;
-  };
+  }, [course?.sessions, findChapterByIdInSessions]);
 
   // Extract YouTube video ID from URL
 

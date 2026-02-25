@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { offlineBatchAPI, flashSaleAPI } from '@/lib/api';
@@ -26,110 +26,110 @@ export default function OfflineBatchDetailPage() {
     const [addingToCart, setAddingToCart] = useState(false);
     const [isEnrolled, setIsEnrolled] = useState(false);
 
-    useEffect(() => {
-        fetchBatch();
-    }, [slug, isAuthenticated]);
+  useEffect(() => {
+    fetchBatch();
+  }, [fetchBatch]);
 
-    const fetchBatch = async () => {
-        try {
-            setLoading(true);
-            const response = await offlineBatchAPI.getBatchBySlug(slug);
-            if (response.success) {
-                const batchData = response.data.batch;
-                setBatch(batchData);
-                // Ensure isEnrolled is properly set from backend
-                const enrolled = batchData.isEnrolled === true;
-                setIsEnrolled(enrolled);
-                // Debug: Log enrollment status
-                if (isAuthenticated) {
-                    console.log('Batch enrollment status:', {
-                        isEnrolled: enrolled,
-                        batchId: batchData.id,
-                        userId: user?.id
-                    });
-                }
-
-                // Fetch pricing info if not free
-                if (!batchData.isFree && batchData.pricingType !== 'FREE' && batchData.price) {
-                    try {
-                        const pricingResponse = await flashSaleAPI.getActive();
-                        if (pricingResponse.success && pricingResponse.data?.flashSale) {
-                            const flashSale = pricingResponse.data.flashSale;
-                            const item = flashSale.items?.find(i => i.itemType === 'OFFLINE_BATCH' && i.itemId === batchData.id);
-                            if (item) {
-                                const effectivePrice = item.discountPrice || batchData.salePrice || batchData.price;
-                                const originalPrice = batchData.salePrice || batchData.price;
-                                const discountPercent = Math.round(((originalPrice - effectivePrice) / originalPrice) * 100);
-
-                                setPricing({
-                                    hasFlashSale: true,
-                                    effectivePrice,
-                                    displayOriginalPrice: originalPrice,
-                                    discountPercent,
-                                    flashSaleTitle: flashSale.title || 'Flash Sale',
-                                });
-                            } else {
-                                // No flash sale, use regular pricing
-                                const effectivePrice = batchData.salePrice || batchData.price;
-                                const originalPrice = batchData.price;
-                                if (effectivePrice < originalPrice) {
-                                    const discountPercent = Math.round(((originalPrice - effectivePrice) / originalPrice) * 100);
-                                    setPricing({
-                                        hasFlashSale: false,
-                                        effectivePrice,
-                                        displayOriginalPrice: originalPrice,
-                                        discountPercent,
-                                    });
-                                } else {
-                                    setPricing({
-                                        hasFlashSale: false,
-                                        effectivePrice: originalPrice,
-                                        displayOriginalPrice: originalPrice,
-                                        discountPercent: 0,
-                                    });
-                                }
-                            }
-                        } else {
-                            // No active flash sale, use regular pricing
-                            const effectivePrice = batchData.salePrice || batchData.price;
-                            const originalPrice = batchData.price;
-                            if (effectivePrice < originalPrice) {
-                                const discountPercent = Math.round(((originalPrice - effectivePrice) / originalPrice) * 100);
-                                setPricing({
-                                    hasFlashSale: false,
-                                    effectivePrice,
-                                    displayOriginalPrice: originalPrice,
-                                    discountPercent,
-                                });
-                            } else {
-                                setPricing({
-                                    hasFlashSale: false,
-                                    effectivePrice: originalPrice,
-                                    displayOriginalPrice: originalPrice,
-                                    discountPercent: 0,
-                                });
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Failed to fetch pricing:', error);
-                        // Fallback to regular pricing
-                        const effectivePrice = batchData.salePrice || batchData.price;
-                        const originalPrice = batchData.price;
-                        setPricing({
-                            hasFlashSale: false,
-                            effectivePrice: effectivePrice || originalPrice,
-                            displayOriginalPrice: originalPrice,
-                            discountPercent: effectivePrice < originalPrice ? Math.round(((originalPrice - effectivePrice) / originalPrice) * 100) : 0,
-                        });
-                    }
-                }
-            }
-        } catch (error) {
-            toast.error(error.message || 'Failed to load batch');
-        } finally {
-            setLoading(false);
+  const fetchBatch = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await offlineBatchAPI.getBatchBySlug(slug);
+      if (response.success) {
+        const batchData = response.data.batch;
+        setBatch(batchData);
+        // Ensure isEnrolled is properly set from backend
+        const enrolled = batchData.isEnrolled === true;
+        setIsEnrolled(enrolled);
+        // Debug: Log enrollment status
+        if (isAuthenticated) {
+          console.log('Batch enrollment status:', {
+            isEnrolled: enrolled,
+            batchId: batchData.id,
+            userId: user?.id
+          });
         }
-    };
+
+        // Fetch pricing info if not free
+        if (!batchData.isFree && batchData.pricingType !== 'FREE' && batchData.price) {
+          try {
+            const pricingResponse = await flashSaleAPI.getActive();
+            if (pricingResponse.success && pricingResponse.data?.flashSale) {
+              const flashSale = pricingResponse.data.flashSale;
+              const item = flashSale.items?.find(i => i.itemType === 'OFFLINE_BATCH' && i.itemId === batchData.id);
+              if (item) {
+                const effectivePrice = item.discountPrice || batchData.salePrice || batchData.price;
+                const originalPrice = batchData.salePrice || batchData.price;
+                const discountPercent = Math.round(((originalPrice - effectivePrice) / originalPrice) * 100);
+
+                setPricing({
+                  hasFlashSale: true,
+                  effectivePrice,
+                  displayOriginalPrice: originalPrice,
+                  discountPercent,
+                  flashSaleTitle: flashSale.title || 'Flash Sale',
+                });
+              } else {
+                // No flash sale, use regular pricing
+                const effectivePrice = batchData.salePrice || batchData.price;
+                const originalPrice = batchData.price;
+                if (effectivePrice < originalPrice) {
+                  const discountPercent = Math.round(((originalPrice - effectivePrice) / originalPrice) * 100);
+                  setPricing({
+                    hasFlashSale: false,
+                    effectivePrice,
+                    displayOriginalPrice: originalPrice,
+                    discountPercent,
+                  });
+                } else {
+                  setPricing({
+                    hasFlashSale: false,
+                    effectivePrice: originalPrice,
+                    displayOriginalPrice: originalPrice,
+                    discountPercent: 0,
+                  });
+                }
+              }
+            } else {
+              // No active flash sale, use regular pricing
+              const effectivePrice = batchData.salePrice || batchData.price;
+              const originalPrice = batchData.price;
+              if (effectivePrice < originalPrice) {
+                const discountPercent = Math.round(((originalPrice - effectivePrice) / originalPrice) * 100);
+                setPricing({
+                  hasFlashSale: false,
+                  effectivePrice,
+                  displayOriginalPrice: originalPrice,
+                  discountPercent,
+                });
+              } else {
+                setPricing({
+                  hasFlashSale: false,
+                  effectivePrice: originalPrice,
+                  displayOriginalPrice: originalPrice,
+                  discountPercent: 0,
+                });
+              }
+            }
+          } catch (error) {
+            console.error('Failed to fetch pricing:', error);
+            // Fallback to regular pricing
+            const effectivePrice = batchData.salePrice || batchData.price;
+            const originalPrice = batchData.price;
+            setPricing({
+              hasFlashSale: false,
+              effectivePrice: effectivePrice || originalPrice,
+              displayOriginalPrice: originalPrice,
+              discountPercent: effectivePrice < originalPrice ? Math.round(((originalPrice - effectivePrice) / originalPrice) * 100) : 0,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      toast.error(error.message || 'Failed to load batch');
+    } finally {
+      setLoading(false);
+    }
+  }, [slug, isAuthenticated, user?.id]);
 
     const handleEnroll = async () => {
         if (!isAuthenticated) {

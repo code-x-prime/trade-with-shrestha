@@ -52,7 +52,7 @@ export default function AdminContactsPage() {
   const [selectedContact, setSelectedContact] = useState(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
 
-  const fetchContacts = async () => {
+  const fetchContacts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await contactAPI.getContacts({
@@ -73,7 +73,7 @@ export default function AdminContactsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, search]);
 
   useEffect(() => {
     // Debounce search
@@ -82,7 +82,7 @@ export default function AdminContactsPage() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [page, search]);
+  }, [fetchContacts]);
 
   const handleMarkAsRead = async (id) => {
     try {

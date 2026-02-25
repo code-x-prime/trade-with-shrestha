@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { orderAPI } from '@/lib/api';
@@ -32,7 +32,7 @@ function OrdersContent() {
     if (isAuthenticated) {
       fetchOrders();
     }
-  }, [isAuthenticated, activeTab]);
+  }, [isAuthenticated, fetchOrders]);
 
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
@@ -40,7 +40,7 @@ function OrdersContent() {
     }
   }, [searchParams]);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -217,7 +217,7 @@ function OrdersContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';

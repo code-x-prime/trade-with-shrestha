@@ -60,14 +60,7 @@ function CoursesPageContent() {
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
   }, [searchParams, router, pathname]);
 
-  useEffect(() => {
-    fetchCourses();
-    if (isAuthenticated) {
-      fetchEnrollments();
-    }
-  }, [isAuthenticated, page, search, filters.isFree, sort]);
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -126,9 +119,9 @@ function CoursesPageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAuthenticated, page, search, filters.isFree, sort]);
 
-  const fetchEnrollments = async () => {
+  const fetchEnrollments = useCallback(async () => {
     try {
       const response = await orderAPI.getOrders();
       if (response.success) {
@@ -144,10 +137,6 @@ function CoursesPageContent() {
                   enrolledCourseIds.add(co.course.id);
                 }
               });
-            }
-            // Also check bundle orders for course enrollments
-            if (order.bundleOrders && order.bundleOrders.length > 0) {
-              // Bundle enrollments are already handled by API, but we keep this for progress tracking
             }
           }
         });
@@ -171,7 +160,14 @@ function CoursesPageContent() {
     } catch (error) {
       console.error('Failed to fetch enrollments:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchCourses();
+    if (isAuthenticated) {
+      fetchEnrollments();
+    }
+  }, [isAuthenticated, fetchCourses, fetchEnrollments]);
 
   const handleFilterChange = useCallback((key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));

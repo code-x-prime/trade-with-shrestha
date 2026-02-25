@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { interviewQuestionAPI, interviewCategoryAPI } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -24,15 +24,7 @@ export default function InterviewQuestionsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [pagination, setPagination] = useState({ page: 1, limit: 50, total: 0, totalPages: 0 });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchQuestions();
-  }, [selectedCategory, selectedDifficulty]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await interviewCategoryAPI.getAll();
       if (res.success) {
@@ -41,9 +33,9 @@ export default function InterviewQuestionsPage() {
     } catch (error) {
       console.error('Failed to fetch categories');
     }
-  };
+  }, []);
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = useCallback(async () => {
     try {
       setLoading(true);
       const params = {
@@ -61,7 +53,7 @@ export default function InterviewQuestionsPage() {
 
       const res = await interviewQuestionAPI.getAll(params);
       if (res.success) {
-        setQuestions(res.data.questions || []);
+        setQuestions(prev => pagination.page === 1 ? (res.data.questions || []) : [...prev, ...(res.data.questions || [])]);
         setPagination(prev => ({ ...prev, ...res.data.pagination }));
       }
     } catch (error) {
@@ -69,7 +61,15 @@ export default function InterviewQuestionsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, selectedCategory, selectedDifficulty]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchQuestions]);
 
   const filteredQuestions = questions.filter(q => 
     searchTerm === '' || 
@@ -136,7 +136,10 @@ export default function InterviewQuestionsPage() {
               <Button
                 variant={selectedCategory === '' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedCategory('')}
+                onClick={() => {
+                  setSelectedCategory('');
+                  setPagination(prev => ({ ...prev, page: 1 }));
+                }}
               >
                 All
               </Button>
@@ -145,7 +148,10 @@ export default function InterviewQuestionsPage() {
                   key={cat.id}
                   variant={selectedCategory === cat.id ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedCategory(cat.id)}
+                  onClick={() => {
+                    setSelectedCategory(cat.id);
+                    setPagination(prev => ({ ...prev, page: 1 }));
+                  }}
                 >
                   {cat.name}
                   {cat._count?.questions > 0 && (
@@ -165,28 +171,40 @@ export default function InterviewQuestionsPage() {
               <Button
                 variant={selectedDifficulty === '' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedDifficulty('')}
+                onClick={() => {
+                  setSelectedDifficulty('');
+                  setPagination(prev => ({ ...prev, page: 1 }));
+                }}
               >
                 All
               </Button>
               <Button
                 variant={selectedDifficulty === 'Easy' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedDifficulty('Easy')}
+                onClick={() => {
+                  setSelectedDifficulty('Easy');
+                  setPagination(prev => ({ ...prev, page: 1 }));
+                }}
               >
                 Easy
               </Button>
               <Button
                 variant={selectedDifficulty === 'Medium' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedDifficulty('Medium')}
+                onClick={() => {
+                  setSelectedDifficulty('Medium');
+                  setPagination(prev => ({ ...prev, page: 1 }));
+                }}
               >
                 Medium
               </Button>
               <Button
                 variant={selectedDifficulty === 'Hard' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedDifficulty('Hard')}
+                onClick={() => {
+                  setSelectedDifficulty('Hard');
+                  setPagination(prev => ({ ...prev, page: 1 }));
+                }}
               >
                 Hard
               </Button>
@@ -263,7 +281,6 @@ export default function InterviewQuestionsPage() {
                 <Button 
                   onClick={() => {
                     setPagination(prev => ({ ...prev, page: prev.page + 1 }));
-                    fetchQuestions();
                   }}
                   variant="outline"
                 >

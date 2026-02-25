@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiMapPin, FiBriefcase, FiDollarSign, FiClock, FiCheckCircle } from 'react-icons/fi';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,14 @@ const JobCard = ({ job }) => {
          {/* Logo */}
          <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 bg-gray-50 dark:bg-zinc-800 rounded-lg flex items-center justify-center p-2 border border-zinc-100 dark:border-zinc-700">
            {job.companyLogoUrl ? (
-             <img src={job.companyLogoUrl} alt={job.companyName} className="w-full h-full object-contain rounded" />
+             <div className="relative w-full h-full">
+                <Image 
+                  src={job.companyLogoUrl} 
+                  alt={job.companyName} 
+                  fill 
+                  className="object-contain rounded" 
+                />
+              </div>
            ) : (
              <FiBriefcase className="w-7 h-7 sm:w-8 sm:h-8 text-indigo-400" />
            )}

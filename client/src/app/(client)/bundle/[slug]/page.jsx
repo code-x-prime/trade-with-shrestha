@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
@@ -41,33 +41,7 @@ export default function BundleDetailPage() {
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [addingToCart, setAddingToCart] = useState(false);
 
-    useEffect(() => {
-        if (slug) {
-            fetchBundle();
-
-            // If payment was just verified, refresh after a short delay
-            if (searchParams.get('payment') === 'success') {
-                setTimeout(() => {
-                    fetchBundle();
-                }, 2000);
-                // Remove the query parameter
-                router.replace(`/bundle/${slug}`, { scroll: false });
-            }
-        }
-    }, [slug, isAuthenticated]); // Refresh when authentication status changes
-
-    // Refresh enrollment status periodically if authenticated but not enrolled
-    useEffect(() => {
-        if (isAuthenticated && bundle && !isEnrolled) {
-            const interval = setInterval(() => {
-                fetchBundle();
-            }, 5000); // Check every 5 seconds
-
-            return () => clearInterval(interval);
-        }
-    }, [isAuthenticated, bundle, isEnrolled]);
-
-    const fetchBundle = async () => {
+    const fetchBundle = useCallback(async () => {
         try {
             setLoading(true);
             const response = await bundleAPI.getBundleBySlug(slug);
@@ -85,7 +59,34 @@ export default function BundleDetailPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [slug, router]);
+
+    useEffect(() => {
+        if (slug) {
+            fetchBundle();
+
+            // If payment was just verified, refresh after a short delay
+            if (searchParams.get('payment') === 'success') {
+                const timer = setTimeout(() => {
+                    fetchBundle();
+                }, 2000);
+                // Remove the query parameter
+                router.replace(`/bundle/${slug}`, { scroll: false });
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [slug, isAuthenticated, fetchBundle, router, searchParams]); // Refresh when authentication status changes
+
+    // Refresh enrollment status periodically if authenticated but not enrolled
+    useEffect(() => {
+        if (isAuthenticated && bundle && !isEnrolled) {
+            const interval = setInterval(() => {
+                fetchBundle();
+            }, 5000); // Check every 5 seconds
+
+            return () => clearInterval(interval);
+        }
+    }, [isAuthenticated, bundle, isEnrolled, fetchBundle]);
 
     const handleAddToCart = async () => {
         try {

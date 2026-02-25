@@ -56,17 +56,7 @@ function BundlePageContent() {
         router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
     }, [searchParams, router, pathname]);
 
-    useEffect(() => {
-        fetchBundles();
-    }, [page, search, sort]);
-
-    useEffect(() => {
-        if (isAuthenticated && bundles.length > 0) {
-            fetchPurchaseStatus();
-        }
-    }, [isAuthenticated, bundles]);
-
-    const fetchBundles = async () => {
+    const fetchBundles = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
@@ -110,26 +100,9 @@ function BundlePageContent() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [page, search, sort]);
 
-    const handlePageChange = useCallback((newPage) => {
-        setPage(newPage);
-        updateURL({ page: newPage > 1 ? newPage : null });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [updateURL]);
-
-    const handleSortChange = useCallback((value) => {
-        setSort(value);
-        updateURL({ sort: value !== 'newest' ? value : null });
-    }, [updateURL]);
-
-    const handleSearch = useCallback((value) => {
-        setSearch(value);
-        setPage(1);
-        updateURL({ q: value || null, page: null });
-    }, [updateURL]);
-
-    const fetchPurchaseStatus = async () => {
+    const fetchPurchaseStatus = useCallback(async () => {
         if (!isAuthenticated || bundles.length === 0) return;
 
         try {
@@ -145,7 +118,17 @@ function BundlePageContent() {
         } catch (error) {
             console.error('Failed to fetch purchase status:', error);
         }
-    };
+    }, [isAuthenticated, bundles]);
+
+    useEffect(() => {
+        fetchBundles();
+    }, [fetchBundles]);
+
+    useEffect(() => {
+        if (isAuthenticated && bundles.length > 0) {
+            fetchPurchaseStatus();
+        }
+    }, [isAuthenticated, bundles, fetchPurchaseStatus]);
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">

@@ -53,17 +53,7 @@ function IndicatorsPageContent() {
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
   }, [searchParams, router, pathname]);
 
-  useEffect(() => {
-    fetchIndicators();
-  }, [page, search, sort]);
-
-  useEffect(() => {
-    if (isAuthenticated && indicators.length > 0) {
-      fetchPurchaseStatus();
-    }
-  }, [isAuthenticated, indicators]);
-
-  const fetchIndicators = async () => {
+  const fetchIndicators = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -97,9 +87,21 @@ function IndicatorsPageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, search, sort]);
 
-  const fetchPurchaseStatus = async () => {
+  useEffect(() => {
+    fetchIndicators();
+  }, [fetchIndicators]);
+
+  useEffect(() => {
+    if (isAuthenticated && indicators.length > 0) {
+      fetchPurchaseStatus();
+    }
+  }, [isAuthenticated, indicators, fetchPurchaseStatus]);
+
+
+
+  const fetchPurchaseStatus = useCallback(async () => {
     if (!isAuthenticated || indicators.length === 0) return;
 
     try {
@@ -115,7 +117,7 @@ function IndicatorsPageContent() {
     } catch (error) {
       console.error('Failed to fetch purchase status:', error);
     }
-  };
+  }, [isAuthenticated, indicators]);
 
   const handleSortChange = useCallback((value) => {
     setSort(value);

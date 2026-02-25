@@ -219,9 +219,9 @@ function IssuedCertificatesTab() {
   const [actionLoading, setActionLoading] = useState(null);
   const [deleteDialog, setDeleteDialog] = useState({ open: false, certificate: null });
 
-  useEffect(() => { fetchCertificates(); }, [page, typeFilter]);
+  useEffect(() => { fetchCertificates(); }, [fetchCertificates, page, typeFilter]);
 
-  const fetchCertificates = async () => {
+  const fetchCertificates = useCallback(async () => {
     try {
       setLoading(true);
       const params = { page, limit: 10 };
@@ -230,7 +230,7 @@ function IssuedCertificatesTab() {
       const response = await certificateAPI.getAdminCertificates(params);
       if (response.success) { setCertificates(response.data.certificates || []); setPagination(response.data.pagination); }
     } catch (error) { toast.error('Failed to load'); } finally { setLoading(false); }
-  };
+  }, [page, typeFilter, search]);
 
   const handleSearch = (e) => { e.preventDefault(); setPage(1); fetchCertificates(); };
   const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -463,14 +463,14 @@ function TemplatesTab() {
   const [uploading, setUploading] = useState({});
   const [previewVisible, setPreviewVisible] = useState(true);
 
-  useEffect(() => { fetchTemplates(); }, []);
-  useEffect(() => { if (templates.length > 0) handleSelectType(selectedType); }, [templates]);
+  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
+  useEffect(() => { if (templates.length > 0) handleSelectType(selectedType); }, [templates, selectedType, handleSelectType]);
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try { setLoading(true); const response = await certificateAPI.getTemplates(); if (response.success) setTemplates(response.data || []); } catch (error) { console.error(error); } finally { setLoading(false); }
-  };
+  }, []);
 
-  const handleSelectType = (type) => {
+  const handleSelectType = useCallback((type) => {
     setSelectedType(type);
     const existing = templates.find(t => t.type === type);
     if (existing) {
@@ -482,7 +482,7 @@ function TemplatesTab() {
       setFormData({ name: `${typeInfo?.label} Certificate`, issuerName: 'Shrestha Academy', issuerTitle: 'Platform Director', primaryColor: '#6366F1', secondaryColor: '#A5B4FC' });
       setSelectedPreset('classic');
     }
-  };
+  }, [templates]);
 
   const handlePresetChange = (presetId) => {
     setSelectedPreset(presetId);
@@ -678,15 +678,15 @@ function ManualGenerationTab() {
   const [templates, setTemplates] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(true);
 
-  useEffect(() => { fetchTemplates(); }, []);
+  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try { const response = await certificateAPI.getTemplates(); if (response.success) setTemplates(response.data || []); } catch (error) { console.error(error); }
-  };
+  }, []);
 
-  const fetchItems = async (type) => {
+  const fetchItems = useCallback(async (type) => {
     try { setLoading(true); const response = await certificateAPI.getEligibleItems(type); if (response.success) setItems(response.data || []); } catch (error) { toast.error('Failed to load'); } finally { setLoading(false); }
-  };
+  }, []);
 
   const searchUsers = async (query) => {
     if (query.length < 2) { setUsers([]); return; }

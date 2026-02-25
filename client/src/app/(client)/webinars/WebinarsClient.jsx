@@ -66,15 +66,15 @@ function WebinarsPageContent() {
 
   useEffect(() => {
     fetchWebinars();
-  }, [page, search, filters.type, sort]);
+  }, [fetchWebinars]);
 
   useEffect(() => {
     if (isAuthenticated && webinars.length > 0) {
       fetchPurchaseStatus();
     }
-  }, [isAuthenticated, webinars]);
+  }, [isAuthenticated, webinars, fetchPurchaseStatus]);
 
-  const fetchWebinars = async () => {
+  const fetchWebinars = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -132,7 +132,7 @@ function WebinarsPageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, limit, search, filters.type, sort]);
 
   const handleFilterChange = useCallback((key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -163,7 +163,7 @@ function WebinarsPageContent() {
     updateURL({ q: value || null, page: null });
   }, [updateURL]);
 
-  const fetchPurchaseStatus = async () => {
+  const fetchPurchaseStatus = useCallback(async () => {
     if (!isAuthenticated || webinars.length === 0) return;
 
     try {
@@ -179,7 +179,7 @@ function WebinarsPageContent() {
     } catch (error) {
       console.error('Failed to fetch purchase status:', error);
     }
-  };
+  }, [isAuthenticated, webinars]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

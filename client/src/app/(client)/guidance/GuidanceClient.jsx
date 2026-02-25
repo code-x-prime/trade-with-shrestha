@@ -54,9 +54,9 @@ function GuidancePageContent() {
 
   useEffect(() => {
     fetchGuidance();
-  }, [page, search, sort]);
+  }, [fetchGuidance]);
 
-  const fetchGuidance = async () => {
+  const fetchGuidance = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -103,7 +103,7 @@ function GuidancePageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, limit, search, sort]);
 
   const handleSortChange = useCallback((value) => {
     setSort(value);

@@ -75,8 +75,7 @@ export default function FeaturesSection() {
           </div>
 
           <h2
-            className="text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
-            style={{ fontFamily: "'Syne', sans-serif" }}
+            className="font-syne text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
           >
             Everything You Need to{' '}
             <span className="bg-gradient-to-r from-[#d4af37] via-[#d4af37] to-[#d4af37] bg-clip-text text-transparent">
@@ -85,7 +84,7 @@ export default function FeaturesSection() {
           </h2>
 
           <p className="max-w-md text-base font-light leading-relaxed text-gray-500 dark:text-white/40">
-            From expert-led courses to industry certifications — we've got your growth covered.
+            From expert-led courses to industry certifications &mdash; we&apos;ve got your growth covered.
           </p>
 
           <div className="h-px w-20 bg-gradient-to-r from-transparent via-gray-300 dark:via-white/10 to-transparent" />
@@ -124,8 +123,7 @@ export default function FeaturesSection() {
                   {/* top row — number + tag */}
                   <div className="flex items-center justify-between">
                     <span
-                      className="text-xs font-bold tracking-[0.18em] text-gray-300 dark:text-white/15"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
+                      className="font-syne text-xs font-bold tracking-[0.18em] text-gray-300 dark:text-white/15"
                     >
                       {f.number}
                     </span>
@@ -154,8 +152,7 @@ export default function FeaturesSection() {
 
                   {/* title */}
                   <h3
-                    className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
-                    style={{ fontFamily: "'Syne', sans-serif" }}
+                    className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
                   >
                     {f.title}
                   </h3>
@@ -194,7 +191,7 @@ export default function FeaturesSection() {
         </div>
       </div>
 
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" />
+
     </section>
   );
 }

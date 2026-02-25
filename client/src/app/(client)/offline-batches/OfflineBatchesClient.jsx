@@ -58,83 +58,85 @@ function OfflineBatchesPageContent() {
         router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
     }, [searchParams, router, pathname]);
 
-    useEffect(() => {
-        fetchBatches();
-        fetchFlashSale();
-    }, [page, cityFilter, search]);
+  const fetchFlashSale = useCallback(async () => {
+    try {
+      const response = await flashSaleAPI.getActive();
+      if (response.success && response.data?.flashSale) {
+        setFlashSaleData(response.data.flashSale);
+      }
+    } catch (error) {
+      console.error('Failed to fetch flash sale:', error);
+    }
+  }, []);
 
-    useEffect(() => {
-        if (isAuthenticated && batches.length > 0) {
-            fetchPurchaseStatus();
+  const fetchBatches = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await offlineBatchAPI.getBatches({
+        status: 'OPEN',
+        city: cityFilter || undefined,
+        page,
+        limit,
+      });
+
+      if (response.success) {
+        let batchesData = response.data.batches || [];
+
+        // Client-side search
+        if (search) {
+          batchesData = batchesData.filter(batch =>
+            batch.title.toLowerCase().includes(search.toLowerCase()) ||
+            batch.city?.toLowerCase().includes(search.toLowerCase()) ||
+            batch.state?.toLowerCase().includes(search.toLowerCase())
+          );
         }
-    }, [isAuthenticated, batches]);
 
-    const fetchFlashSale = async () => {
-        try {
-            const response = await flashSaleAPI.getActive();
-            if (response.success && response.data?.flashSale) {
-                setFlashSaleData(response.data.flashSale);
-            }
-        } catch (error) {
-            console.error('Failed to fetch flash sale:', error);
+        // Client-side sorting
+        if (sort === 'date-desc') {
+          batchesData = [...batchesData].sort((a, b) => {
+            const dateA = a.startDate ? new Date(a.startDate) : new Date(0);
+            const dateB = b.startDate ? new Date(b.startDate) : new Date(0);
+            return dateB - dateA;
+          });
+        } else if (sort === 'date-asc') {
+          batchesData = [...batchesData].sort((a, b) => {
+            const dateA = a.startDate ? new Date(a.startDate) : new Date(0);
+            const dateB = b.startDate ? new Date(b.startDate) : new Date(0);
+            return dateA - dateB;
+          });
+        } else if (sort === 'title-asc') {
+          batchesData = [...batchesData].sort((a, b) => a.title.localeCompare(b.title));
+        } else if (sort === 'title-desc') {
+          batchesData = [...batchesData].sort((a, b) => b.title.localeCompare(a.title));
         }
-    };
 
-    const fetchBatches = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            const response = await offlineBatchAPI.getBatches({
-                status: 'OPEN',
-                city: cityFilter || undefined,
-                page,
-                limit,
-            });
+        setBatches(batchesData);
+        setPagination(response.data.pagination);
+      } else {
+        throw new Error(response.message || 'Failed to fetch offline batches');
+      }
+    } catch (error) {
+      console.error('Error fetching offline batches:', error);
+      setError(error.message || 'Failed to load offline batches. Please try again.');
+      toast.error(error.message || 'Failed to fetch offline batches');
+    } finally {
+      setLoading(false);
+    }
+  }, [cityFilter, page, search, sort]);
 
-            if (response.success) {
-                let batchesData = response.data.batches || [];
+  useEffect(() => {
+    fetchBatches();
+    fetchFlashSale();
+  }, [fetchBatches, fetchFlashSale]);
 
-                // Client-side search
-                if (search) {
-                    batchesData = batchesData.filter(batch =>
-                        batch.title.toLowerCase().includes(search.toLowerCase()) ||
-                        batch.city?.toLowerCase().includes(search.toLowerCase()) ||
-                        batch.state?.toLowerCase().includes(search.toLowerCase())
-                    );
-                }
+  useEffect(() => {
+    if (isAuthenticated && batches.length > 0) {
+      fetchPurchaseStatus();
+    }
+  }, [isAuthenticated, batches, fetchPurchaseStatus]);
 
-                // Client-side sorting
-                if (sort === 'date-desc') {
-                    batchesData = [...batchesData].sort((a, b) => {
-                        const dateA = a.startDate ? new Date(a.startDate) : new Date(0);
-                        const dateB = b.startDate ? new Date(b.startDate) : new Date(0);
-                        return dateB - dateA;
-                    });
-                } else if (sort === 'date-asc') {
-                    batchesData = [...batchesData].sort((a, b) => {
-                        const dateA = a.startDate ? new Date(a.startDate) : new Date(0);
-                        const dateB = b.startDate ? new Date(b.startDate) : new Date(0);
-                        return dateA - dateB;
-                    });
-                } else if (sort === 'title-asc') {
-                    batchesData = [...batchesData].sort((a, b) => a.title.localeCompare(b.title));
-                } else if (sort === 'title-desc') {
-                    batchesData = [...batchesData].sort((a, b) => b.title.localeCompare(a.title));
-                }
 
-                setBatches(batchesData);
-                setPagination(response.data.pagination);
-            } else {
-                throw new Error(response.message || 'Failed to fetch offline batches');
-            }
-        } catch (error) {
-            console.error('Error fetching offline batches:', error);
-            setError(error.message || 'Failed to load offline batches. Please try again.');
-            toast.error(error.message || 'Failed to fetch offline batches');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleFilterChange = useCallback((key, value) => {
         if (key === 'city') {
@@ -167,23 +169,23 @@ function OfflineBatchesPageContent() {
         updateURL({ q: value || null, page: null });
     }, [updateURL]);
 
-    const fetchPurchaseStatus = async () => {
-        if (!isAuthenticated || batches.length === 0) return;
+  const fetchPurchaseStatus = useCallback(async () => {
+    if (!isAuthenticated || batches.length === 0) return;
 
-        try {
-            const items = batches.map(batch => ({
-                type: 'OFFLINE_BATCH',
-                id: batch.id,
-            }));
+    try {
+      const items = batches.map(batch => ({
+        type: 'OFFLINE_BATCH',
+        id: batch.id,
+      }));
 
-            const response = await userAPI.getPurchaseStatus(items);
-            if (response.success) {
-                setPurchaseStatus(response.data.purchaseStatus || {});
-            }
-        } catch (error) {
-            console.error('Failed to fetch purchase status:', error);
-        }
-    };
+      const response = await userAPI.getPurchaseStatus(items);
+      if (response.success) {
+        setPurchaseStatus(response.data.purchaseStatus || {});
+      }
+    } catch (error) {
+      console.error('Failed to fetch purchase status:', error);
+    }
+  }, [isAuthenticated, batches]);
 
     // Get unique cities for filter
     const uniqueCities = Array.from(new Set(batches.map(b => b.city).filter(Boolean))).sort();

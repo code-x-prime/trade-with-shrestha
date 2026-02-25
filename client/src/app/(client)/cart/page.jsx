@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { ebookAPI, webinarAPI, courseAPI, offlineBatchAPI, couponAPI, orderAPI, bundleAPI } from '@/lib/api';
@@ -44,25 +44,7 @@ function CartContent() {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [showCouponsDialog, setShowCouponsDialog] = useState(false);
 
-  useEffect(() => {
-    loadCart();
-    loadAvailableCoupons();
-
-    // Read coupon from URL query parameter
-    const urlCoupon = searchParams.get('coupon');
-    if (urlCoupon) {
-      setCouponCode(urlCoupon.toUpperCase());
-    }
-
-    const handleUpdate = () => {
-      loadCart();
-    };
-
-    window.addEventListener('cartUpdated', handleUpdate);
-    return () => window.removeEventListener('cartUpdated', handleUpdate);
-  }, [searchParams]);
-
-  const loadAvailableCoupons = async () => {
+  const loadAvailableCoupons = useCallback(async () => {
     try {
       const response = await couponAPI.getCouponsReadyToShow();
       if (response.success && response.data.coupons) {
@@ -71,15 +53,12 @@ function CartContent() {
     } catch (error) {
       console.error('Error loading available coupons:', error);
     }
-  };
+  }, []);
 
-
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
     try {
       setLoading(true);
 
-      // ALWAYS read from localStorage first (works for both guest and logged in)
-      // For logged-in users, we'll sync to backend in background but won't clear localStorage
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
       const webinarCart = JSON.parse(localStorage.getItem('webinarCart') || '[]');
       const guidanceCart = JSON.parse(localStorage.getItem('guidanceCart') || '[]');
@@ -87,12 +66,9 @@ function CartContent() {
       const offlineBatchCart = JSON.parse(localStorage.getItem('offlineBatchCart') || '[]');
       const bundleCart = JSON.parse(localStorage.getItem('bundleCart') || '[]');
 
-      // If logged in, sync cart to backend in background (don't wait, don't clear localStorage)
       if (isAuthenticated) {
         try {
           const { cartAPI } = await import('@/lib/api');
-
-          // Build merged cart object for syncing (extract IDs from objects where needed)
           const cartToSync = {
             EBOOK: cart,
             WEBINAR: webinarCart,
@@ -101,12 +77,8 @@ function CartContent() {
             OFFLINE_BATCH: offlineBatchCart,
             BUNDLE: bundleCart,
           };
-
-          // Check if there are any items to sync
           const hasItems = Object.values(cartToSync).some(arr => arr.length > 0);
-
           if (hasItems) {
-            // Sync to backend (fire and forget - don't await, don't block UI)
             cartAPI.syncCart(cartToSync).catch(err => {
               console.error('Background cart sync failed:', err);
             });
@@ -116,8 +88,6 @@ function CartContent() {
         }
       }
 
-
-      // Load ebooks
       const ebookItems = cart.length > 0 ? await Promise.all(
         cart.map(async (id) => {
           try {
@@ -133,7 +103,6 @@ function CartContent() {
             }
             return null;
           } catch (error) {
-            // If ebook not found or access denied, remove from cart
             console.error(`Failed to load ebook ${id}:`, error);
             const updatedCart = cart.filter(cartId => cartId !== id);
             localStorage.setItem('cart', JSON.stringify(updatedCart));
@@ -143,7 +112,6 @@ function CartContent() {
         })
       ) : [];
 
-      // Load webinars
       const webinarItems = webinarCart.length > 0 ? await Promise.all(
         webinarCart.map(async (id) => {
           try {
@@ -159,7 +127,6 @@ function CartContent() {
             }
             return null;
           } catch (error) {
-            // If webinar not found or access denied, remove from cart
             console.error(`Failed to load webinar ${id}:`, error);
             const updatedCart = webinarCart.filter(cartId => cartId !== id);
             localStorage.setItem('webinarCart', JSON.stringify(updatedCart));
@@ -169,13 +136,11 @@ function CartContent() {
         })
       ) : [];
 
-      // Load guidance slots (already have all data in localStorage)
       const guidanceItems = guidanceCart.map(item => ({
         ...item,
         type: 'guidance',
       }));
 
-      // Load courses
       const courseItems = courseCart.length > 0 ? await Promise.all(
         courseCart.map(async (id) => {
           try {
@@ -191,7 +156,6 @@ function CartContent() {
             }
             return null;
           } catch (error) {
-            // If course not found or access denied, remove from cart
             console.error(`Failed to load course ${id}:`, error);
             const updatedCart = courseCart.filter(cartId => cartId !== id);
             localStorage.setItem('courseCart', JSON.stringify(updatedCart));
@@ -201,7 +165,6 @@ function CartContent() {
         })
       ) : [];
 
-      // Load offline batches
       const offlineBatchItems = offlineBatchCart.length > 0 ? await Promise.all(
         offlineBatchCart.map(async (id) => {
           try {
@@ -226,7 +189,6 @@ function CartContent() {
         })
       ) : [];
 
-      // Load bundles
       const bundleItems = bundleCart.length > 0 ? await Promise.all(
         bundleCart.map(async (id) => {
           try {
@@ -256,7 +218,24 @@ function CartContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    loadCart();
+    loadAvailableCoupons();
+
+    const urlCoupon = searchParams.get('coupon');
+    if (urlCoupon) {
+      setCouponCode(urlCoupon.toUpperCase());
+    }
+
+    const handleUpdate = () => {
+      loadCart();
+    };
+
+    window.addEventListener('cartUpdated', handleUpdate);
+    return () => window.removeEventListener('cartUpdated', handleUpdate);
+  }, [searchParams, loadCart, loadAvailableCoupons]);
 
   const removeFromCart = async (itemId, type) => {
     const typeMap = {
@@ -363,7 +342,7 @@ function CartContent() {
   };
 
   // Helper to validate and apply coupon
-  const validateAndApplyCoupon = async (code, isAutoApply = false) => {
+  const validateAndApplyCoupon = useCallback(async (code, isAutoApply = false) => {
     if (!code.trim()) {
       if (!isAutoApply) setCouponError('Please enter a coupon code');
       return;
@@ -434,7 +413,7 @@ function CartContent() {
         toast.error(error.message || 'Invalid coupon code');
       }
     }
-  };
+  }, [cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, calculateTotal]);
 
   const applyCoupon = async (code = null) => {
     const codeToApply = code || couponCode;
@@ -451,21 +430,19 @@ function CartContent() {
       guidanceCartItems.length > 0 || courseCartItems.length > 0 || offlineBatchCartItems.length > 0 ||
       bundleCartItems.length > 0;
 
-    // Only auto-validate if we have a URL coupon, items loaded, and not already applied
     if (urlCoupon && hasItems && !appliedCoupon && !loading) {
       validateAndApplyCoupon(urlCoupon.toUpperCase(), true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems]);
+  }, [loading, cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, appliedCoupon, searchParams, validateAndApplyCoupon]);
 
 
   // Helper to get effective price (considers flash sale)
-  const getEffectivePrice = (item) => {
+  const getEffectivePrice = useCallback((item) => {
     if (item.pricing?.effectivePrice !== undefined) {
       return item.pricing.effectivePrice;
     }
     return item.salePrice || item.price || 0;
-  };
+  }, []);
 
   // Helper to render price with flash sale info
   const renderPrice = (item) => {
@@ -515,7 +492,7 @@ function CartContent() {
     );
   };
 
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     let total = 0;
     cartItems.forEach(item => {
       if (!item.isFree) {
@@ -544,7 +521,7 @@ function CartContent() {
       total += getEffectivePrice(item);
     });
     return total;
-  };
+  }, [cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, getEffectivePrice]);
 
   const calculateFinalTotal = () => {
     const subtotal = calculateTotal();

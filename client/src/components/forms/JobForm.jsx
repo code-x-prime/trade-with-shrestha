@@ -17,6 +17,7 @@ import RichTextEditor from '@/components/RichTextEditor';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const JOB_TYPES = [
   'FULL_TIME',
@@ -149,7 +150,12 @@ export default function JobForm({ initialData = null, isAdmin = false }) {
             <div className="flex items-center gap-4">
                 <div className="w-16 h-16 border rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden relative">
                     {logoPreview ? (
-                        <img src={logoPreview} alt="Preview" className="w-full h-full object-cover" />
+                        <Image 
+                            src={logoPreview} 
+                            alt="Preview" 
+                            fill 
+                            className="object-cover" 
+                        />
                     ) : (
                         <span className="text-gray-400 text-xs">No Logo</span>
                     )}

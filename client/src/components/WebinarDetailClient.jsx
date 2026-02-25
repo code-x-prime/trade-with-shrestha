@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +35,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     } else {
       setEnrollmentStatus({ enrolled: false, canAccessLink: false, googleMeetLink: null, loading: false });
     }
-  }, [webinar?.id, isAuthenticated]);
+  }, [webinar?.id, isAuthenticated, checkEnrollment]);
 
   // Calculate hasEnded once
   const checkIfEnded = () => {
@@ -84,7 +84,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
         return () => clearInterval(interval);
       }
     }
-  }, [enrollmentStatus.enrolled, enrollmentStatus.canAccessLink, webinar?.startDate, isAuthenticated]);
+  }, [enrollmentStatus.enrolled, enrollmentStatus.canAccessLink, webinar?.startDate, isAuthenticated, checkEnrollment]);
 
   const updateCountdown = () => {
     if (!webinar.startDate) return;
@@ -123,7 +123,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     }
   };
 
-  const checkEnrollment = async () => {
+  const checkEnrollment = useCallback(async () => {
     if (!webinar?.id || !isAuthenticated) {
       return;
     }
@@ -143,7 +143,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
     } catch (error) {
       setEnrollmentStatus({ enrolled: false, canAccessLink: false, googleMeetLink: null, loading: false });
     }
-  };
+  }, [webinar?.id, isAuthenticated]);
 
   const addToCart = async () => {
     const webinarCart = JSON.parse(localStorage.getItem('webinarCart') || '[]');

@@ -65,7 +65,7 @@ export default function CTABanner() {
         </Link>
       </div>
 
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" />
+
     </section>
   );
 }

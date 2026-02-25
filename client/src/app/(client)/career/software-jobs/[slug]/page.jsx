@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
 
 export default function JobDetailsPage() {
   const { slug } = useParams();
@@ -18,13 +19,7 @@ export default function JobDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (slug) {
-      fetchJobDetails();
-    }
-  }, [slug]);
-
-  const fetchJobDetails = async () => {
+  const fetchJobDetails = useCallback(async () => {
     try {
       setLoading(true);
       const res = await api.get(`/jobs/slug/${slug}`);
@@ -37,7 +32,13 @@ export default function JobDetailsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    if (slug) {
+      fetchJobDetails();
+    }
+  }, [slug, fetchJobDetails]);
 
   if (loading) {
     return (
@@ -79,7 +80,14 @@ export default function JobDetailsPage() {
                  <div className="flex flex-col sm:flex-row gap-4 items-start mb-4">
                     <div className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 bg-gray-50 dark:bg-zinc-800 rounded-xl flex items-center justify-center p-2 border border-zinc-200 dark:border-zinc-700">
                         {job.companyLogoUrl ? (
-                            <img src={job.companyLogoUrl} alt={job.companyName} className="w-full h-full object-contain" />
+                            <div className="relative w-full h-full">
+                                <Image 
+                                    src={job.companyLogoUrl} 
+                                    alt={job.companyName} 
+                                    fill 
+                                    className="object-contain" 
+                                />
+                            </div>
                         ) : (
                             <FiBriefcase className="w-8 h-8 md:w-10 md:h-10 text-gray-400" />
                         )}

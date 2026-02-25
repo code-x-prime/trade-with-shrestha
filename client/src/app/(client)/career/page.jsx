@@ -74,7 +74,7 @@ export default function CareerPage() {
           </div>
 
           {/* headline */}
-          <h1 className="text-[clamp(40px,6vw,80px)] font-extrabold leading-none tracking-[-0.04em] text-gray-900 dark:text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
+          <h1 className="font-syne text-[clamp(40px,6vw,80px)] font-extrabold leading-none tracking-[-0.04em] text-gray-900 dark:text-white">
             Crack Your{' '}
             <span className="bg-gradient-to-r from-[#d4af37] via-[#d4af37] to-[#d4af37] bg-clip-text text-transparent">
               Dream
@@ -124,8 +124,7 @@ export default function CareerPage() {
 
                 {/* number badge */}
                 <span
-                  className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25"
-                  style={{ fontFamily: "'Syne', sans-serif" }}
+                  className="font-syne absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25"
                 >
                   {s.number}
                 </span>
@@ -145,8 +144,7 @@ export default function CareerPage() {
 
                 {/* title */}
                 <h2
-                  className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
-                  style={{ fontFamily: "'Syne', sans-serif" }}
+                  className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
                 >
                   {s.title}
                 </h2>
@@ -186,8 +184,7 @@ export default function CareerPage() {
         {/* ── FOOTER ── */}
         <footer className="mt-16 flex items-center justify-between border-t border-gray-200 dark:border-white/[0.05] pt-8">
           <span
-            className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-white/15"
-            style={{ fontFamily: "'Syne', sans-serif" }}
+            className="font-syne text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-white/15"
           >
             Career Portal
           </span>
@@ -200,7 +197,7 @@ export default function CareerPage() {
       </div>
 
       {/* Syne font */}
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" />
+
     </div>
   );
 }

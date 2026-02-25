@@ -182,8 +182,7 @@ function HomeContent() {
                         </div>
 
                         <h2
-                            className="text-4xl md:text-5xl font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white py-2"
-                            style={{ fontFamily: "'Syne', sans-serif" }}
+                            className="font-syne text-4xl md:text-5xl font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
                         >
                             Explore Learning{' '}
                             <span
@@ -273,7 +272,7 @@ function HomeContent() {
                     </div>
                 </div>
 
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" />
+
             </section>
 
             {/* Career Section – Software Jobs, Interview Questions, Placement Training */}
@@ -301,8 +300,7 @@ function HomeContent() {
                         </div>
 
                         <h2
-                            className="text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
-                            style={{ fontFamily: "'Syne', sans-serif" }}
+                            className="font-syne text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
                         >
                             Launch Your{' '}
                             <span className="bg-gradient-to-r from-[#d4af37] via-[#d4af37] to-[#d4af37] bg-clip-text text-transparent">
@@ -329,14 +327,14 @@ function HomeContent() {
                             <div className="relative h-52 w-full shrink-0 overflow-hidden">
                                 <Image src="/card1.png" alt="Software Jobs" fill className="object-cover brightness-95 dark:brightness-75 transition-transform duration-500 group-hover:scale-105 dark:group-hover:brightness-90" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#0F0F1A]" />
-                                <span className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25" style={{ fontFamily: "'Syne', sans-serif" }}>01</span>
+                                <span className="font-syne absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25">01</span>
                             </div>
                             <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-3">
                                 <span className="self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-orange-400">
                                     <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-orange-400" />
                                     500+ Openings
                                 </span>
-                                <h3 className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: "'Syne', sans-serif" }}>Software Jobs</h3>
+                                <h3 className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white">Software Jobs</h3>
                                 <p className="flex-1 text-sm font-light leading-relaxed text-gray-500 dark:text-white/40">Browse software and tech job openings. Find roles that match your skills and experience level.</p>
                                 <div className="h-px w-full bg-gray-100 dark:bg-white/[0.05]" />
                                 <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-orange-400 transition-all duration-300">
@@ -359,14 +357,14 @@ function HomeContent() {
                             <div className="relative h-52 w-full shrink-0 overflow-hidden">
                                 <Image src="/card2.png" alt="Interview Questions" fill className="object-cover brightness-95 dark:brightness-75 transition-transform duration-500 group-hover:scale-105 dark:group-hover:brightness-90" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#0F0F1A]" />
-                                <span className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25" style={{ fontFamily: "'Syne', sans-serif" }}>02</span>
+                                <span className="font-syne absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25">02</span>
                             </div>
                             <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-3">
                                 <span className="self-start rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-400">
                                     <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-teal-400" />
                                     1200+ Questions
                                 </span>
-                                <h3 className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: "'Syne', sans-serif" }}>Interview Questions</h3>
+                                <h3 className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white">Interview Questions</h3>
                                 <p className="flex-1 text-sm font-light leading-relaxed text-gray-500 dark:text-white/40">Practice common interview questions and answers for technical and HR rounds.</p>
                                 <div className="h-px w-full bg-gray-100 dark:bg-white/[0.05]" />
                                 <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-teal-400 transition-all duration-300">
@@ -389,14 +387,14 @@ function HomeContent() {
                             <div className="relative h-52 w-full shrink-0 overflow-hidden">
                                 <Image src="/card3.png" alt="Placement Training" fill className="object-cover brightness-95 dark:brightness-75 transition-transform duration-500 group-hover:scale-105 dark:group-hover:brightness-90" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#0F0F1A]" />
-                                <span className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25" style={{ fontFamily: "'Syne', sans-serif" }}>03</span>
+                                <span className="font-syne absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25">03</span>
                             </div>
                             <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-3">
                                 <span className="self-start rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-violet-400">
                                     <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-violet-400" />
                                     Expert Mentors
                                 </span>
-                                <h3 className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: "'Syne', sans-serif" }}>Placement Training</h3>
+                                <h3 className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white">Placement Training</h3>
                                 <p className="flex-1 text-sm font-light leading-relaxed text-gray-500 dark:text-white/40">Structured training to get you job-ready: resume, interviews, and essential soft skills.</p>
                                 <div className="h-px w-full bg-gray-100 dark:bg-white/[0.05]" />
                                 <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-violet-400 transition-all duration-300">
@@ -428,7 +426,7 @@ function HomeContent() {
                 </div>
 
                 {/* Syne font */}
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" />
+
             </section>
             {/* Features Section */}
             <FeaturesSection />

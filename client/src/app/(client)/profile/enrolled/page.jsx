@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { orderAPI, webinarAPI, courseAPI, bundleAPI, offlineBatchAPI } from '@/lib/api';
@@ -47,48 +47,9 @@ export default function EnrolledPage() {
     if (isAuthenticated && !fetchedTabs.has(activeTab)) {
       fetchTabData(activeTab);
     }
-  }, [isAuthenticated, activeTab]);
+  }, [isAuthenticated, activeTab, fetchedTabs, fetchTabData]);
 
-  const fetchTabData = async (tab) => {
-    if (fetchedTabs.has(tab)) return; // Already fetched
-
-    try {
-      setLoading(prev => ({ ...prev, [tab]: true }));
-
-      let tabItems = [];
-
-      switch (tab) {
-        case 'courses':
-          tabItems = await fetchCourses();
-          break;
-        case 'books':
-          tabItems = await fetchBooks();
-          break;
-        case 'sessions':
-          tabItems = await fetchSessions();
-          break;
-        case 'webinars':
-          tabItems = await fetchWebinars();
-          break;
-        case 'bundles':
-          tabItems = await fetchBundles();
-          break;
-        case 'offline':
-          tabItems = await fetchOfflineBatches();
-          break;
-      }
-
-      setItems(prev => ({ ...prev, [tab]: tabItems }));
-      setFetchedTabs(prev => new Set([...prev, tab]));
-    } catch (error) {
-      console.error(`Error fetching ${tab}:`, error);
-      toast.error(`Failed to load ${TABS.find(t => t.id === tab)?.label || tab}`);
-    } finally {
-      setLoading(prev => ({ ...prev, [tab]: false }));
-    }
-  };
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     const orderResponse = await orderAPI.getOrders({ type: 'course' });
     const allOrders = orderResponse.success ? orderResponse.data.orders : [];
     const items = [];
@@ -141,9 +102,9 @@ export default function EnrolledPage() {
       }
     }
     return items;
-  };
+  }, []);
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     const orderResponse = await orderAPI.getOrders();
     const allOrders = orderResponse.success ? orderResponse.data.orders : [];
     const items = [];
@@ -166,9 +127,9 @@ export default function EnrolledPage() {
       }
     }
     return items;
-  };
+  }, []);
 
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     const orderResponse = await orderAPI.getOrders();
     const allOrders = orderResponse.success ? orderResponse.data.orders : [];
     const items = [];
@@ -219,9 +180,9 @@ export default function EnrolledPage() {
       }
     }
     return items;
-  };
+  }, []);
 
-  const fetchWebinars = async () => {
+  const fetchWebinars = useCallback(async () => {
     const orderResponse = await orderAPI.getOrders();
     const allOrders = orderResponse.success ? orderResponse.data.orders : [];
     const items = [];
@@ -273,9 +234,9 @@ export default function EnrolledPage() {
       }
     }
     return items;
-  };
+  }, []);
 
-  const fetchBundles = async () => {
+  const fetchBundles = useCallback(async () => {
     // Fetch bundle enrollments
     const orderResponse = await orderAPI.getOrders();
     const allOrders = orderResponse.success ? orderResponse.data.orders : [];
@@ -299,9 +260,9 @@ export default function EnrolledPage() {
       }
     }
     return items;
-  };
+  }, []);
 
-  const fetchOfflineBatches = async () => {
+  const fetchOfflineBatches = useCallback(async () => {
     const orderResponse = await orderAPI.getOrders();
     const allOrders = orderResponse.success ? orderResponse.data.orders : [];
     const items = [];
@@ -325,7 +286,46 @@ export default function EnrolledPage() {
       }
     }
     return items;
-  };
+  }, []);
+
+  const fetchTabData = useCallback(async (tab) => {
+    if (fetchedTabs.has(tab)) return; // Already fetched
+
+    try {
+      setLoading(prev => ({ ...prev, [tab]: true }));
+
+      let tabItems = [];
+
+      switch (tab) {
+        case 'courses':
+          tabItems = await fetchCourses();
+          break;
+        case 'books':
+          tabItems = await fetchBooks();
+          break;
+        case 'sessions':
+          tabItems = await fetchSessions();
+          break;
+        case 'webinars':
+          tabItems = await fetchWebinars();
+          break;
+        case 'bundles':
+          tabItems = await fetchBundles();
+          break;
+        case 'offline':
+          tabItems = await fetchOfflineBatches();
+          break;
+      }
+
+      setItems(prev => ({ ...prev, [tab]: tabItems }));
+      setFetchedTabs(prev => new Set([...prev, tab]));
+    } catch (error) {
+      console.error(`Error fetching ${tab}:`, error);
+      toast.error(`Failed to load ${TABS.find(t => t.id === tab)?.label || tab}`);
+    } finally {
+      setLoading(prev => ({ ...prev, [tab]: false }));
+    }
+  }, [fetchedTabs, fetchCourses, fetchBooks, fetchSessions, fetchWebinars, fetchBundles, fetchOfflineBatches]);
 
   const handleJoin = async (item) => {
     try {

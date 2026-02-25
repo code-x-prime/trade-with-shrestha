@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FiSearch, FiBriefcase, FiFilter } from 'react-icons/fi';
@@ -68,16 +68,7 @@ export default function JobListingPage() {
     return () => clearTimeout(timeoutId);
   }, []);
   
-  // Debounced search effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchJobs();
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(timer);
-  }, [filters, searchTerm]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       setLoading(true);
       let query = '/jobs?status=PUBLISHED&isVerified=true';
@@ -97,7 +88,16 @@ export default function JobListingPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, searchTerm]);
+
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchJobs();
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timer);
+  }, [fetchJobs]);
 
   const handleSearch = (e) => {
     e.preventDefault();

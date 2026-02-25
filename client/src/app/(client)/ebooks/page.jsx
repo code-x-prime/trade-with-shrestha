@@ -69,15 +69,15 @@ function EbooksPageContent() {
 
   useEffect(() => {
     fetchEbooks();
-  }, [page, search, filters.category, filters.isFree, sort]);
+  }, [fetchEbooks]);
 
   useEffect(() => {
     if (isAuthenticated && ebooks.length > 0) {
       fetchPurchaseStatus();
     }
-  }, [isAuthenticated, ebooks]);
+  }, [isAuthenticated, ebooks, fetchPurchaseStatus]);
 
-  const fetchEbooks = async () => {
+  const fetchEbooks = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -125,7 +125,7 @@ function EbooksPageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, limit, search, filters.category, filters.isFree, sort]);
 
   const handleFilterChange = useCallback((key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -156,7 +156,7 @@ function EbooksPageContent() {
     updateURL({ q: value || null, page: null });
   }, [updateURL]);
 
-  const fetchPurchaseStatus = async () => {
+  const fetchPurchaseStatus = useCallback(async () => {
     if (!isAuthenticated || ebooks.length === 0) return;
 
     try {
@@ -172,7 +172,7 @@ function EbooksPageContent() {
     } catch (error) {
       console.error('Failed to fetch purchase status:', error);
     }
-  };
+  }, [isAuthenticated, ebooks]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { certificateAPI } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -18,9 +18,9 @@ export default function VerifyCertificatePage({ params }) {
     if (certificateNo) {
       verifyCertificate();
     }
-  }, [certificateNo]);
+  }, [certificateNo, verifyCertificate]);
 
-  const verifyCertificate = async () => {
+  const verifyCertificate = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -36,7 +36,7 @@ export default function VerifyCertificatePage({ params }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [certificateNo]);
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-IN', {

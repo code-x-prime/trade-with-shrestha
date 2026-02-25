@@ -53,17 +53,7 @@ function MentorshipPageContent() {
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
   }, [searchParams, router, pathname]);
 
-  useEffect(() => {
-    fetchMentorship();
-  }, [page, search, sort]);
-
-  useEffect(() => {
-    if (isAuthenticated && mentorship.length > 0) {
-      fetchPurchaseStatus();
-    }
-  }, [isAuthenticated, mentorship]);
-
-  const fetchMentorship = async () => {
+  const fetchMentorship = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -98,14 +88,26 @@ function MentorshipPageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, search, sort]);
+
+  useEffect(() => {
+    fetchMentorship();
+  }, [fetchMentorship]);
+
+  useEffect(() => {
+    if (isAuthenticated && mentorship.length > 0) {
+      fetchPurchaseStatus();
+    }
+  }, [isAuthenticated, mentorship, fetchPurchaseStatus]);
+
+
 
   const handleSortChange = useCallback((value) => {
     setSort(value);
     updateURL({ sort: value !== 'newest' ? value : null });
   }, [updateURL]);
 
-  const fetchPurchaseStatus = async () => {
+  const fetchPurchaseStatus = useCallback(async () => {
     if (!isAuthenticated || mentorship.length === 0) return;
 
     try {
@@ -121,7 +123,7 @@ function MentorshipPageContent() {
     } catch (error) {
       console.error('Failed to fetch purchase status:', error);
     }
-  };
+  }, [isAuthenticated, mentorship]);
 
   const handlePageChange = useCallback((newPage) => {
     setPage(newPage);

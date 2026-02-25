@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
@@ -35,43 +35,7 @@ function CheckoutContent() {
   const [couponError, setCouponError] = useState('');
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      const redirect = searchParams.get('redirect') || '/checkout';
-      router.push(`/auth?mode=login&redirect=${encodeURIComponent(redirect)}`);
-      return;
-    }
-
-    loadCart();
-
-    // Read coupon from URL query parameter
-    const urlCoupon = searchParams.get('coupon');
-    if (urlCoupon) {
-      setCouponCode(urlCoupon.toUpperCase());
-    }
-
-    // Check if Razorpay is already loaded (from beforeInteractive script)
-    if (typeof window !== 'undefined' && window.Razorpay) {
-      setRazorpayLoaded(true);
-    }
-  }, [isAuthenticated, router, searchParams]);
-
-  // Auto-validate coupon from URL after cart items are loaded
-  useEffect(() => {
-    const urlCoupon = searchParams.get('coupon');
-    const hasItems = cartItems.length > 0 || webinarCartItems.length > 0 ||
-      guidanceCartItems.length > 0 ||
-      courseCartItems.length > 0 || offlineBatchCartItems.length > 0 ||
-      bundleCartItems.length > 0;
-
-    // Only auto-validate if we have a URL coupon, items loaded, and not already applied
-    if (urlCoupon && hasItems && !appliedCoupon && !loading) {
-      validateCouponCode(urlCoupon.toUpperCase());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, cartItems, webinarCartItems, guidanceCartItems, mentorshipCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems]);
-
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
     try {
       setLoading(true);
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -86,7 +50,6 @@ function CheckoutContent() {
         return;
       }
 
-      // Load ebooks
       const ebookItems = cart.length > 0 ? await Promise.all(
         cart.map(async (id) => {
           try {
@@ -98,7 +61,6 @@ function CheckoutContent() {
         })
       ) : [];
 
-      // Load webinars
       const webinarItems = webinarCart.length > 0 ? await Promise.all(
         webinarCart.map(async (id) => {
           try {
@@ -110,13 +72,11 @@ function CheckoutContent() {
         })
       ) : [];
 
-      // Load guidance (already have all data in localStorage)
       const guidanceItems = guidanceCart.map(item => ({
         ...item,
         type: 'guidance',
       }));
 
-      // Load courses
       const courseItems = courseCart.length > 0 ? await Promise.all(
         courseCart.map(async (id) => {
           try {
@@ -141,7 +101,6 @@ function CheckoutContent() {
         })
       ) : [];
 
-      // Load offline batches
       const offlineBatchItems = offlineBatchCart.length > 0 ? await Promise.all(
         offlineBatchCart.map(async (id) => {
           try {
@@ -166,7 +125,6 @@ function CheckoutContent() {
         })
       ) : [];
 
-      // Load bundles
       const bundleItems = bundleCart.length > 0 ? await Promise.all(
         bundleCart.map(async (id) => {
           try {
@@ -196,17 +154,36 @@ function CheckoutContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const redirect = searchParams.get('redirect') || '/checkout';
+      router.push(`/auth?mode=login&redirect=${encodeURIComponent(redirect)}`);
+      return;
+    }
+
+    loadCart();
+
+    const urlCoupon = searchParams.get('coupon');
+    if (urlCoupon) {
+      setCouponCode(urlCoupon.toUpperCase());
+    }
+
+    if (typeof window !== 'undefined' && window.Razorpay) {
+      setRazorpayLoaded(true);
+    }
+  }, [isAuthenticated, router, searchParams, loadCart]);
 
   // Helper to get effective price (considers flash sale)
-  const getEffectivePrice = (item) => {
+  const getEffectivePrice = useCallback((item) => {
     if (item.pricing?.effectivePrice !== undefined) {
       return item.pricing.effectivePrice;
     }
     return item.salePrice || item.price || 0;
-  };
+  }, []);
 
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     let total = 0;
 
     // Add ebook items
@@ -242,14 +219,14 @@ function CheckoutContent() {
       total += getEffectivePrice(item);
     });
     return total;
-  };
+  }, [cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, getEffectivePrice]);
 
   const calculateFinalTotal = () => {
     const subtotal = calculateTotal();
     return Math.max(0, subtotal - couponDiscount);
   };
 
-  const validateCouponCode = async (code) => {
+  const validateCouponCode = useCallback(async (code) => {
     if (!code.trim()) {
       setAppliedCoupon(null);
       setCouponDiscount(0);
@@ -303,7 +280,21 @@ function CheckoutContent() {
       toast.error(error.message || 'Invalid coupon code');
       sessionStorage.removeItem('couponCode');
     }
-  };
+  }, [cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, calculateTotal]);
+
+  // Auto-validate coupon from URL after cart items are loaded
+  useEffect(() => {
+    const urlCoupon = searchParams.get('coupon');
+    const hasItems = cartItems.length > 0 || webinarCartItems.length > 0 ||
+      guidanceCartItems.length > 0 ||
+      courseCartItems.length > 0 || offlineBatchCartItems.length > 0 ||
+      bundleCartItems.length > 0;
+
+    // Only auto-validate if we have a URL coupon, items loaded, and not already applied
+    if (urlCoupon && hasItems && !appliedCoupon && !loading) {
+      validateCouponCode(urlCoupon.toUpperCase());
+    }
+  }, [loading, cartItems, webinarCartItems, guidanceCartItems, courseCartItems, offlineBatchCartItems, bundleCartItems, appliedCoupon, searchParams, validateCouponCode]);
 
   const handlePayment = async () => {
 

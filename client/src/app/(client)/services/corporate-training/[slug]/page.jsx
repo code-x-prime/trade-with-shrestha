@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { corporateTrainingAPI } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -34,9 +34,9 @@ export default function CorporateTrainingDetailPage() {
 
   useEffect(() => {
     fetchTraining();
-  }, [slug]);
+  }, [fetchTraining]);
 
-  const fetchTraining = async () => {
+  const fetchTraining = useCallback(async () => {
     try {
       setLoading(true);
       const res = await corporateTrainingAPI.getBySlug(slug);
@@ -52,7 +52,7 @@ export default function CorporateTrainingDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

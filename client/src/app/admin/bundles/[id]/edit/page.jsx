@@ -54,9 +54,9 @@ export default function EditBundlePage() {
             fetchBundle();
             fetchCourses();
         }
-    }, [isAuthenticated, isAdmin, bundleId]);
+    }, [isAuthenticated, isAdmin, bundleId, fetchBundle, fetchCourses]);
 
-    const fetchBundle = async () => {
+    const fetchBundle = useCallback(async () => {
         try {
             setLoadingBundle(true);
             const response = await bundleAPI.getById(bundleId);
@@ -82,9 +82,9 @@ export default function EditBundlePage() {
         } finally {
             setLoadingBundle(false);
         }
-    };
+    }, [bundleId, router]);
 
-    const fetchCourses = async () => {
+    const fetchCourses = useCallback(async () => {
         try {
             setLoadingCourses(true);
             const response = await bundleAPI.getCoursesForBundle();
@@ -96,7 +96,7 @@ export default function EditBundlePage() {
         } finally {
             setLoadingCourses(false);
         }
-    };
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
