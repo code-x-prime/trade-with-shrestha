@@ -219,13 +219,6 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 dark:border-gray-800 pt-8 mt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-center md:text-left space-y-1">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Partner: <a href="https://codexprime.in/" target="_blank" rel="noreferrer" className="hover:text-yellow-700 dark:hover:text-yellow-400">CodeXPrime</a>
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Contact: <a href="tel:+919354734436" className="hover:text-yellow-700 dark:hover:text-yellow-400">+91 935 473 4436</a></p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Email: <a href="mailto:codexprime00@gmail.com" className="hover:text-yellow-700 dark:hover:text-yellow-400">codexprime00@gmail.com</a></p>
-            </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center md:text-right">
               © {new Date().getFullYear()} Shrestha Academy. All rights reserved.
             </p>
