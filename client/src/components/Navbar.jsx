@@ -303,6 +303,7 @@ export default function Navbar() {
     { title: 'Hire From Us', description: 'Connect with job-ready talent', href: '/services/hire-from-us', icon: Briefcase },
     { title: 'Mock Interview', description: 'Practice with expert feedback', href: '/services/mock-interview', icon: MessageCircle },
     { title: 'Practice with Expert', description: 'Get expert feedback on your practice', href: '/services/practice-with-expert', icon: MessageCircle },
+    { title: 'CodeXPrime Collab', description: 'Agency + Academy growth partnership', href: '/codexprime', icon: Briefcase },
   ];
 
   const careerMenuItems = [
@@ -378,7 +379,7 @@ export default function Navbar() {
                   >
                     {item.name}
                     {item.badge && (
-                      <span className="px-2 py-0.5 text-[10px] font-bold text-white rounded-full bg-gradient-to-r from-orange-500 to-pink-500 shadow-md">
+                      <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-400 shadow-sm">
                         {item.badge}
                       </span>
                     )}

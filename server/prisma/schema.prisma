@@ -1240,6 +1240,25 @@ model PlacementTrainingRegistration {
   @@index([source])
 }
 
+// CodeXPrime collaboration leads
+model CodeXPrimeLead {
+  id             String   @id @default(cuid())
+  name           String
+  email          String
+  phone          String
+  courseInterest String?
+  message        String?  @db.Text
+  source         String   @default("codexprime-collab")
+  status         String   @default("NEW") // NEW, CONTACTED, CONVERTED, CLOSED
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@index([source])
+}
+
 // ===============================
 // JOB / CAREER SYSTEM
 // ===============================

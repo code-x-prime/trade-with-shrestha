@@ -2135,6 +2135,16 @@ export const placementTrainingAPI = {
     },
 };
 
+export const codexPrimeAPI = {
+    submitLead: async (data) => apiRequest('/codexprime/leads', { method: 'POST', body: JSON.stringify(data) }),
+    getLeadsAdmin: async (params = {}) => {
+        const q = new URLSearchParams(params || {}).toString();
+        return apiRequest(`/codexprime/leads/admin${q ? `?${q}` : ''}`, { method: 'GET' });
+    },
+    getStatsAdmin: async () => apiRequest('/codexprime/leads/admin/stats', { method: 'GET' }),
+    updateLeadStatus: async (id, status) => apiRequest(`/codexprime/leads/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+};
+
 // ==================== INDICATOR APIs ====================
 export const indicatorAPI = {
     getAll: async (params = {}) => {
@@ -2319,6 +2329,7 @@ export const api = {
     expertPractice: expertPracticeAPI,
     hireFromUs: hireFromUsAPI,
     placementTraining: placementTrainingAPI,
+    codexPrime: codexPrimeAPI,
     indicator: indicatorAPI,
     mentorship: mentorshipAPI,
     subscription: subscriptionAPI,

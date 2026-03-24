@@ -36,9 +36,11 @@ import {
   Image as ImageIcon,
   HelpCircle,
   FolderOpen,
+  Handshake,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { codexPrimeAPI } from '@/lib/api';
 
 const menuItems = [
   {
@@ -106,6 +108,7 @@ const menuItems = [
       { title: 'Contacts', icon: Mail, href: '/admin/contacts' },
       { title: 'Demo Requests', icon: Calendar, href: '/admin/demo-requests' },
       { title: 'Hire From Us', icon: UserPlus, href: '/admin/hire-from-us' },
+      { title: 'CodeXPrime Collab', icon: Handshake, href: '/admin/codexprime' },
       { title: 'Training Schedule', icon: CalendarCheck, href: '/admin/training-schedule' },
       { title: 'Reviews', icon: Star, href: '/admin/reviews' },
     ],
@@ -128,12 +131,32 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [newCodeXPrimeLeads, setNewCodeXPrimeLeads] = useState(0);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
       router.push('/auth');
     }
   }, [user, isAdmin, loading, router]);
+
+  useEffect(() => {
+    if (!user || !isAdmin) return;
+    let active = true;
+    const loadNewLeads = async () => {
+      try {
+        const res = await codexPrimeAPI.getStatsAdmin();
+        if (active && res?.success) {
+          setNewCodeXPrimeLeads(Number(res?.data?.new || 0));
+        }
+      } catch {
+        // keep sidebar stable if count fetch fails
+      }
+    };
+    loadNewLeads();
+    return () => {
+      active = false;
+    };
+  }, [user, isAdmin]);
 
   // Reset scroll position when pathname changes
   useEffect(() => {
@@ -211,6 +234,11 @@ export default function AdminLayout({ children }) {
                     >
                       <SubIcon className="h-4 w-4" />
                       <span>{subItem.title}</span>
+                      {subItem.href === '/admin/codexprime' && newCodeXPrimeLeads > 0 && (
+                        <span className="ml-auto inline-flex min-w-5 h-5 px-1 items-center justify-center rounded-full text-[11px] font-bold bg-red-500 text-white">
+                          {newCodeXPrimeLeads > 99 ? '99+' : newCodeXPrimeLeads}
+                        </span>
+                      )}
                     </Link>
                   );
                 })}

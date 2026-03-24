@@ -40,6 +40,7 @@ import subscriptionPlanRoutes from "./routes/subscriptionPlan.routes.js";
 import interviewCategoryRoutes from "./routes/interviewCategory.routes.js";
 import interviewQuestionRoutes from "./routes/interviewQuestion.routes.js";
 import corporateTrainingRoutes from "./routes/corporateTraining.routes.js";
+import codexPrimeLeadRoutes from "./routes/codexPrimeLead.routes.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -163,6 +164,7 @@ app.use("/api/subscription-plans", subscriptionPlanRoutes);
 app.use("/api/interview-categories", interviewCategoryRoutes);
 app.use("/api/interview-questions", interviewQuestionRoutes);
 app.use("/api/corporate-training", corporateTrainingRoutes);
+app.use("/api/codexprime", codexPrimeLeadRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
