@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { HelpCircle, Search, Loader2 } from 'lucide-react';
-import ListingHero from '@/components/listing-heroes/ListingHero';
+import PageHero from '@/components/sections/PageHero';
 import {
   Accordion,
   AccordionContent,
@@ -93,25 +93,16 @@ export default function InterviewQuestionsPage() {
           ← Career
         </Link>
       </div>
-      <div className="max-w-7xl mx-auto px-4">
-        <ListingHero
-          badge="Resources"
-          badgeColor="orange"
-          title="Interview Questions"
-          description="Common technical and HR interview questions with detailed answers. Prepare better with our comprehensive question bank."
-          features={[
-            { icon: HelpCircle, text: 'Technical & HR questions' },
-            { icon: HelpCircle, text: 'Detailed answers & explanations' },
-          ]}
-          ctaText="Contact Us"
-          ctaLink="/contact"
-          gradientFrom="from-amber-600"
-          gradientVia="via-orange-600"
-          gradientTo="to-orange-800"
-        />
-      </div>
+      <PageHero
+        eyebrow="1200+ Questions"
+        title="Interview"
+        titleHighlight="Preparation"
+        highlightPosition="end"
+        description="Practice real interview questions for technical and HR rounds."
+        primaryBtn={{ text: 'Start Practicing', href: '#questions' }}
+      />
 
-      <section id="content" className="max-w-5xl mx-auto px-4 pb-12">
+      <section id="questions" className="max-w-5xl mx-auto px-4 pb-12 pt-6">
         {/* Filters */}
         <div className="bg-card rounded-xl border border-border shadow-sm p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">Filter Questions</h2>

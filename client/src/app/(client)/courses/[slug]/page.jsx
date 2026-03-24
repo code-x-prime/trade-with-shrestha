@@ -8,7 +8,8 @@ function stripHtml(html) {
 }
 
 export async function generateMetadata({ params }) {
-  const course = await getCourseBySlug(params.slug);
+  const { slug } = await params;
+  const course = await getCourseBySlug(slug);
   
   if (!course) {
     return {
@@ -39,7 +40,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function CourseDetailPage({ params }) {
-  const course = await getCourseBySlug(params.slug);
+  const { slug } = await params;
+  const course = await getCourseBySlug(slug);
 
   if (!course) {
     notFound();

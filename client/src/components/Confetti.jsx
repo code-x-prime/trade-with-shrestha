@@ -20,7 +20,7 @@ export default function Confetti({ active = false }) {
       { front: '#10B981', back: '#34D399' },
       { front: '#F59E0B', back: '#FBBF24' },
       { front: '#EF4444', back: '#F87171' },
-      { front: '#8B5CF6', back: '#A78BFA' },
+      { front: '#D4AF37', back: '#F0C040' },
     ];
 
     canvas.width = window.innerWidth;

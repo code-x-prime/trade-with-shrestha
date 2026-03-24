@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Package, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import BundleCard from '@/components/cards/BundleCard';
-import BundlesHero from '@/components/listing-heroes/BundlesHero';
+import PageHero from '@/components/sections/PageHero';
 import SearchInput from '@/components/SearchInput';
 import { Pagination } from '@/components/ui/pagination';
 import { Filters } from '@/components/ui/filters';
@@ -148,21 +148,29 @@ function BundlePageContent() {
     }, [isAuthenticated, bundles, fetchPurchaseStatus]);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8">
-            <BundlesHero />
+        <div className="min-h-screen bg-background">
+            <PageHero
+                eyebrow="Best Value"
+                title="Course"
+                titleHighlight="Bundles"
+                highlightPosition="end"
+                description="Get more for less with our specially curated course bundles."
+                primaryBtn={{ text: 'View Bundles', href: '#bundles' }}
+            />
+            <div className="max-w-7xl mx-auto px-4 py-8">
 
-            {/* Search */}
-            <div className="mb-6">
+                {/* Search */}
+                <div className="mb-6">
                 <SearchInput
                     placeholder="Search bundles..."
                     onSearch={handleSearch}
                     debounceMs={500}
                     defaultValue={search}
                 />
-            </div>
+                </div>
 
-            {/* Sort */}
-            <div className="mb-6">
+                {/* Sort */}
+                <div className="mb-6">
                 <Filters
                     filters={[]}
                     sortOptions={SORT_OPTIONS}
@@ -171,17 +179,17 @@ function BundlePageContent() {
                     onFilterChange={() => { }}
                     onClearFilters={() => { }}
                 />
-            </div>
+                </div>
 
-            {/* Results Count */}
-            {!loading && pagination && (
+                {/* Results Count */}
+                {!loading && pagination && (
                 <div className="mb-4 text-sm text-muted-foreground dark:text-gray-400">
                     Showing {((page - 1) * limit) + 1} - {Math.min(page * limit, pagination.total)} of {pagination.total} bundles
                 </div>
-            )}
+                )}
 
-            {/* Error State */}
-            {error && !loading && (
+                {/* Error State */}
+                {error && !loading && (
                 <Card className="rounded-2xl mb-6 border-destructive dark:bg-gray-800 dark:border-red-900/50">
                     <CardContent className="py-12 text-center">
                         <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
@@ -192,10 +200,10 @@ function BundlePageContent() {
                         </Button>
                     </CardContent>
                 </Card>
-            )}
+                )}
 
-            {/* Loading State */}
-            {loading ? (
+                {/* Loading State */}
+                {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[1, 2, 3, 4, 5, 6].map((i) => (
                         <Card key={i} className="rounded-2xl dark:bg-gray-900 dark:border-gray-800">
@@ -209,7 +217,7 @@ function BundlePageContent() {
                         </Card>
                     ))}
                 </div>
-            ) : bundles.length === 0 ? (
+                ) : bundles.length === 0 ? (
                 <Card className="rounded-2xl dark:bg-gray-800 dark:border-gray-700">
                     <CardContent className="py-12 text-center">
                         <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4 dark:text-gray-500" />
@@ -221,9 +229,9 @@ function BundlePageContent() {
                         </p>
                     </CardContent>
                 </Card>
-            ) : (
+                ) : (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div id="bundles" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         {bundles.map((bundle) => (
                             <BundleCard
                                 key={bundle.id}
@@ -242,7 +250,8 @@ function BundlePageContent() {
                         />
                     )}
                 </>
-            )}
+                )}
+            </div>
         </div>
     );
 }

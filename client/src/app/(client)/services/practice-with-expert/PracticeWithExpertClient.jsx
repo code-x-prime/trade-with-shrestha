@@ -15,7 +15,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { MessageCircle, CheckCircle2, Loader2, CalendarCheck, Sparkles } from 'lucide-react';
-import ListingHero from '@/components/listing-heroes/ListingHero';
+import PageHero from '@/components/sections/PageHero';
 import { expertPracticeAPI } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -83,25 +83,16 @@ export default function PracticeWithExpertPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
-        <ListingHero
-          badge="Practice"
-          badgeColor="green"
-          title="Practice with Expert"
-          description="Get structured practice sessions with expert feedback. Choose a option below and reach out to book."
-          features={[
-            { icon: MessageCircle, text: 'Expert-led practice sessions' },
-            { icon: CheckCircle2, text: 'Personalized feedback' },
-          ]}
-          ctaText="Contact us"
-          ctaLink="/contact"
-          gradientFrom="from-emerald-600"
-          gradientVia="via-emerald-700"
-          gradientTo="to-teal-800"
-        />
-      </div>
+      <PageHero
+        eyebrow="1:1 Practice"
+        title="Practice With"
+        titleHighlight="Experts"
+        highlightPosition="end"
+        description="Sharpen your skills with hands-on practice sessions."
+        primaryBtn={{ text: 'Book Now', href: '#practice' }}
+      />
 
-      <section id="content" className="max-w-4xl mx-auto px-4 pb-12">
+      <section id="practice" className="max-w-4xl mx-auto px-4 pb-12">
         {loading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-brand-600" />

@@ -48,8 +48,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { webinarAPI, courseAPI, ebookAPI, bundleAPI, guidanceAPI } from '@/lib/api';
 
-const BRAND_COLOR = '#4A50B0';
-
 const SEARCH_PLACEHOLDERS = [
   "Search 'Web Development'",
   "Search 'Webinars'",
@@ -329,9 +327,9 @@ export default function Navbar() {
           ? '0 8px 32px rgba(74, 80, 176, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)'
           : '0 0 0 rgba(0,0,0,0)',
       }}
-      className={`z-[100] w-full border-b border-[#4A50B0]/10 dark:border-[#4A50B0]/20 backdrop-blur-md transition-all duration-300 ${scrolled
-        ? 'bg-white/85 dark:bg-gray-900/85'
-        : 'bg-white/95 dark:bg-gray-900/95'
+      className={`z-[100] w-full border-b border-yellow-300 dark:border-gray-800 backdrop-blur-md transition-all duration-300 ${scrolled
+        ? 'bg-white/85 dark:bg-gray-950/85'
+        : 'bg-white/95 dark:bg-gray-950/95'
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
@@ -376,7 +374,7 @@ export default function Navbar() {
                 >
                   <Link
                     href={item.href}
-                    className="relative px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] transition-all duration-300 flex items-center gap-1.5 group rounded-lg hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20"
+                    className="relative px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-yellow-700 dark:hover:text-yellow-400 transition-all duration-300 flex items-center gap-1.5 group rounded-lg hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20"
                   >
                     {item.name}
                     {item.badge && (
@@ -385,10 +383,10 @@ export default function Navbar() {
                       </span>
                     )}
                     {item.hasMegaMenu && (
-                      <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 text-[#4A50B0] ${openDropdown === dropdownKey ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 text-yellow-700 dark:text-yellow-400 ${openDropdown === dropdownKey ? 'rotate-180' : ''}`} />
                     )}
                     <motion.span
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-[#4A50B0] to-purple-600 rounded-full"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-yellow-500 rounded-full"
                       initial={{ width: 0 }}
                       whileHover={{ width: '80%' }}
                       transition={{ duration: 0.3 }}
@@ -403,14 +401,14 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
+                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-yellow-300 dark:border-yellow-500/30 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-2xl shadow-yellow-500/10 overflow-hidden z-[200]"
                       onMouseEnter={() => setOpenDropdown('courses')}
                       onMouseLeave={() => {
                         setOpenDropdown(null);
                       }}
                     >
                       <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">
                           Course Programs
                         </h3>
                         <div className="space-y-2">
@@ -423,15 +421,15 @@ export default function Navbar() {
                             >
                               <Link
                                 href={menuItem.href}
-                                className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 transition-all duration-300 group border border-transparent hover:border-[#4A50B0]/10 dark:hover:border-[#4A50B0]/30"
+                                className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20 transition-all duration-300 group border border-transparent hover:border-yellow-300 dark:hover:border-yellow-500/30"
                                 onClick={() => setOpenDropdown(null)}
                               >
                                 <div className="flex items-start gap-3">
-                                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#4A50B0]/10 to-purple-600/10 group-hover:from-[#4A50B0]/20 group-hover:to-purple-600/20 transition-all duration-300 shadow-sm">
-                                    <menuItem.icon className="h-5 w-5 text-[#4A50B0] dark:text-[#9ca0ff] group-hover:scale-110 transition-transform" />
+                                  <div className="p-2.5 rounded-xl bg-yellow-100 dark:bg-yellow-500/10 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-500/20 transition-all duration-300 shadow-sm">
+                                    <menuItem.icon className="h-5 w-5 text-yellow-700 dark:text-yellow-400 group-hover:scale-110 transition-transform" />
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#4A50B0] dark:group-hover:text-[#9ca0ff] transition-colors">
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-colors">
                                       {menuItem.title}
                                     </h4>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -455,22 +453,22 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
+                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-yellow-300 dark:border-yellow-500/30 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-2xl shadow-yellow-500/10 overflow-hidden z-[200]"
                       onMouseEnter={() => setOpenDropdown('services')}
                       onMouseLeave={() => setOpenDropdown(null)}
                     >
                       <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">Services</h3>
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">Services</h3>
                         <div className="space-y-2">
                           {servicesMenuItems.map((menuItem, idx) => (
                             <motion.div key={menuItem.href} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }}>
-                              <Link href={menuItem.href} className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 transition-all duration-300 group border border-transparent hover:border-[#4A50B0]/10 dark:hover:border-[#4A50B0]/30" onClick={() => setOpenDropdown(null)}>
+                              <Link href={menuItem.href} className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20 transition-all duration-300 group border border-transparent hover:border-yellow-300 dark:hover:border-yellow-500/30" onClick={() => setOpenDropdown(null)}>
                                 <div className="flex items-start gap-3">
-                                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#4A50B0]/10 to-purple-600/10 group-hover:from-[#4A50B0]/20 group-hover:to-purple-600/20 transition-all duration-300 shadow-sm">
-                                    <menuItem.icon className="h-5 w-5 text-[#4A50B0] dark:text-[#9ca0ff] group-hover:scale-110 transition-transform" />
+                                  <div className="p-2.5 rounded-xl bg-yellow-100 dark:bg-yellow-500/10 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-500/20 transition-all duration-300 shadow-sm">
+                                    <menuItem.icon className="h-5 w-5 text-yellow-700 dark:text-yellow-400 group-hover:scale-110 transition-transform" />
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#4A50B0] dark:group-hover:text-[#9ca0ff] transition-colors">{menuItem.title}</h4>
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-colors">{menuItem.title}</h4>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{menuItem.description}</p>
                                   </div>
                                 </div>
@@ -490,14 +488,14 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
+                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-yellow-300 dark:border-yellow-500/30 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-2xl shadow-yellow-500/10 overflow-hidden z-[200]"
                       onMouseEnter={() => setOpenDropdown('events')}
                       onMouseLeave={() => {
                         setOpenDropdown(null);
                       }}
                     >
                       <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">
                           Events
                         </h3>
                         <div className="space-y-2">
@@ -510,15 +508,15 @@ export default function Navbar() {
                             >
                               <Link
                                 href={menuItem.href}
-                                className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 transition-all duration-300 group border border-transparent hover:border-[#4A50B0]/10 dark:hover:border-[#4A50B0]/30"
+                                className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20 transition-all duration-300 group border border-transparent hover:border-yellow-300 dark:hover:border-yellow-500/30"
                                 onClick={() => setOpenDropdown(null)}
                               >
                                 <div className="flex items-start gap-3">
-                                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#4A50B0]/10 to-purple-600/10 group-hover:from-[#4A50B0]/20 group-hover:to-purple-600/20 transition-all duration-300 shadow-sm">
-                                    <menuItem.icon className="h-5 w-5 text-[#4A50B0] dark:text-[#9ca0ff] group-hover:scale-110 transition-transform" />
+                                  <div className="p-2.5 rounded-xl bg-yellow-100 dark:bg-yellow-500/10 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-500/20 transition-all duration-300 shadow-sm">
+                                    <menuItem.icon className="h-5 w-5 text-yellow-700 dark:text-yellow-400 group-hover:scale-110 transition-transform" />
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#4A50B0] dark:group-hover:text-[#9ca0ff] transition-colors">
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-colors">
                                       {menuItem.title}
                                     </h4>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -542,22 +540,22 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 overflow-hidden z-[200]"
+                      className="mega-dropdown absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[320px] rounded-2xl border border-yellow-300 dark:border-yellow-500/30 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-2xl shadow-yellow-500/10 overflow-hidden z-[200]"
                       onMouseEnter={() => setOpenDropdown('career')}
                       onMouseLeave={() => setOpenDropdown(null)}
                     >
                       <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-[#4A50B0] to-purple-600 bg-clip-text text-transparent">Career</h3>
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-5 bg-gradient-to-r from-yellow-500 to-yellow-400 bg-clip-text text-transparent">Career</h3>
                         <div className="space-y-2">
                           {careerMenuItems.map((menuItem, idx) => (
                             <motion.div key={menuItem.href} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }}>
-                              <Link href={menuItem.href} className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 transition-all duration-300 group border border-transparent hover:border-[#4A50B0]/10 dark:hover:border-[#4A50B0]/30" onClick={() => setOpenDropdown(null)}>
+                              <Link href={menuItem.href} className="block p-4 rounded-xl hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20 transition-all duration-300 group border border-transparent hover:border-yellow-300 dark:hover:border-yellow-500/30" onClick={() => setOpenDropdown(null)}>
                                 <div className="flex items-start gap-3">
-                                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#4A50B0]/10 to-purple-600/10 group-hover:from-[#4A50B0]/20 group-hover:to-purple-600/20 transition-all duration-300 shadow-sm">
-                                    <menuItem.icon className="h-5 w-5 text-[#4A50B0] dark:text-[#9ca0ff] group-hover:scale-110 transition-transform" />
+                                  <div className="p-2.5 rounded-xl bg-yellow-100 dark:bg-yellow-500/10 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-500/20 transition-all duration-300 shadow-sm">
+                                    <menuItem.icon className="h-5 w-5 text-yellow-700 dark:text-yellow-400 group-hover:scale-110 transition-transform" />
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#4A50B0] dark:group-hover:text-[#9ca0ff] transition-colors">{menuItem.title}</h4>
+                                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-colors">{menuItem.title}</h4>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{menuItem.description}</p>
                                   </div>
                                 </div>
@@ -589,7 +587,7 @@ export default function Navbar() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setDesktopSearchOpen(true)}
-                    className="h-11 w-11 rounded-full text-gray-600 dark:text-gray-300 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] hover:bg-[#4A50B0]/10 dark:hover:bg-[#4A50B0]/20 transition-all"
+                    className="h-11 w-11 rounded-full text-gray-600 dark:text-gray-300 hover:text-yellow-700 dark:hover:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-500/20 transition-all"
                   >
                     <Search className="h-5 w-5" />
                   </Button>
@@ -604,7 +602,7 @@ export default function Navbar() {
                       onFocus={() => setSearchFocused(true)}
                       onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
                       placeholder={SEARCH_PLACEHOLDERS[placeholderIndex]}
-                      className="h-11 w-full pl-11 pr-11 rounded-full border-2 border-[#4A50B0]/30 dark:border-[#4A50B0]/40 bg-white dark:bg-gray-800 focus:border-[#4A50B0] focus:ring-2 focus:ring-[#4A50B0]/20 dark:text-white dark:placeholder:text-gray-400 shadow-lg"
+                      className="h-11 w-full pl-11 pr-11 rounded-full border-2 border-yellow-500/30 dark:border-yellow-500/40 bg-white dark:bg-gray-800 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 dark:text-white dark:placeholder:text-gray-400 shadow-lg"
                     />
                     <button
                       type="button"
@@ -629,7 +627,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute top-full right-0 mt-2 w-96 rounded-2xl border border-[#4A50B0]/10 dark:border-[#4A50B0]/30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-[#4A50B0]/10 z-50 overflow-hidden"
+                    className="absolute top-full right-0 mt-2 w-96 rounded-2xl border border-yellow-300 dark:border-yellow-500/30 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-2xl shadow-yellow-500/10 z-50 overflow-hidden"
                     onMouseDown={(e) => e.preventDefault()}
                   >
                     {searchSuggestions.length > 0 ? (
@@ -671,14 +669,14 @@ export default function Navbar() {
             {/* Cart */}
             <Link
               href="/cart"
-              className="relative p-2.5 text-gray-700 dark:text-gray-200 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20 group"
+              className="relative p-2.5 text-gray-700 dark:text-gray-200 hover:text-yellow-700 dark:hover:text-yellow-400 transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20 group"
             >
               <ShoppingCart className="h-5 w-5 group-hover:scale-110 transition-transform" />
               {cartCount > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-gradient-to-r from-[#4A50B0] to-purple-600 text-white text-xs flex items-center justify-center font-bold shadow-lg shadow-[#4A50B0]/30 ring-2 ring-white"
+                  className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black text-xs flex items-center justify-center font-bold shadow-lg shadow-yellow-500/30 ring-2 ring-white"
                 >
                   {cartCount > 9 ? '9+' : cartCount}
                 </motion.span>
@@ -688,7 +686,7 @@ export default function Navbar() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 text-gray-700 dark:text-gray-200 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:from-[#4A50B0]/20 dark:hover:to-purple-600/20"
+              className="p-2.5 text-gray-700 dark:text-gray-200 hover:text-yellow-700 dark:hover:text-yellow-400 transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:from-yellow-500/20 dark:hover:to-yellow-500/20"
               aria-label="Toggle theme"
             >
               {theme === 'dark' ? (
@@ -702,9 +700,9 @@ export default function Navbar() {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-11 w-11 rounded-full hover:ring-2 hover:ring-[#4A50B0]/30 transition-all duration-300 p-0 overflow-hidden hover:scale-105 shadow-sm hover:shadow-md Z-[100]">
+                  <Button variant="ghost" className="relative h-11 w-11 rounded-full hover:ring-2 hover:ring-yellow-500/30 transition-all duration-300 p-0 overflow-hidden hover:scale-105 shadow-sm hover:shadow-md Z-[100]">
                     {user?.avatarUrl ? (
-                      <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-[#4A50B0]/20 ring-2 ring-white">
+                      <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-yellow-500/20 ring-2 ring-white">
                         <Image
                           src={user.avatarUrl}
                           alt={user.name || 'User'}
@@ -714,7 +712,7 @@ export default function Navbar() {
                         />
                       </div>
                     ) : (
-                      <div className="h-11 w-11 rounded-full flex items-center justify-center shadow-md bg-gradient-to-br from-[#4A50B0] to-purple-600 text-white font-semibold text-sm">
+                      <div className="h-11 w-11 rounded-full flex items-center justify-center shadow-md bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black font-semibold text-sm">
                         {getUserInitials(user?.name)}
                       </div>
                     )}
@@ -751,7 +749,7 @@ export default function Navbar() {
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link href="/admin" className="cursor-pointer font-semibold" style={{ color: BRAND_COLOR }}>
+                        <Link href="/admin" className="cursor-pointer font-semibold text-yellow-700 dark:text-yellow-400">
                           <Settings className="mr-2 h-4 w-4" />
                           Admin Panel
                         </Link>
@@ -768,7 +766,7 @@ export default function Navbar() {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2 border-[#4A50B0]/30 dark:border-[#4A50B0]/50 text-[#4A50B0] dark:text-[#9ca0ff] hover:bg-[#4A50B0]/10 dark:hover:bg-[#4A50B0]/20 font-medium">
+                  <Button variant="outline" className="gap-2 border-yellow-700 dark:border-yellow-500/50 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-500/20 font-medium">
                     <User className="h-4 w-4" />
 
                   </Button>
@@ -786,7 +784,7 @@ export default function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="py-2.5 rounded-md">
-                    <Link href="/auth?mode=signup" className="cursor-pointer font-semibold text-[#4A50B0] dark:text-[#9ca0ff]">
+                    <Link href="/auth?mode=signup" className="cursor-pointer font-semibold text-yellow-700 dark:text-yellow-400">
                       Sign Up
                     </Link>
                   </DropdownMenuItem>
@@ -804,17 +802,17 @@ export default function Navbar() {
                 e.stopPropagation();
                 setMobileMenuOpen(true);
               }}
-              className="lg:hidden hover:bg-[#4A50B0]/5 dark:hover:bg-[#4A50B0]/20 transition-all duration-300 text-gray-700 dark:text-gray-200"
+              className="lg:hidden hover:bg-yellow-500/5 dark:hover:bg-yellow-500/20 transition-all duration-300 text-gray-700 dark:text-gray-200"
             >
               <Menu className="h-5 w-5 hover:scale-110 transition-transform" />
             </Button>
             <Link
               href="/cart"
-              className="relative p-2.5 text-gray-700 dark:text-gray-200 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5"
+              className="relative p-2.5 text-gray-700 dark:text-gray-200 hover:text-yellow-700 dark:hover:text-yellow-400 transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100"
             >
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-gradient-to-r from-[#4A50B0] to-purple-600 text-white text-[10px] flex items-center justify-center font-bold shadow-md shadow-[#4A50B0]/30 ring-2 ring-white">
+                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black text-[10px] flex items-center justify-center font-bold shadow-md shadow-yellow-500/30 ring-2 ring-white">
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
@@ -826,7 +824,7 @@ export default function Navbar() {
                 e.stopPropagation();
                 setMobileSearchOpen(true);
               }}
-              className="hover:bg-[#4A50B0]/5 dark:hover:bg-[#4A50B0]/20 transition-all duration-300 text-gray-700 dark:text-gray-200"
+              className="hover:bg-yellow-500/5 dark:hover:bg-yellow-500/20 transition-all duration-300 text-gray-700 dark:text-gray-200"
             >
               <Search className="h-5 w-5 hover:scale-110 transition-transform" />
             </Button>
@@ -850,7 +848,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed top-20 left-0 right-0 z-[105] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-[#4A50B0]/10 dark:border-[#4A50B0]/30 shadow-xl shadow-[#4A50B0]/5 px-4 py-3"
+              className="lg:hidden fixed top-20 left-0 right-0 z-[105] bg-white/95 dark:bg-gray-950/95 backdrop-blur-md border-b border-yellow-300 dark:border-gray-800 shadow-xl shadow-yellow-500/5 px-4 py-3"
               onClick={(e) => e.stopPropagation()}
             >
               <form onSubmit={handleSearch} className="flex items-center gap-2">
@@ -862,7 +860,7 @@ export default function Navbar() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={SEARCH_PLACEHOLDERS[placeholderIndex]}
-                    className="w-full pl-10 pr-10 rounded-full border-2 border-gray-200/80 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:border-[#4A50B0] focus:ring-2 focus:ring-[#4A50B0]/20 focus:bg-white dark:focus:bg-gray-800 transition-all duration-300 shadow-sm dark:text-white dark:placeholder:text-gray-400"
+                    className="w-full pl-10 pr-10 rounded-full border-2 border-gray-200/80 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all duration-300 shadow-sm dark:text-white dark:placeholder:text-gray-400"
                   />
                   {searchQuery && (
                     <button
@@ -937,18 +935,18 @@ export default function Navbar() {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed left-0 top-0 h-[100dvh] w-[85vw] max-w-sm bg-white/95 dark:bg-gray-900/95 backdrop-blur-md z-[120] lg:hidden shadow-2xl shadow-[#4A50B0]/20 overflow-y-auto border-r border-[#4A50B0]/10 dark:border-gray-700"
+                className="fixed left-0 top-0 h-[100dvh] w-[85vw] max-w-sm bg-white/95 dark:bg-gray-950/95 backdrop-blur-md z-[120] lg:hidden shadow-2xl shadow-yellow-500/20 overflow-y-auto border-r border-yellow-300 dark:border-gray-700"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#4A50B0]/10 w-full dark:border-gray-800">
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-yellow-300 w-full dark:border-gray-800">
                     <Link href="/" onClick={() => setMobileMenuOpen(false)}>
                       <Image src={theme === 'dark' ? '/logo.png' : '/logob.png'} alt="Shrestha Academy" width={120} height={120} className="w-full h-16 object-contain " />
                     </Link>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={toggleTheme}
-                        className="p-2.5 text-gray-700 dark:text-gray-200 hover:text-[#4A50B0] dark:hover:text-[#9ca0ff] transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:hover:bg-[#4A50B0]/20"
+                        className="p-2.5 text-gray-700 dark:text-gray-200 hover:text-yellow-700 dark:hover:text-yellow-400 transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:hover:bg-yellow-500/20"
                         aria-label="Toggle theme"
                       >
                         {theme === 'dark' ? (
@@ -977,7 +975,7 @@ export default function Navbar() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder={SEARCH_PLACEHOLDERS[placeholderIndex]}
-                        className="w-full pl-10 rounded-full border-2 border-gray-200/80 bg-white/80 backdrop-blur-sm focus:border-[#4A50B0] focus:ring-2 focus:ring-[#4A50B0]/20 focus:bg-white transition-all duration-300 shadow-sm dark:bg-gray-800/80 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:bg-gray-800"
+                        className="w-full pl-10 rounded-full border-2 border-gray-200/80 bg-white/80 backdrop-blur-sm focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 focus:bg-white transition-all duration-300 shadow-sm dark:bg-gray-800/80 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:bg-gray-800"
                       />
                     </div>
                   </form>
@@ -1002,7 +1000,7 @@ export default function Navbar() {
                                         e.stopPropagation();
                                         setMobileMenuOpen(false);
                                       }}
-                                      className="block py-2 text-sm text-gray-600 hover:text-[#4A50B0] dark:text-gray-400 dark:hover:text-[#9ca0ff]"
+                                      className="block py-2 text-sm text-gray-600 hover:text-yellow-700 dark:text-gray-400 dark:hover:text-yellow-400"
                                     >
                                       {subItem.title}
                                     </Link>
@@ -1018,7 +1016,7 @@ export default function Navbar() {
                               e.stopPropagation();
                               setMobileMenuOpen(false);
                             }}
-                            className="block py-3 px-4 text-base font-semibold hover:text-[#4A50B0] transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-[#4A50B0]/5 hover:to-purple-600/5 dark:text-gray-200 dark:hover:text-[#9ca0ff] dark:hover:bg-[#4A50B0]/20"
+                            className="block py-3 px-4 text-base font-semibold hover:text-yellow-700 dark:hover:text-yellow-400 transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-100 dark:text-gray-200 dark:hover:bg-yellow-500/20"
                           >
                             {item.name}
                           </Link>
@@ -1032,7 +1030,7 @@ export default function Navbar() {
                       <>
                         <div className="flex items-center gap-3 mb-4 pb-4 border-b dark:border-gray-800">
                           {user?.avatarUrl ? (
-                            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#4A50B0]/20 flex-shrink-0">
+                            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-yellow-500/20 flex-shrink-0">
                               <Image
                                 src={user.avatarUrl}
                                 alt={user.name || 'User'}
@@ -1042,7 +1040,7 @@ export default function Navbar() {
                               />
                             </div>
                           ) : (
-                            <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md bg-gradient-to-br from-[#4A50B0] to-purple-600 text-white font-semibold text-sm">
+                            <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black font-semibold text-sm">
                               {getUserInitials(user?.name)}
                             </div>
                           )}
@@ -1057,7 +1055,7 @@ export default function Navbar() {
                             e.stopPropagation();
                             setMobileMenuOpen(false);
                           }}
-                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-[#4A50B0] transition-colors dark:text-gray-200 dark:hover:text-[#9ca0ff]"
+                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors dark:text-gray-200"
                         >
                           <User className="h-5 w-5" />
                           Profile
@@ -1068,7 +1066,7 @@ export default function Navbar() {
                             e.stopPropagation();
                             setMobileMenuOpen(false);
                           }}
-                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-[#4A50B0] transition-colors dark:text-gray-200 dark:hover:text-[#9ca0ff]"
+                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors dark:text-gray-200"
                         >
                           <Video className="h-5 w-5" />
                           My Enrolled Items
@@ -1079,7 +1077,7 @@ export default function Navbar() {
                             e.stopPropagation();
                             setMobileMenuOpen(false);
                           }}
-                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-[#4A50B0] transition-colors dark:text-gray-200 dark:hover:text-[#9ca0ff]"
+                          className="flex items-center gap-3 py-3 text-base font-medium hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors dark:text-gray-200"
                         >
                           <ShoppingCart className="h-5 w-5" />
                           My Orders
@@ -1094,8 +1092,7 @@ export default function Navbar() {
                                 e.stopPropagation();
                                 setMobileMenuOpen(false);
                               }}
-                              className="flex items-center gap-3 py-3 text-base font-semibold"
-                              style={{ color: BRAND_COLOR }}
+                              className="flex items-center gap-3 py-3 text-base font-semibold text-yellow-700 dark:text-yellow-400"
                             >
                               <Settings className="h-5 w-5" />
                               Admin Panel
@@ -1123,7 +1120,7 @@ export default function Navbar() {
                             Login
                           </Link>
                         </Button>
-                        <Button asChild className="w-full text-white" style={{ backgroundColor: BRAND_COLOR }}>
+                        <Button asChild className="w-full bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black hover:bg-yellow-500 dark:hover:bg-yellow-400">
                           <Link href="/auth?mode=signup" onClick={() => setMobileMenuOpen(false)}>
                             Sign Up
                           </Link>

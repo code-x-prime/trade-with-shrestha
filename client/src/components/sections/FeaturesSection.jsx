@@ -11,12 +11,12 @@ const features = [
     accent: '#d4af37',
     accentRgb: '212,175,55',
     tag: '200+ Courses',
-    tagCls: 'text-[#d4af37] bg-[#d4af37]/10 border-[#d4af37]/20',
+    tagCls: 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/10 border-yellow-300 dark:border-yellow-500/20',
     dot: 'bg-[#d4af37]',
     borderHover: 'hover:border-[#d4af37]/50',
     glowCls: 'bg-[#d4af37]',
     lineCls: 'bg-[#d4af37]',
-    arrowCls: 'group-hover:text-[#d4af37]',
+    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
     number: '01',
   },
   {
@@ -26,12 +26,12 @@ const features = [
     accent: '#d4af37',
     accentRgb: '212,175,55',
     tag: 'Industry Relevant',
-    tagCls: 'text-[#d4af37] bg-[#d4af37]/10 border-[#d4af37]/20',
+    tagCls: 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/10 border-yellow-300 dark:border-yellow-500/20',
     dot: 'bg-[#d4af37]',
     borderHover: 'hover:border-[#d4af37]/50',
     glowCls: 'bg-[#d4af37]',
     lineCls: 'bg-[#d4af37]',
-    arrowCls: 'group-hover:text-[#d4af37]',
+    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
     number: '02',
   },
   {
@@ -41,12 +41,12 @@ const features = [
     accent: '#d4af37',
     accentRgb: '212,175,55',
     tag: 'Recognized',
-    tagCls: 'text-[#d4af37] bg-[#d4af37]/10 border-[#d4af37]/20',
+    tagCls: 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/10 border-yellow-300 dark:border-yellow-500/20',
     dot: 'bg-[#d4af37]',
     borderHover: 'hover:border-[#d4af37]/50',
     glowCls: 'bg-[#d4af37]',
     lineCls: 'bg-[#d4af37]',
-    arrowCls: 'group-hover:text-[#d4af37]',
+    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
     number: '03',
   },
 ];
@@ -69,13 +69,13 @@ export default function FeaturesSection() {
 
         {/* ── HEADER ── */}
         <div className="flex flex-col items-center gap-4 text-center mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/25 bg-[#d4af37]/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#d4af37]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300 dark:border-yellow-500/20 bg-yellow-100 dark:bg-yellow-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-700 dark:text-yellow-400">
             <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37] shadow-[0_0_6px_#d4af37]" />
             Why Choose Us
           </div>
 
           <h2
-            className="font-syne text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
+            className="text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
           >
             Everything You Need to{' '}
             <span className="bg-gradient-to-r from-[#d4af37] via-[#d4af37] to-[#d4af37] bg-clip-text text-transparent">
@@ -123,7 +123,7 @@ export default function FeaturesSection() {
                   {/* top row — number + tag */}
                   <div className="flex items-center justify-between">
                     <span
-                      className="font-syne text-xs font-bold tracking-[0.18em] text-gray-300 dark:text-white/15"
+                      className="text-xs font-bold tracking-[0.18em] text-gray-300 dark:text-white/15"
                     >
                       {f.number}
                     </span>
@@ -152,7 +152,7 @@ export default function FeaturesSection() {
 
                   {/* title */}
                   <h3
-                    className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
+                    className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
                   >
                     {f.title}
                   </h3>

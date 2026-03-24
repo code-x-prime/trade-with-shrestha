@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { BookOpen, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import CourseCard from '@/components/cards/CourseCard';
-import CoursesHero from '@/components/listing-heroes/CoursesHero';
+import PageHero from '@/components/sections/PageHero';
 import SearchInput from '@/components/SearchInput';
 import { Pagination } from '@/components/ui/pagination';
 import { Filters } from '@/components/ui/filters';
@@ -199,50 +199,62 @@ function CoursesPageContent() {
   }, [updateURL]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <CoursesHero />
-
-      {/* Search */}
-      <div className="mb-6">
-        <SearchInput
-          placeholder="Search courses..."
-          onSearch={handleSearch}
-          debounceMs={500}
-          defaultValue={search}
-        />
-      </div>
-
-      {/* Filters and Sort */}
-      <div className="mb-6">
-        <Filters
-          filters={[
-            {
-              key: 'isFree',
-              label: 'Price',
-              value: filters.isFree,
-              options: [
-                { value: 'true', label: 'Free' },
-                { value: 'false', label: 'Paid' },
-              ],
-            },
-          ]}
-          sortOptions={SORT_OPTIONS}
-          selectedSort={sort}
-          onSortChange={handleSortChange}
-          onFilterChange={handleFilterChange}
-          onClearFilters={handleClearFilters}
-        />
-      </div>
-
-      {/* Results Count */}
-      {!loading && pagination && (
-        <div className="mb-4 text-sm text-muted-foreground dark:text-gray-400">
-          Showing {((page - 1) * limit) + 1} - {Math.min(page * limit, pagination.total)} of {pagination.total} courses
+    <div className="min-h-screen bg-background">
+      <PageHero
+        eyebrow="Learn at Your Pace"
+        title="Explore Our"
+        titleHighlight="Courses"
+        highlightPosition="end"
+        description="Master in-demand skills with structured courses from industry experts."
+        primaryBtn={{ text: 'Browse Courses', href: '#courses' }}
+        stats={[
+          { value: '50+', label: 'Courses' },
+          { value: '10K+', label: 'Students' },
+          { value: '4.8★', label: 'Rating' },
+        ]}
+      />
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Search */}
+        <div className="mb-6">
+          <SearchInput
+            placeholder="Search courses..."
+            onSearch={handleSearch}
+            debounceMs={500}
+            defaultValue={search}
+          />
         </div>
-      )}
 
-      {/* Error State */}
-      {error && !loading && (
+        {/* Filters and Sort */}
+        <div className="mb-6">
+          <Filters
+            filters={[
+              {
+                key: 'isFree',
+                label: 'Price',
+                value: filters.isFree,
+                options: [
+                  { value: 'true', label: 'Free' },
+                  { value: 'false', label: 'Paid' },
+                ],
+              },
+            ]}
+            sortOptions={SORT_OPTIONS}
+            selectedSort={sort}
+            onSortChange={handleSortChange}
+            onFilterChange={handleFilterChange}
+            onClearFilters={handleClearFilters}
+          />
+        </div>
+
+        {/* Results Count */}
+        {!loading && pagination && (
+          <div className="mb-4 text-sm text-muted-foreground dark:text-gray-400">
+            Showing {((page - 1) * limit) + 1} - {Math.min(page * limit, pagination.total)} of {pagination.total} courses
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
         <Card className="rounded-2xl mb-6 border-destructive dark:bg-gray-800 dark:border-red-900/50">
           <CardContent className="py-12 text-center">
             <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
@@ -253,10 +265,10 @@ function CoursesPageContent() {
             </Button>
           </CardContent>
         </Card>
-      )}
+        )}
 
-      {/* Loading State */}
-      {loading ? (
+        {/* Loading State */}
+        {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <Card key={i} className="rounded-2xl dark:bg-gray-900 dark:border-gray-800">
@@ -269,7 +281,7 @@ function CoursesPageContent() {
             </Card>
           ))}
         </div>
-      ) : courses.length === 0 ? (
+        ) : courses.length === 0 ? (
         <Card className="rounded-2xl dark:bg-gray-800 dark:border-gray-700">
           <CardContent className="py-12 text-center">
             <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4 dark:text-gray-500" />
@@ -281,9 +293,9 @@ function CoursesPageContent() {
             </p>
           </CardContent>
         </Card>
-      ) : (
+        ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+          <div id="courses" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
             {courses.map((course) => (
               <CourseCard
                 key={course.id}
@@ -304,7 +316,8 @@ function CoursesPageContent() {
             />
           )}
         </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

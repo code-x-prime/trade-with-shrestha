@@ -9,7 +9,8 @@ function stripHtml(html) {
 }
 
 export async function generateMetadata({ params }) {
-  const indicator = await getIndicatorBySlug(params.slug);
+  const { slug } = await params;
+  const indicator = await getIndicatorBySlug(slug);
   
   if (!indicator) {
     return {
@@ -40,7 +41,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function IndicatorDetailPage({ params }) {
-  const indicator = await getIndicatorBySlug(params.slug);
+  const { slug } = await params;
+  const indicator = await getIndicatorBySlug(slug);
 
   if (!indicator) {
     notFound();

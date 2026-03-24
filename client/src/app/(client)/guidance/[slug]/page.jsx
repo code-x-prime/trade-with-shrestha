@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import GuidanceDetailClient from '@/components/GuidanceDetailClient';
 
 export async function generateMetadata({ params }) {
-  const guidance = await getGuidanceBySlug(params.slug);
+  const { slug } = await params;
+  const guidance = await getGuidanceBySlug(slug);
   
   if (!guidance) {
     return {
@@ -18,7 +19,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function GuidanceDetailPage({ params }) {
-  const guidance = await getGuidanceBySlug(params.slug);
+  const { slug } = await params;
+  const guidance = await getGuidanceBySlug(slug);
 
   if (!guidance) {
     notFound();

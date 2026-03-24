@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import JobCard from '@/components/cards/JobCard';
+import PageHero from '@/components/sections/PageHero';
 
 export default function JobListingPage() {
   const [jobs, setJobs] = useState([]);
@@ -114,33 +115,18 @@ export default function JobListingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-black">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <PageHero
+        eyebrow="500+ Openings"
+        title="Software"
+        titleHighlight="Jobs"
+        highlightPosition="end"
+        description="Browse top software and tech job openings matched to your skills."
+        primaryBtn={{ text: 'Browse Jobs', href: '#jobs' }}
+      />
 
-      {/* Hero Header */}
-      <section className="bg-indigo-700 text-white pt-32 pb-20 px-6"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(67, 56, 202, 0.4), rgba(67, 56, 202, 0.4)), url(/Career.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
+      <section className="pt-8 pb-10 px-6 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto text-center">
-            <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-4xl md:text-5xl font-bold mb-4"
-            >
-                Find Your Next Career Move
-            </motion.h1>
-            <motion.p
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ delay: 0.1 }}
-                className="text-indigo-100 text-lg md:text-xl max-w-2xl mx-auto mb-8"
-            >
-                Browse latest openings in software, design, and engineering.
-            </motion.p>
 
             {/* Search Bar */}
             <motion.form 
@@ -148,7 +134,7 @@ export default function JobListingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 onSubmit={handleSearch}
-                className="max-w-3xl mx-auto bg-white dark:bg-zinc-900 rounded-full p-2 pl-4 md:pl-6 flex shadow-2xl items-center border border-transparent focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all dark:shadow-indigo-900/10 w-full"
+                className="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-full p-2 pl-4 md:pl-6 flex shadow-2xl items-center border border-gray-200 dark:border-gray-800 focus-within:border-yellow-500/50 focus-within:ring-4 focus-within:ring-yellow-500/10 transition-all w-full"
             >
                 <FiSearch className="text-xl text-gray-400 flex-shrink-0" />
                 <input 
@@ -158,7 +144,7 @@ export default function JobListingPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Button type="submit" size="lg" className="rounded-full px-4 md:px-8 bg-indigo-600 hover:bg-indigo-700 text-white h-10 md:h-12 shadow-md hover:shadow-lg transition-all flex-shrink-0">
+                <Button type="submit" size="lg" className="rounded-full px-4 md:px-8 bg-yellow-500 hover:bg-yellow-400 text-black h-10 md:h-12 shadow-md hover:shadow-lg transition-all flex-shrink-0 font-semibold">
                   <FiSearch className="md:mr-2 w-4 h-4 md:w-5 md:h-5" />
                    <span className='hidden md:block'>Search</span>
                 </Button>
@@ -167,10 +153,10 @@ export default function JobListingPage() {
       </section>
 
       {/* Jobs List */}
-      <section className="py-16 px-6">
+      <section id="jobs" className="py-16 px-6 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-5xl mx-auto">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold dark:text-white">Latest Openings</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Latest Openings</h2>
                 <div className="flex gap-2">
                     <Button 
                       variant={showFilters ? "default" : "outline"} 
@@ -189,12 +175,12 @@ export default function JobListingPage() {
 
             {/* Filter Panel */}
             {showFilters && (
-              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 mb-6">
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 mb-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Job Type</label>
+                    <label className="text-sm font-medium mb-2 block text-gray-900 dark:text-white">Job Type</label>
                     <select 
-                      className="w-full px-3 py-2 border rounded-lg dark:bg-zinc-800 dark:border-zinc-700"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                       value={filters.type}
                       onChange={(e) => handleFilterChange('type', e.target.value)}
                     >
@@ -211,20 +197,20 @@ export default function JobListingPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Location</label>
+                    <label className="text-sm font-medium mb-2 block text-gray-900 dark:text-white">Location</label>
                     <input 
                       type="text"
                       placeholder="e.g. New York, Remote"
-                      className="w-full px-3 py-2 border rounded-lg dark:bg-zinc-800 dark:border-zinc-700"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                       value={filters.location}
                       onChange={(e) => handleFilterChange('location', e.target.value)}
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Experience</label>
+                    <label className="text-sm font-medium mb-2 block text-gray-900 dark:text-white">Experience</label>
                     <select 
-                      className="w-full px-3 py-2 border rounded-lg dark:bg-zinc-800 dark:border-zinc-700"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                       value={filters.experience}
                       onChange={(e) => handleFilterChange('experience', e.target.value)}
                     >
@@ -248,7 +234,7 @@ export default function JobListingPage() {
                     {jobs.map((job) => <JobCard key={job.id} job={job} />)}
                 </div>
             ) : (
-                <div className="text-center py-20 bg-white dark:bg-zinc-900 rounded-xl border border-dashed border-gray-300 dark:border-zinc-800">
+                <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-xl border border-dashed border-gray-300 dark:border-gray-800">
                     <FiBriefcase className="mx-auto text-4xl text-gray-300 mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200">No jobs found</h3>
                     <p className="text-gray-500">Try adjusting your search criteria</p>
@@ -263,14 +249,14 @@ export default function JobListingPage() {
       </section>
 
       {/* Post Job CTA */}
-      <section className="bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 py-16">
+      <section className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-16">
          <div className="max-w-4xl mx-auto text-center px-6">
             <h2 className="text-3xl font-bold mb-4 dark:text-white">Hiring? Post a Job Today</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-xl mx-auto">
                 Reach thousands of qualified candidates. Post your job opening in minutes and verify your listing.
             </p>
             <Link href="/career/post-job">
-                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white px-8">
+                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-400 text-black px-8 font-semibold">
                     Post a Job for Free
                 </Button>
             </Link>

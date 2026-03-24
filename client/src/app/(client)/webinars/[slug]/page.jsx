@@ -3,7 +3,8 @@ import WebinarDetailClient from '@/components/WebinarDetailClient';
 import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }) {
-  const webinar = await getWebinarBySlug(params.slug);
+  const { slug } = await params;
+  const webinar = await getWebinarBySlug(slug);
 
   if (!webinar) {
     return {
@@ -34,7 +35,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function WebinarDetailPage({ params }) {
-  const webinar = await getWebinarBySlug(params.slug);
+  const { slug } = await params;
+  const webinar = await getWebinarBySlug(slug);
 
   if (!webinar) {
     notFound();

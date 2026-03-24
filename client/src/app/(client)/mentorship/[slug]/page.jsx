@@ -3,7 +3,8 @@ import { getMentorshipBySlug } from '@/lib/server-api';
 import MentorshipDetailClient from '@/components/MentorshipDetailClient';
 
 export async function generateMetadata({ params }) {
-  const mentorship = await getMentorshipBySlug(params.slug);
+  const { slug } = await params;
+  const mentorship = await getMentorshipBySlug(slug);
   
   if (!mentorship) {
     return {
@@ -23,7 +24,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function MentorshipDetailPage({ params }) {
-  const mentorship = await getMentorshipBySlug(params.slug);
+  const { slug } = await params;
+  const mentorship = await getMentorshipBySlug(slug);
 
   if (!mentorship) {
     notFound();

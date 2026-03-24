@@ -41,7 +41,7 @@ const DESIGN_PRESETS = [
   { id: 'classic', name: 'Classic Violet', primaryColor: '#6366F1', secondaryColor: '#A5B4FC' },
   { id: 'gold', name: 'Royal Gold', primaryColor: '#B8860B', secondaryColor: '#FFD700' },
   { id: 'emerald', name: 'Emerald', primaryColor: '#059669', secondaryColor: '#34D399' },
-  { id: 'navy', name: 'Navy Blue', primaryColor: '#1E3A5F', secondaryColor: '#3B82F6' },
+  { id: 'navy', name: 'Black Gold', primaryColor: '#0A0A0A', secondaryColor: '#D4AF37' },
   { id: 'rose', name: 'Rose Pink', primaryColor: '#BE185D', secondaryColor: '#F472B6' },
   { id: 'custom', name: 'Custom', primaryColor: '#6366F1', secondaryColor: '#A5B4FC' },
 ];

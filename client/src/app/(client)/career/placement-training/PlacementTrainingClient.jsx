@@ -36,7 +36,7 @@ import {
   Loader2,
   CheckCircle2,
 } from 'lucide-react';
-import ListingHero from '@/components/listing-heroes/ListingHero';
+import PageHero from '@/components/sections/PageHero';
 import { placementTrainingAPI } from '@/lib/api';
 import { toast } from 'sonner';
 import Image from 'next/image';
@@ -177,26 +177,17 @@ export default function PlacementTrainingPage() {
           ← Career
         </Link>
       </div>
-      <div className="max-w-7xl mx-auto px-4">
-        <ListingHero
-          badge="Training"
-          badgeColor="pink"
-          title="Placement Assistance Training"
-          description="Launch your IT career with structured training + placement support from Shrestha Academy."
-          features={[
-            { icon: ShieldCheck, text: 'Job-ready skills & interview prep' },
-            { icon: Sparkles, text: 'Dedicated placement support' },
-          ]}
-          ctaText="One‑Click Apply"
-          ctaLink="#register"
-          gradientFrom="from-violet-600"
-          gradientVia="via-fuchsia-600"
-          gradientTo="to-pink-700"
-        />
-      </div>
+      <PageHero
+        eyebrow="Expert Mentors"
+        title="Placement"
+        titleHighlight="Training"
+        highlightPosition="end"
+        description="Structured training to make you job-ready from day one."
+        primaryBtn={{ text: 'Get Started', href: '#training' }}
+      />
 
       {/* Stats */}
-      <section className="max-w-6xl mx-auto px-4 py-10">
+      <section id="training" className="max-w-6xl mx-auto px-4 py-10">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STATS.map((s) => {
             const Icon = s.icon;
@@ -204,7 +195,7 @@ export default function PlacementTrainingPage() {
               <Card key={s.title} className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur">
                 <CardContent className="p-5">
                   <div className="flex items-start gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400 flex items-center justify-center">
+                    <div className="h-10 w-10 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
@@ -223,7 +214,7 @@ export default function PlacementTrainingPage() {
         {/* Left content */}
         <div className="lg:col-span-7 space-y-8">
           {/* Banner placeholder */}
-          <Card className="rounded-3xl border border-border/80 bg-gradient-to-br from-fuchsia-600/10 via-background to-violet-600/10 overflow-hidden">
+          <Card className="rounded-3xl border border-border/80 bg-gradient-to-br from-brand-600/10 via-background to-brand-500/10 overflow-hidden">
             <CardContent className="p-6">
               <div className="flex items-center justify-center  flex-wrap gap-4">
                 <div>
@@ -253,7 +244,7 @@ export default function PlacementTrainingPage() {
               <div className="mt-5 grid gap-3">
                 {WHAT_YOU_GET.map((t) => (
                   <div key={t} className="flex gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-5 w-5 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" />
                     <p className="text-sm text-foreground/90">{t}</p>
                   </div>
                 ))}
@@ -353,7 +344,7 @@ export default function PlacementTrainingPage() {
         {/* Right registration card */}
         <div id="register" className="lg:col-span-5">
           <Card className="rounded-3xl border-2 border-border/80 bg-card shadow-xl shadow-black/5 dark:shadow-none overflow-hidden sticky top-6">
-            <div className="px-6 md:px-8 py-5 bg-gradient-to-r from-violet-600/10 to-fuchsia-600/10 border-b border-border/60">
+            <div className="px-6 md:px-8 py-5 bg-gradient-to-r from-brand-600/10 to-brand-500/10 border-b border-border/60">
               <p className="text-xs text-muted-foreground">Register Image</p>
               <h3 className="text-xl font-bold mt-1">Placement Training Registration</h3>
               <p className="text-sm text-muted-foreground mt-1">
@@ -414,7 +405,7 @@ export default function PlacementTrainingPage() {
                     <Label>Hiring / Learning Notes (optional)</Label>
                     <Textarea value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} placeholder="Anything you'd like us to know" className="rounded-xl resize-none" rows={3} />
                   </div>
-                  <Button type="submit" disabled={submitting} className="w-full h-12 rounded-xl bg-fuchsia-600 hover:bg-fuchsia-700 font-semibold">
+                  <Button type="submit" disabled={submitting} className="w-full h-12 rounded-xl bg-brand-600 hover:bg-brand-700 font-semibold">
                     {submitting ? (<><Loader2 className="h-5 w-5 animate-spin mr-2" /> Sending OTP…</>) : 'One‑Click Apply'}
                   </Button>
                 </form>
@@ -429,7 +420,7 @@ export default function PlacementTrainingPage() {
                     <Label>OTP *</Label>
                     <Input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="6-digit OTP" className="h-11 rounded-xl tracking-widest text-center" />
                   </div>
-                  <Button type="submit" disabled={verifying} className="w-full h-12 rounded-xl bg-fuchsia-600 hover:bg-fuchsia-700 font-semibold">
+                  <Button type="submit" disabled={verifying} className="w-full h-12 rounded-xl bg-brand-600 hover:bg-brand-700 font-semibold">
                     {verifying ? (<><Loader2 className="h-5 w-5 animate-spin mr-2" /> Verifying…</>) : 'Verify OTP'}
                   </Button>
                   <Button type="button" variant="outline" className="w-full rounded-xl" onClick={() => { setStep('form'); setOtp(''); }}>

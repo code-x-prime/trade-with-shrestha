@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, Video, MessageCircle, Loader2 } from 'lucide-react';
 import BookDemoDialog from '@/components/BookDemoDialog';
-import TrainingScheduleHero from '@/components/listing-heroes/TrainingScheduleHero';
+import PageHero from '@/components/sections/PageHero';
 
 const TRAINING_TYPE_FILTERS = [
   { value: '', label: 'All' },
@@ -86,10 +86,14 @@ function TrainingScheduleContent() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Banner – same style as Courses / other listing pages */}
-      <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
-        <TrainingScheduleHero />
-      </div>
+      <PageHero
+        eyebrow="Free Demos"
+        title="Training"
+        titleHighlight="Schedule"
+        highlightPosition="end"
+        description="Join upcoming online demos — no signup needed."
+        primaryBtn={{ text: 'View Schedule', href: '#schedule' }}
+      />
 
       {/* Schedule section */}
       <section id="schedule" className="max-w-5xl mx-auto px-4 py-6 pb-10" aria-label="Demo schedule">
@@ -228,9 +232,6 @@ export default function TrainingSchedulePage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
-          <TrainingScheduleHero />
-        </div>
         <div className="max-w-5xl mx-auto px-4 py-6 pb-10 flex justify-center items-center">
             <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
         </div>

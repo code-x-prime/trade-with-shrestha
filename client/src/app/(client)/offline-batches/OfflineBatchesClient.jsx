@@ -12,7 +12,7 @@ import { MapPin, Calendar, Clock, Users, ArrowRight, Zap, AlertCircle } from 'lu
 import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import OfflineBatchesHero from '@/components/listing-heroes/OfflineBatchesHero';
+import PageHero from '@/components/sections/PageHero';
 import SearchInput from '@/components/SearchInput';
 import { Pagination } from '@/components/ui/pagination';
 import { Filters } from '@/components/ui/filters';
@@ -235,8 +235,15 @@ function OfflineBatchesPageContent() {
 
     return (
         <div className="min-h-screen bg-background">
+            <PageHero
+                    eyebrow="Classroom Learning"
+                    title="Offline"
+                    titleHighlight="Batches"
+                    highlightPosition="end"
+                    description="Learn in a structured classroom environment with live mentors."
+                    primaryBtn={{ text: 'View Batches', href: '#batches' }}
+            />
             <div className="max-w-7xl mx-auto px-4 py-8">
-                <OfflineBatchesHero />
 
                 {/* Search */}
                 <div className="mb-6">
@@ -315,7 +322,7 @@ function OfflineBatchesPageContent() {
                     </Card>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div id="batches" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                             {batches.map((batch) => {
                                 const pricing = getBatchPricing(batch);
                                 const isPurchased = purchaseStatus[`OFFLINE_BATCH_${batch.id}`] || false;

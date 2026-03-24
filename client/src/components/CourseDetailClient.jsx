@@ -205,6 +205,10 @@ export default function CourseDetailClient({ course: initialCourse }) {
   const showBookDemo = deliveryMode === 'ONLINE' || deliveryMode === 'BOTH';
   const showSelfPaced = deliveryMode === 'SELF_PACED' || deliveryMode === 'BOTH';
   const benefitsList = course.benefits && Array.isArray(course.benefits) ? course.benefits : [];
+  const totalEnrollments = course?._count?.enrollments || 0;
+  const categoryNames = (course?.categories || [])
+    .map((item) => item?.category?.name)
+    .filter(Boolean);
 
   if (!course) {
     return (
@@ -218,9 +222,11 @@ export default function CourseDetailClient({ course: initialCourse }) {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-gray-950">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white dark:from-gray-950 dark:via-gray-950 dark:to-gray-950">
       {/* Hero Section - Academic Style */}
-      <div className="bg-gradient-to-br from-brand-50 via-white to-brand-50/30 border-b dark:from-black dark:via-gray-900 dark:to-brand-950/80 dark:border-gray-800">
+      <div className="relative overflow-hidden bg-gradient-to-br from-amber-50/70 via-white to-yellow-50/40 border-b border-amber-100 dark:from-black dark:via-gray-900 dark:to-gray-950 dark:border-gray-800">
+        <div className="pointer-events-none absolute -top-28 -left-16 h-64 w-64 rounded-full bg-yellow-200/40 blur-3xl dark:bg-yellow-500/10" />
+        <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl dark:bg-yellow-500/10" />
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
           <Breadcrumb items={[
             { label: 'Home', href: '/' },
@@ -228,52 +234,71 @@ export default function CourseDetailClient({ course: initialCourse }) {
             { label: course.title },
           ]} />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 relative z-10">
             {/* Main Hero Content */}
             <div className="lg:col-span-2 space-y-6">
               {/* Course Title & Meta */}
               <div className="space-y-4">
                 <div>
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 dark:text-white">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">
                     {course.title}
                   </h1>
-                  <p className="text-lg text-muted-foreground dark:text-gray-400 max-w-2xl">
+                  <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
                     Master {course.title.toLowerCase()} with structured learning, expert guidance, and hands-on practice.
                   </p>
                 </div>
 
                 {/* Meta Info */}
                 <div className="flex flex-wrap items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border dark:bg-gray-800 dark:border-gray-700">
-                    <Globe className="h-4 w-4 text-brand-600 dark:text-brand-400" />
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                    <Globe className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
                     <span className="font-medium dark:text-gray-200">{getLanguageLabel(course.language)}</span>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border dark:bg-gray-800 dark:border-gray-700">
-                    <BookOpen className="h-4 w-4 text-brand-600 dark:text-brand-400" />
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                    <BookOpen className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
                     <span className="font-medium dark:text-gray-200">{totalChapters} Chapters</span>
                   </div>
                   {reviews.length > 0 && (
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border dark:bg-gray-800 dark:border-gray-700">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-yellow-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                      <Star className="h-4 w-4 fill-yellow-700 text-yellow-700 dark:fill-yellow-400 dark:text-yellow-400" />
                       <span className="font-medium dark:text-gray-200">{averageRating.toFixed(1)} ({reviews.length})</span>
                     </div>
                   )}
+                  {totalEnrollments > 0 && (
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                      <Award className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                      <span className="font-medium dark:text-gray-200">{totalEnrollments}+ Enrolled</span>
+                    </div>
+                  )}
                 </div>
+                {categoryNames.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {categoryNames.slice(0, 4).map((name) => (
+                      <Badge
+                        key={name}
+                        variant="outline"
+                        className="rounded-full border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-500/30 dark:bg-yellow-500/10 dark:text-yellow-400"
+                      >
+                        {name}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Progress Card (if enrolled) */}
               {enrollmentStatus.isEnrolled && progress && (
-                <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 dark:from-blue-900/20 dark:to-indigo-900/20 dark:border-blue-900">
+                <Card className="bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 dark:from-yellow-500/10 dark:to-yellow-500/5 dark:border-yellow-500/30">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <Award className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        <span className="font-semibold text-blue-900 dark:text-blue-100">Your Learning Progress</span>
+                        <Award className="h-5 w-5 text-yellow-700 dark:text-yellow-400" />
+                        <span className="font-semibold text-yellow-900 dark:text-yellow-100">Your Learning Progress</span>
                       </div>
-                      <span className="text-2xl font-bold text-blue-900 dark:text-blue-100">{Math.round(overallProgress)}%</span>
+                      <span className="text-2xl font-bold text-yellow-900 dark:text-yellow-100">{Math.round(overallProgress)}%</span>
                     </div>
                     <Progress value={overallProgress} className="h-3 mb-2" />
-                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
                       {completedChapters} of {totalChapters} chapters completed
                     </p>
                   </CardContent>
@@ -361,13 +386,14 @@ export default function CourseDetailClient({ course: initialCourse }) {
           <div className="lg:col-span-2 space-y-8">
             {/* Cover Image */}
             {(course.coverImageUrl || course.coverImage) && (
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 shadow-lg dark:border-gray-800">
+              <div className="group relative w-full aspect-video rounded-2xl overflow-hidden border border-gray-200 shadow-xl dark:border-gray-800">
                 <Image
                   src={getPublicUrl(course.coverImageUrl || course.coverImage)}
                   alt={course.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/40" />
               </div>
             )}
 
@@ -404,8 +430,8 @@ export default function CourseDetailClient({ course: initialCourse }) {
               {course.sessions && course.sessions.length > 0 && (
                 <div className="space-y-4">
                   {course.sessions.map((session) => (
-                    <Card key={session.id} className="border-2 hover:border-brand-200 transition-colors dark:bg-gray-900 dark:border-gray-800 dark:hover:border-brand-800">
-                      <CardContent className="p-6">
+                    <Card key={session.id} className="border border-gray-200 hover:border-yellow-300 shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:border-yellow-500/30">
+                      <CardContent className="p-4 sm:p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
@@ -416,7 +442,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                                 <Badge variant="outline" className="bg-gray-100 dark:bg-gray-800 dark:text-gray-400">Draft</Badge>
                               )}
                             </div>
-                            <h3 className="text-xl font-bold mb-2 dark:text-white">{session.title}</h3>
+                            <h3 className="text-lg sm:text-xl font-bold mb-2 dark:text-white">{session.title}</h3>
                             {session.description && (
                               <div
                                 className="text-muted-foreground line-clamp-2 dark:text-gray-400 prose prose-sm max-w-none dark:prose-invert"
@@ -435,10 +461,10 @@ export default function CourseDetailClient({ course: initialCourse }) {
                               return (
                                 <div
                                   key={chapter.id}
-                                  className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isLocked ? 'bg-muted/50 opacity-60 dark:bg-gray-800/50 dark:border-gray-800' : isCompleted ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : 'hover:bg-muted border-border dark:border-gray-800 dark:hover:bg-gray-800'
+                                  className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-xl border transition-colors ${isLocked ? 'bg-muted/50 opacity-60 dark:bg-gray-800/50 dark:border-gray-800' : isCompleted ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : 'hover:bg-muted border-border dark:border-gray-800 dark:hover:bg-gray-800'
                                     }`}
                                 >
-                                  <div className="flex items-center gap-3 flex-1">
+                                  <div className="flex items-start gap-3 flex-1 min-w-0">
                                     {showVideoIcon ? (
                                       <Video className="h-5 w-5 text-brand-600 dark:text-brand-400 flex-shrink-0" />
                                     ) : isCompleted ? (
@@ -450,16 +476,18 @@ export default function CourseDetailClient({ course: initialCourse }) {
                                         <div className="h-2 w-2 rounded-full bg-brand-600 dark:bg-brand-400" />
                                       </div>
                                     )}
-                                    <span className="font-medium dark:text-gray-200">
-                                      {chapter.order}. {chapter.title}
-                                    </span>
-                                    {chapter.isFreePreview && (
-                                      <Badge variant="outline" className="text-xs dark:text-gray-300 dark:border-gray-700">Free Preview</Badge>
-                                    )}
+                                    <div className="min-w-0">
+                                      <p className="font-medium dark:text-gray-200 break-words">
+                                        {chapter.order}. {chapter.title}
+                                      </p>
+                                      {chapter.isFreePreview && (
+                                        <Badge variant="outline" className="mt-1 text-[11px] shrink-0 dark:text-gray-300 dark:border-gray-700">Free Preview</Badge>
+                                      )}
+                                    </div>
                                   </div>
                                   {!isLocked && enrollmentStatus.isEnrolled && (
-                                    <Link href={`/courses/${course.slug}/learn?chapter=${chapter.id}`}>
-                                      <Button size="sm" variant="ghost">
+                                    <Link href={`/courses/${course.slug}/learn?chapter=${chapter.id}`} className="w-full sm:w-auto">
+                                      <Button size="sm" variant="ghost" className="w-full sm:w-auto hover:bg-yellow-100 hover:text-yellow-800 dark:hover:bg-yellow-500/10 dark:hover:text-yellow-400">
                                         <Play className="h-4 w-4 mr-1" />
                                         Watch
                                       </Button>
@@ -516,7 +544,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                               >
                                 <Star
                                   className={`h-6 w-6 ${star <= reviewForm.rating
-                                      ? 'fill-yellow-400 text-yellow-400'
+                                      ? 'fill-yellow-700 text-yellow-700 dark:fill-yellow-400 dark:text-yellow-400'
                                       : 'text-gray-300'
                                     }`}
                                 />
@@ -568,7 +596,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
               ) : (
                 <div className="space-y-4">
                   {reviews.map((review) => (
-                    <Card key={review.id} className="dark:bg-gray-900 dark:border-gray-800">
+                    <Card key={review.id} className="border border-gray-200 shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           {review.user.avatarUrl ? (
@@ -580,30 +608,30 @@ export default function CourseDetailClient({ course: initialCourse }) {
                               height={360}
                             />
                           ) : (
-                            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-brand-600 to-brand-700 flex items-center justify-center text-white font-semibold text-lg">
+                            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-yellow-700 to-amber-600 dark:from-yellow-500 dark:to-amber-400 flex items-center justify-center text-white dark:text-black font-semibold text-lg">
                               {review.user.name?.charAt(0)?.toUpperCase() || 'U'}
                             </div>
                           )}
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-semibold text-lg dark:text-white">{review.user.name || 'Anonymous'}</h3>
-                              <div className="flex gap-1">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                  <Star
-                                    key={star}
-                                    className={`h-4 w-4 ${star <= review.rating
-                                        ? 'fill-yellow-400 text-yellow-400'
-                                        : 'text-gray-300 dark:text-gray-600'
-                                      }`}
-                                  />
-                                ))}
-                              </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                              <h3 className="font-semibold text-base sm:text-lg dark:text-white truncate">{review.user.name || 'Anonymous'}</h3>
                               <span className="text-sm text-muted-foreground dark:text-gray-400">
                                 {new Date(review.createdAt).toLocaleDateString()}
                               </span>
                             </div>
+                            <div className="flex items-center gap-1 mb-2">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <Star
+                                    key={star}
+                                    className={`h-4 w-4 ${star <= review.rating
+                                        ? 'fill-yellow-700 text-yellow-700 dark:fill-yellow-400 dark:text-yellow-400'
+                                        : 'text-gray-300 dark:text-gray-600'
+                                      }`}
+                                  />
+                                ))}
+                            </div>
                             {review.comment && (
-                              <p className="text-muted-foreground dark:text-gray-400">{review.comment}</p>
+                              <p className="text-muted-foreground dark:text-gray-400 leading-relaxed break-words">{review.comment}</p>
                             )}
                           </div>
                         </div>

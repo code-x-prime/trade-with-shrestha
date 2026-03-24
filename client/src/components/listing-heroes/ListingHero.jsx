@@ -16,11 +16,11 @@ export default function ListingHero({
   gradientTo = 'to-brand-800',
 }) {
   const badgeColors = {
-    green: 'bg-green-400',
-    blue: 'bg-blue-400',
-    purple: 'bg-purple-400',
-    orange: 'bg-orange-400',
-    pink: 'bg-pink-400',
+    green: 'bg-brand-400',
+    blue: 'bg-brand-400',
+    purple: 'bg-brand-400',
+    orange: 'bg-brand-400',
+    pink: 'bg-brand-400',
   };
 
   return (

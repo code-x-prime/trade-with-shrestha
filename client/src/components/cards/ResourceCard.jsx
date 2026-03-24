@@ -186,7 +186,6 @@ export default function ResourceCard({
             {/* title */}
             <h3
               className="text-2xl font-extrabold leading-tight tracking-tight text-white"
-              style={{ fontFamily: "'Syne', sans-serif" }}
             >
               {title}
             </h3>

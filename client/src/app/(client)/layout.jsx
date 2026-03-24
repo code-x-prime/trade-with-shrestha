@@ -24,7 +24,7 @@ export default function ClientLayout({ children }) {
         <Navbar />
         {isHomePage && <FlashSaleBanner />}
       </header>
-      <main className="pb-16 md:pb-0">{children}</main>
+      <main className="pb-20 md:pb-0">{children}</main>
       <Footer />
       <BottomNavbar />
       <CouponPopup />

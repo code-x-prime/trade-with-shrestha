@@ -10,7 +10,7 @@ import { Video, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import SearchInput from '@/components/SearchInput';
 import WebinarCard from '@/components/cards/WebinarCard';
-import WebinarsHero from '@/components/listing-heroes/WebinarsHero';
+import PageHero from '@/components/sections/PageHero';
 import { Pagination } from '@/components/ui/pagination';
 import { Filters } from '@/components/ui/filters';
 
@@ -182,21 +182,29 @@ function WebinarsPageContent() {
   }, [updateURL]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <WebinarsHero />
+    <div className="min-h-screen bg-background">
+      <PageHero
+        eyebrow="Live Sessions"
+        title="Upcoming"
+        titleHighlight="Webinars"
+        highlightPosition="end"
+        description="Join live expert sessions with real-time Q&A."
+        primaryBtn={{ text: 'Join Now', href: '#webinars' }}
+      />
+      <div className="max-w-7xl mx-auto px-4 py-8">
 
-      {/* Search */}
-      <div className="mb-6">
+        {/* Search */}
+        <div className="mb-6">
         <SearchInput
           placeholder="Search webinars..."
           onSearch={handleSearch}
           debounceMs={500}
           defaultValue={search}
         />
-      </div>
+        </div>
 
-      {/* Filters and Sort */}
-      <div className="mb-6">
+        {/* Filters and Sort */}
+        <div className="mb-6">
         <Filters
           filters={[
             {
@@ -212,17 +220,17 @@ function WebinarsPageContent() {
           onFilterChange={handleFilterChange}
           onClearFilters={handleClearFilters}
         />
-      </div>
+        </div>
 
-      {/* Results Count */}
-      {!loading && pagination && (
+        {/* Results Count */}
+        {!loading && pagination && (
         <div className="mb-4 text-sm text-muted-foreground dark:text-gray-400">
           Showing {((page - 1) * limit) + 1} - {Math.min(page * limit, webinars.length)} of {webinars.length} webinars
         </div>
-      )}
+        )}
 
-      {/* Error State */}
-      {error && !loading && (
+        {/* Error State */}
+        {error && !loading && (
         <Card className="rounded-2xl mb-6 border-destructive dark:bg-gray-800 dark:border-red-900/50">
           <CardContent className="py-12 text-center">
             <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
@@ -236,10 +244,10 @@ function WebinarsPageContent() {
             </button>
           </CardContent>
         </Card>
-      )}
+        )}
 
-      {/* Loading State */}
-      {loading ? (
+        {/* Loading State */}
+        {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <Card key={i} className="rounded-2xl dark:bg-gray-900 dark:border-gray-800">
@@ -252,7 +260,7 @@ function WebinarsPageContent() {
             </Card>
           ))}
         </div>
-      ) : webinars.length === 0 ? (
+        ) : webinars.length === 0 ? (
         <Card className="rounded-2xl dark:bg-gray-800 dark:border-gray-700">
           <CardContent className="py-12 text-center">
             <Video className="h-16 w-16 text-muted-foreground mx-auto mb-4 dark:text-gray-500" />
@@ -264,9 +272,9 @@ function WebinarsPageContent() {
             </p>
           </CardContent>
         </Card>
-      ) : (
+        ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+          <div id="webinars" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
             {webinars.map((webinar) => (
               <WebinarCard
                 key={webinar.id}
@@ -285,7 +293,8 @@ function WebinarsPageContent() {
             />
           )}
         </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

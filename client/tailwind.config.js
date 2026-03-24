@@ -8,28 +8,38 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-jakarta)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+			},
 			colors: {
+				gold: {
+					DEFAULT: '#B45309',
+					light: '#F0C040',
+					dark: '#D4AF37',
+				},
 				brand: {
-					'50': '#f0f1fc',
-					'100': '#e1e3f9',
-					'200': '#c3c7f3',
-					'300': '#a5abed',
-					'400': '#878fe7',
-					'500': '#5C64D7',
-					'600': '#4a50b0',
-					'700': '#383c89',
-					'800': '#262862',
-					'900': '#14143b',
-					DEFAULT: '#5C64D7'
+					'50': '#fff9eb',
+					'100': '#fff1cf',
+					'200': '#ffe39f',
+					'300': '#ffd46f',
+					'400': '#f7c24b',
+					'500': '#d4a63a',
+					'600': '#b98824',
+					'700': '#8f6818',
+					'800': '#664812',
+					'900': '#3d2a0b',
+					DEFAULT: '#d4a63a',
+					dark: '#0A0A0A',
+					card: '#111111',
 				},
 				hero: {
-					primary: '#4A50B0',
-					secondary: '#7c3aed',
-					accent: '#6366f1',
+					primary: '#b98824',
+					secondary: '#d4a63a',
+					accent: '#f7c24b',
 					gradient: {
-						from: '#4A50B0',
-						to: '#7c3aed',
-						via: '#6366f1'
+						from: '#8f6818',
+						to: '#d4a63a',
+						via: '#b98824'
 					}
 				},
 				background: 'hsl(var(--background))',

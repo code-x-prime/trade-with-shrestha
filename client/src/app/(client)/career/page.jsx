@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import PageHero from '@/components/sections/PageHero';
 
 const SECTIONS = [
   {
@@ -39,56 +40,34 @@ const SECTIONS = [
     img: '/card3.png',
     tag: 'Expert Mentors',
     number: '03',
-    borderHover: 'hover:border-violet-500/50',
-    tagCls: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
-    dot: 'bg-violet-400',
-    arrowCls: 'group-hover:text-violet-400',
-    glowCls: 'bg-violet-500',
-    lineCls: 'bg-violet-400',
+    borderHover: 'hover:border-yellow-500/50',
+    tagCls: 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:border-yellow-500/20',
+    dot: 'bg-yellow-500',
+    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
+    glowCls: 'bg-yellow-500',
+    lineCls: 'bg-yellow-500',
   },
 ];
 
 export default function CareerPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#08080E] transition-colors duration-300">
-
-      {/* dark-mode grid pattern */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0 opacity-0 dark:opacity-100 transition-opacity duration-300"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
-          backgroundSize: '56px 56px',
-        }}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+      <PageHero
+        eyebrow="Your Growth Hub"
+        title="Launch Your"
+        titleHighlight="Career"
+        highlightPosition="end"
+        description="Jobs, interview prep, and placement support — everything in one place."
+        primaryBtn={{ text: 'Explore Jobs', href: '/career/software-jobs' }}
+        secondaryBtn={{ text: 'Interview Prep', href: '/career/interview-questions' }}
+        stats={[
+          { value: '500+', label: 'Job Openings' },
+          { value: '1200+', label: 'Interview Questions' },
+          { value: '100%', label: 'Placement Support' },
+        ]}
       />
 
       <div className="relative z-10 mx-auto max-w-6xl px-5 pb-8">
-
-        {/* ── HEADER ── */}
-        <header className="flex flex-col items-center gap-5 pt-8 pb-8 text-center">
-
-          {/* eyebrow pill */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/25 bg-[#d4af37]/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#d4af37]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37] shadow-[0_0_6px_#d4af37]" />
-            Your Growth Hub
-          </div>
-
-          {/* headline */}
-          <h1 className="font-syne text-[clamp(40px,6vw,80px)] font-extrabold leading-none tracking-[-0.04em] text-gray-900 dark:text-white">
-            Crack Your{' '}
-            <span className="bg-gradient-to-r from-[#d4af37] via-[#d4af37] to-[#d4af37] bg-clip-text text-transparent">
-              Dream
-            </span>{' '}
-            Career
-          </h1>
-
-          <p className="max-w-md text-base font-light leading-relaxed text-gray-500 dark:text-white/40">
-            Jobs, interview prep, and placement support — everything in one place.
-          </p>
-
-          <div className="h-px w-20 bg-gradient-to-r from-transparent via-gray-300 dark:via-white/10 to-transparent" />
-        </header>
-
         {/* ── CARDS — teeno bilkul equal size ── */}
         <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SECTIONS.map((s) => (
@@ -97,20 +76,13 @@ export default function CareerPage() {
               href={s.href}
               className={[
                 'group relative flex flex-col overflow-hidden rounded-2xl',
-                'border border-gray-200 dark:border-white/[0.07]',
-                'bg-white dark:bg-[#0F0F1A]',
+                'border border-gray-200 dark:border-gray-800',
+                'bg-white dark:bg-gray-900',
                 'shadow-sm hover:shadow-2xl',
                 'transition-all duration-300',
                 s.borderHover,
               ].join(' ')}
             >
-              {/* hover glow blob top-right */}
-              <div className={[
-                'pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl',
-                'opacity-0 group-hover:opacity-15 transition-opacity duration-500',
-                s.glowCls,
-              ].join(' ')} />
-
               {/* ── IMAGE — fixed height same on all 3 ── */}
               <div className="relative h-52 w-full shrink-0 overflow-hidden">
                 <Image
@@ -120,11 +92,11 @@ export default function CareerPage() {
                   className="object-cover brightness-95 dark:brightness-75 transition-transform duration-500 group-hover:scale-105 dark:group-hover:brightness-90"
                 />
                 {/* gradient fade bottom */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#0F0F1A]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-gray-900" />
 
                 {/* number badge */}
                 <span
-                  className="font-syne absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25"
+                  className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25"
                 >
                   {s.number}
                 </span>
@@ -144,23 +116,23 @@ export default function CareerPage() {
 
                 {/* title */}
                 <h2
-                  className="font-syne text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
+                  className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white"
                 >
                   {s.title}
                 </h2>
 
                 {/* description — flex-1 pushes arrow to bottom */}
-                <p className="flex-1 text-sm font-light leading-relaxed text-gray-500 dark:text-white/40">
+                <p className="flex-1 text-sm font-light leading-relaxed text-gray-600 dark:text-gray-400">
                   {s.description}
                 </p>
 
                 {/* divider */}
-                <div className="h-px w-full bg-gray-100 dark:bg-white/[0.05]" />
+                <div className="h-px w-full bg-gray-100 dark:bg-gray-800" />
 
                 {/* cta arrow */}
                 <div className={[
                   'flex items-center gap-2 text-xs font-medium uppercase tracking-widest',
-                  'text-gray-400 dark:text-white/25 transition-all duration-300',
+                  'text-gray-500 dark:text-gray-500 transition-all duration-300',
                   s.arrowCls,
                 ].join(' ')}>
                   <span className="h-px w-5 bg-current transition-all duration-300 group-hover:w-9" />
@@ -181,10 +153,19 @@ export default function CareerPage() {
           ))}
         </section>
 
+        <div className="text-center mt-10">
+          <Link
+            href="/career/software-jobs"
+            className="inline-flex items-center gap-3 rounded-full bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black hover:bg-yellow-500 dark:hover:bg-yellow-400 px-7 py-3 text-sm font-semibold transition-all duration-300"
+          >
+            Explore career resources
+          </Link>
+        </div>
+
         {/* ── FOOTER ── */}
-        <footer className="mt-16 flex items-center justify-between border-t border-gray-200 dark:border-white/[0.05] pt-8">
+        <footer className="mt-16 flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-8">
           <span
-            className="font-syne text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-300 dark:text-white/15"
+            className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-500"
           >
             Career Portal
           </span>

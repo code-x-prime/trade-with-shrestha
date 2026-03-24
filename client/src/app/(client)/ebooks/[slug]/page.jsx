@@ -9,7 +9,8 @@ function stripHtml(html) {
 }
 
 export async function generateMetadata({ params }) {
-  const ebook = await getEbookBySlug(params.slug);
+  const { slug } = await params;
+  const ebook = await getEbookBySlug(slug);
   
   if (!ebook) {
     return {
@@ -40,7 +41,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function EbookDetailPage({ params }) {
-  const ebook = await getEbookBySlug(params.slug);
+  const { slug } = await params;
+  const ebook = await getEbookBySlug(slug);
 
   if (!ebook) {
     notFound();

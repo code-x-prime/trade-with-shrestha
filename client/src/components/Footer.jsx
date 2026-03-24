@@ -84,7 +84,7 @@ export default function Footer() {
 
   if (loading) {
     return (
-      <footer className="bg-white dark:bg-gray-900 text-slate-900 dark:text-slate-100 border-t border-slate-200 dark:border-gray-800">
+      <footer className="bg-gray-100 dark:bg-gray-950 text-slate-900 dark:text-slate-100 border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="animate-pulse space-y-4">
             <div className="h-8 w-48 bg-slate-200 dark:bg-gray-700 rounded"></div>
@@ -96,7 +96,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 text-slate-700 dark:text-slate-300 border-t border-slate-200 dark:border-gray-800">
+    <footer className="bg-gray-100 dark:bg-gray-950 text-slate-700 dark:text-slate-300 border-t border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
@@ -127,28 +127,19 @@ export default function Footer() {
               <div className="flex flex-wrap gap-2 pt-2">
                 {socialLinks.map((link) => {
                   const IconComponent = link.icon ? iconMap[link.icon] : null;
-                  const linkColor = link.color || '#3b82f6';
-
                   return (
                     <a
                       key={link.id}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:scale-110 hover:shadow-lg border"
-                      style={{
-                        backgroundColor: `${linkColor}15`,
-                        borderColor: linkColor,
-                      }}
+                      className="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:scale-110 hover:shadow-lg border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:text-yellow-700 dark:hover:text-yellow-400 bg-white dark:bg-gray-900"
                       title={link.label}
                     >
                       {IconComponent ? (
-                        <IconComponent
-                          className="h-5 w-5"
-                          style={{ color: linkColor }}
-                        />
+                        <IconComponent className="h-5 w-5" />
                       ) : (
-                        <span className="text-xs font-medium" style={{ color: linkColor }}>
+                        <span className="text-xs font-medium">
                           {link.label.charAt(0)}
                         </span>
                       )}
@@ -172,7 +163,7 @@ export default function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group"
+                      className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors group"
                     >
                       <Icon className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <span>{item.name}</span>
@@ -194,7 +185,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -214,7 +205,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -225,9 +216,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-slate-200 dark:border-gray-800 pt-8 mt-8">
+        <div className="border-t border-gray-200 dark:border-gray-800 pt-8 mt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center md:text-left">
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center md:text-left">
               © {new Date().getFullYear()} Shrestha Academy. All rights reserved.
             </p>
             {socialLinks.length === 0 && (

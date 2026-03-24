@@ -19,8 +19,8 @@ export default function BottomNavbar() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[90] lg:hidden bg-white border-t border-gray-200 shadow-lg safe-area-inset-bottom dark:bg-gray-900 dark:border-gray-800">
-      <div className="flex items-center justify-around h-16 px-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-[90] lg:hidden border-t border-yellow-200 bg-white/95 backdrop-blur-md shadow-[0_-8px_20px_rgba(0,0,0,0.06)] safe-area-inset-bottom dark:bg-gray-900 dark:border-gray-800 dark:shadow-none">
+      <div className="flex items-center justify-around h-16 px-2 pb-1">
         {menuItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
           const Icon = item.icon;
@@ -30,10 +30,10 @@ export default function BottomNavbar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors min-w-0",
+                "relative flex flex-col items-center justify-center gap-1 flex-1 h-full transition-all duration-200 min-w-0 rounded-xl",
                 isActive
-                  ? "text-[#4A50B0] dark:text-[#9ca0ff]"
-                  : "text-gray-600 hover:text-[#4A50B0] dark:text-gray-400 dark:hover:text-[#9ca0ff]"
+                  ? "text-yellow-700 dark:text-yellow-400 bg-yellow-100/80 dark:bg-yellow-500/10"
+                  : "text-gray-600 hover:text-yellow-700 hover:bg-yellow-50 dark:text-gray-400 dark:hover:text-yellow-400 dark:hover:bg-yellow-500/10"
               )}
             >
               <Icon className={cn(
@@ -41,13 +41,13 @@ export default function BottomNavbar() {
                 isActive && "scale-110"
               )} />
               <span className={cn(
-                "text-[10px] font-medium truncate w-full text-center",
+                "text-[11px] font-medium truncate w-full text-center",
                 isActive && "font-semibold"
               )}>
                 {item.name}
               </span>
               {isActive && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[#4A50B0] rounded-t-full dark:bg-[#9ca0ff]" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-yellow-700 rounded-t-full dark:bg-yellow-400" />
               )}
             </Link>
           );

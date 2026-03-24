@@ -41,8 +41,8 @@ export default function CTABanner() {
               <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.25)] rounded-3xl pointer-events-none" />
 
               {/* bottom-left badge — small, doesn't block image text */}
-              <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-full border border-[#d4af37]/30 bg-black/40 backdrop-blur-md px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d4af37]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37] shadow-[0_0_6px_#d4af37]" />
+              <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-full border border-yellow-300 dark:border-yellow-500/30 bg-black/40 backdrop-blur-md px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-yellow-700 dark:text-yellow-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-yellow-700 dark:bg-yellow-400 shadow-[0_0_6px_#b45309]" />
                 New Batch Starting
               </div>
 
