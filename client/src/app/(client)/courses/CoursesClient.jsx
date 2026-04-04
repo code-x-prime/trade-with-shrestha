@@ -295,7 +295,7 @@ function CoursesPageContent() {
         </Card>
         ) : (
         <>
-          <div id="courses" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+          <div id="courses" className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
             {courses.map((course) => (
               <CourseCard
                 key={course.id}

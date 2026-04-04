@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Globe, Zap, Play,  MessageSquare } from 'lucide-react';
+import { BookOpen, Globe, Zap, Play } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getPublicUrl } from '@/lib/imageUtils';
@@ -33,7 +33,7 @@ const CourseCard = ({ course, isEnrolled = false, progress = 0, showProgress = f
       transition={{ duration: 0.2 }}
     >
       <Link href={`/courses/${course.slug}`} className="block h-full">
-        <Card className="rounded-2xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-border dark:border-gray-800 cursor-pointer">
+        <Card className="rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-border dark:border-gray-800 cursor-pointer">
           <div>
             <div className="relative w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200">
               {(course.coverImageUrl || course.coverImage) ? (
@@ -77,7 +77,7 @@ const CourseCard = ({ course, isEnrolled = false, progress = 0, showProgress = f
               )}
             </div>
           </div>
-          <CardContent className="p-5 flex-1 flex flex-col gap-0">
+          <CardContent className="p-3 md:p-5 flex-1 flex flex-col gap-0">
             <div className="min-h-[3rem] mb-2 flex items-start">
               <h3 className="font-semibold text-base text-gray-900 dark:text-white hover:text-hero-primary dark:hover:text-[#9ca0ff] transition-colors line-clamp-2 leading-tight">
                 {course.title}
@@ -159,15 +159,15 @@ const CourseCard = ({ course, isEnrolled = false, progress = 0, showProgress = f
 
                   {USE_STATIC && (
                     <Button
-                      className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white text-sm font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
                       onClick={(e) => {
                         e.preventDefault();
                         const message = WHATSAPP_MESSAGE_TEMPLATE.replace('[COURSE_NAME]', course.title);
                         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
                       }}
                     >
-                  <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} />
-                      Enroll via WhatsApp
+                      <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} className="w-5 h-5" />
+                      <span>Enroll via WhatsApp</span>
                     </Button>
                   )}
                 </div>
