@@ -4,11 +4,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Globe, Zap, Play, ArrowRight } from 'lucide-react';
+import { BookOpen, Globe, Zap, Play,  MessageSquare } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getPublicUrl } from '@/lib/imageUtils';
 import { motion } from 'framer-motion';
+import { USE_STATIC, WHATSAPP_NUMBER, WHATSAPP_MESSAGE_TEMPLATE } from '@/lib/constants';
 
 const CourseCard = ({ course, isEnrolled = false, progress = 0, showProgress = false }) => {
   // Get effective price considering flash sale
@@ -76,15 +77,19 @@ const CourseCard = ({ course, isEnrolled = false, progress = 0, showProgress = f
               )}
             </div>
           </div>
-          <CardContent className="p-5 flex-1 flex flex-col">
-            <h3 className="font-semibold text-base mb-2 text-gray-900 dark:text-white hover:text-hero-primary dark:hover:text-[#9ca0ff] transition-colors line-clamp-2 leading-snug">
-              {course.title}
-            </h3>
+          <CardContent className="p-5 flex-1 flex flex-col gap-0">
+            <div className="min-h-[3rem] mb-2 flex items-start">
+              <h3 className="font-semibold text-base text-gray-900 dark:text-white hover:text-hero-primary dark:hover:text-[#9ca0ff] transition-colors line-clamp-2 leading-tight">
+                {course.title}
+              </h3>
+            </div>
 
             {course.description && (
-              <p className="text-sm text-muted-foreground dark:text-gray-400 mb-3 line-clamp-2 flex-1">
-                {course.description.replace(/<[^>]*>/g, '').substring(0, 100)}
-              </p>
+              <div className="min-h-[2.5rem] mb-3">
+                <p className="text-sm text-muted-foreground dark:text-gray-400 line-clamp-2 leading-relaxed">
+                  {course.description.replace(/<[^>]*>/g, '').substring(0, 100)}
+                </p>
+              </div>
             )}
 
             <div className="flex items-center gap-2 mb-3 text-xs text-muted-foreground dark:text-gray-500">
@@ -121,33 +126,49 @@ const CourseCard = ({ course, isEnrolled = false, progress = 0, showProgress = f
                   </Badge>
                 </div>
               ) : (
-                <div className="space-y-1">
-                  {hasFlashSale ? (
-                    <>
-                      <div className="flex items-center gap-1 text-blue-500 text-xs font-semibold">
-                        <Zap className="h-3 w-3" />
-                        Flash Sale
-                      </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    {hasFlashSale ? (
+                      <>
+                        <div className="flex items-center gap-1 text-blue-500 text-xs font-semibold">
+                          <Zap className="h-3 w-3" />
+                          Flash Sale
+                        </div>
+                        <div className="text-xl font-bold text-hero-primary dark:text-[#9ca0ff]">
+                          ₹{effectivePrice.toLocaleString('en-IN')}
+                        </div>
+                        <div className="text-xs text-muted-foreground dark:text-gray-500 line-through">
+                          ₹{originalPrice.toLocaleString('en-IN')}
+                        </div>
+                      </>
+                    ) : effectivePrice < originalPrice ? (
+                      <>
+                        <div className="text-xl font-bold text-hero-primary dark:text-[#9ca0ff]">
+                          ₹{effectivePrice.toLocaleString('en-IN')}
+                        </div>
+                        <div className="text-xs text-muted-foreground dark:text-gray-500 line-through">
+                          ₹{originalPrice.toLocaleString('en-IN')}
+                        </div>
+                      </>
+                    ) : (
                       <div className="text-xl font-bold text-hero-primary dark:text-[#9ca0ff]">
-                        ₹{effectivePrice.toLocaleString('en-IN')}
+                        ₹{course.price.toLocaleString('en-IN')}
                       </div>
-                      <div className="text-xs text-muted-foreground dark:text-gray-500 line-through">
-                        ₹{originalPrice.toLocaleString('en-IN')}
-                      </div>
-                    </>
-                  ) : effectivePrice < originalPrice ? (
-                    <>
-                      <div className="text-xl font-bold text-hero-primary dark:text-[#9ca0ff]">
-                        ₹{effectivePrice.toLocaleString('en-IN')}
-                      </div>
-                      <div className="text-xs text-muted-foreground dark:text-gray-500 line-through">
-                        ₹{originalPrice.toLocaleString('en-IN')}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="text-xl font-bold text-hero-primary dark:text-[#9ca0ff]">
-                      ₹{course.price.toLocaleString('en-IN')}
-                    </div>
+                    )}
+                  </div>
+
+                  {USE_STATIC && (
+                    <Button
+                      className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const message = WHATSAPP_MESSAGE_TEMPLATE.replace('[COURSE_NAME]', course.title);
+                        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+                      }}
+                    >
+                  <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} />
+                      Enroll via WhatsApp
+                    </Button>
                   )}
                 </div>
               )}

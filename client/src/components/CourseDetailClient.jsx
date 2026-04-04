@@ -18,6 +18,7 @@ import Link from 'next/link';
 import PricingBox from '@/components/detail/PricingBox';
 import SectionContainer from '@/components/detail/SectionContainer';
 import BookDemoDialog from '@/components/BookDemoDialog';
+import { USE_STATIC, WHATSAPP_NUMBER, WHATSAPP_MESSAGE_TEMPLATE } from '@/lib/constants';
 
 export default function CourseDetailClient({ course: initialCourse }) {
   const course = initialCourse;
@@ -339,37 +340,52 @@ export default function CourseDetailClient({ course: initialCourse }) {
                   </Link>
                 ) : (
                   <div className="space-y-2">
-                    {showBookDemo && (
+                    {USE_STATIC ? (
+                      <Button
+                        className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                        onClick={() => {
+                          const message = WHATSAPP_MESSAGE_TEMPLATE.replace('[COURSE_NAME]', course.title);
+                          window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+                        }}
+                      >
+                        <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} />
+                        Enroll via WhatsApp
+                      </Button>
+                    ) : (
                       <>
-                        <Button
-                          variant="outline"
-                          className="w-full border-brand-600 text-brand-600 hover:bg-brand-50 dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-900/30"
-                          onClick={() => setBookDemoOpen(true)}
-                        >
-                          <Calendar className="h-4 w-4 mr-2" />
-                          Book a Demo
-                        </Button>
-                        <BookDemoDialog
-                          open={bookDemoOpen}
-                          onOpenChange={setBookDemoOpen}
-                          courseId={course.id}
-                          courseTitle={course.title}
-                          defaultName={isAuthenticated && user?.name ? user.name : ''}
-                          defaultEmail={isAuthenticated && user?.email ? user.email : ''}
-                          defaultPhone={isAuthenticated && user?.phone ? user.phone || '' : ''}
-                        />
+                        {showBookDemo && (
+                          <>
+                            <Button
+                              variant="outline"
+                              className="w-full border-brand-600 text-brand-600 hover:bg-brand-50 dark:border-brand-400 dark:text-brand-400 dark:hover:bg-brand-900/30"
+                              onClick={() => setBookDemoOpen(true)}
+                            >
+                              <Calendar className="h-4 w-4 mr-2" />
+                              Book a Demo
+                            </Button>
+                            <BookDemoDialog
+                              open={bookDemoOpen}
+                              onOpenChange={setBookDemoOpen}
+                              courseId={course.id}
+                              courseTitle={course.title}
+                              defaultName={isAuthenticated && user?.name ? user.name : ''}
+                              defaultEmail={isAuthenticated && user?.email ? user.email : ''}
+                              defaultPhone={isAuthenticated && user?.phone ? user.phone || '' : ''}
+                            />
+                          </>
+                        )}
+                        {course.isFree ? (
+                          <Button className="w-full bg-brand-600 hover:bg-brand-700" onClick={handleEnrollFree}>
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Enroll for Free
+                          </Button>
+                        ) : showSelfPaced && (
+                          <Button className="w-full bg-brand-600 hover:bg-brand-700" onClick={addToCart}>
+                            <ShoppingCart className="h-4 w-4 mr-2" />
+                            Self-paced Purchase
+                          </Button>
+                        )}
                       </>
-                    )}
-                    {course.isFree ? (
-                      <Button className="w-full bg-brand-600 hover:bg-brand-700" onClick={handleEnrollFree}>
-                        <BookOpen className="h-4 w-4 mr-2" />
-                        Enroll for Free
-                      </Button>
-                    ) : showSelfPaced && (
-                      <Button className="w-full bg-brand-600 hover:bg-brand-700" onClick={addToCart}>
-                        <ShoppingCart className="h-4 w-4 mr-2" />
-                        Self-paced Purchase
-                      </Button>
                     )}
                   </div>
                 )}

@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { BookOpen, TrendingUp, Award, ArrowRight, Video, Star, Loader2, Download, CheckCircle2, Target, UserCheck, Calendar, MessageCircle, Briefcase, HelpCircle } from 'lucide-react';
+import { BookOpen, TrendingUp, Award, ArrowRight, Video, Star, Loader2, } from 'lucide-react';
 import { ebookAPI, courseAPI } from '@/lib/api';
 
 import FlashSaleSection from '@/components/FlashSaleSection';
@@ -19,7 +19,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import EbookCard from '@/components/cards/EbookCard';
 import CourseCard from '@/components/cards/CourseCard';
-import ResourceCard from '@/components/cards/ResourceCard';
 import FeaturesSection from '@/components/sections/FeaturesSection';
 import CTABanner from '@/components/sections/CTABanner';
 import { toast } from 'sonner';
@@ -30,17 +29,17 @@ import Image from 'next/image';
 const EBOOK_CATEGORIES = [
     { value: 'FEATURED', label: 'Featured Books', icon: Award },
     { value: 'BESTSELLER', label: 'Bestsellers', icon: TrendingUp },
-    { value: 'NEW', label: 'New Releases', icon: BookOpen },
-    { value: 'TRENDING', label: 'Trending', icon: TrendingUp },
-    { value: 'POPULAR', label: 'Popular', icon: BookOpen },
+    // { value: 'NEW', label: 'New Releases', icon: BookOpen },
+    // { value: 'TRENDING', label: 'Trending', icon: TrendingUp },
+    // { value: 'POPULAR', label: 'Popular', icon: BookOpen },
 ];
 
 const COURSE_CATEGORIES = [
     { value: 'FEATURED', label: 'Featured Courses', icon: Star },
     { value: 'BESTSELLER', label: 'Bestsellers', icon: TrendingUp },
-    { value: 'NEW', label: 'New Releases', icon: Video },
-    { value: 'TRENDING', label: 'Trending', icon: TrendingUp },
-    { value: 'POPULAR', label: 'Popular', icon: Award },
+    // { value: 'NEW', label: 'New Releases', icon: Video },
+    // { value: 'TRENDING', label: 'Trending', icon: TrendingUp },
+    // { value: 'POPULAR', label: 'Popular', icon: Award },
 ];
 
 function HomeContent() {
@@ -214,7 +213,7 @@ function HomeContent() {
                                 >
                                     <CarouselContent className="-ml-2 md:-ml-4">
                                         {courses.map((course) => (
-                                            <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                                            <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 flex">
                                                 <CourseCard course={course} />
                                             </CarouselItem>
                                         ))}
@@ -439,7 +438,7 @@ function HomeContent() {
                                 >
                                     <CarouselContent className="-ml-2 md:-ml-4">
                                         {books.map((ebook) => (
-                                            <CarouselItem key={ebook.id} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
+                                            <CarouselItem key={ebook.id} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4 flex">
                                                 <EbookCard ebook={ebook} />
                                             </CarouselItem>
                                         ))}
@@ -484,7 +483,7 @@ function HomeContent() {
                         >
                             <CarouselContent className="-ml-2 md:-ml-4">
                                 {freeCourses.map((course) => (
-                                    <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                                    <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 flex">
                                         <CourseCard course={course} />
                                     </CarouselItem>
                                 ))}

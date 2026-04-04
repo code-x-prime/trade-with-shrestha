@@ -9,12 +9,17 @@ export function getPublicUrl(filename) {
         return filename;
     }
 
+    // If it's a local path (starts with /), return as is
+    if (filename.startsWith('/')) {
+        return filename;
+    }
+
     // Get base URL from env
     const baseUrl = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || process.env.NEXT_PUBLIC_CDN_URL;
 
     if (!baseUrl) {
         console.warn('R2_PUBLIC_URL not configured');
-        return null;
+        return filename; // Fallback to filename instead of null
     }
 
     // Remove trailing slash from base URL

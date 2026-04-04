@@ -1,9 +1,7 @@
-/**
- * Server-side API functions for Next.js Server Components
- * These functions run on the server and don't require authentication tokens
- */
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+
+import { USE_STATIC } from './constants';
+import { STATIC_COURSES } from '../data/courses';
 
 /**
  * Fetch ebook by slug (Server-side)
@@ -134,6 +132,11 @@ export async function getMentorshipBySlug(slug) {
  * Fetch course by slug (Server-side)
  */
 export async function getCourseBySlug(slug) {
+    // Check if we should use static data
+    if (USE_STATIC) {
+        return STATIC_COURSES.find(c => c.slug === slug) || null;
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/courses/slug/${slug}`, {
             method: 'GET',

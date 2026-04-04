@@ -57,10 +57,12 @@ const EbookCard = ({ ebook, isPurchased = false }) => {
             </div>
           </div>
 
-          <CardContent className="p-3 flex-1 flex flex-col">
-            <h3 className="font-bold text-sm mb-1 line-clamp-2 leading-tight text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              {ebook.title}
-            </h3>
+          <CardContent className="p-3 flex-1 flex flex-col gap-0">
+            <div className="min-h-[2.5rem] mb-1">
+              <h3 className="font-bold text-sm line-clamp-2 leading-tight text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                {ebook.title}
+              </h3>
+            </div>
 
             {ebook.author && (
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 truncate">by {ebook.author}</p>

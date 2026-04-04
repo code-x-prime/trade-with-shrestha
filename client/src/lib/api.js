@@ -1,9 +1,7 @@
-/**
- * API Utility - Centralized API calls
- * All API calls go through this file
- */
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+
+import { USE_STATIC } from './constants';
+import { STATIC_COURSES } from '../data/courses';
 
 /**
  * Generic API request handler
@@ -976,6 +974,11 @@ export const courseAPI = {
      * Get all courses
      */
     getCourses: async (params = {}) => {
+        // Check if we should use static data
+        if (USE_STATIC) {
+            return { success: true, data: { courses: STATIC_COURSES, pagination: { total: STATIC_COURSES.length, pages: 1 } } };
+        }
+
         const queryParams = new URLSearchParams();
         if (params.published) queryParams.append('published', params.published);
         if (params.search) queryParams.append('search', params.search);
@@ -994,6 +997,12 @@ export const courseAPI = {
      * Get course by slug
      */
     getCourseBySlug: async (slug) => {
+        // Check if we should use static data
+        if (USE_STATIC) {
+            const course = STATIC_COURSES.find(c => c.slug === slug);
+            return { success: true, data: { course } };
+        }
+
         return apiRequest(`/courses/slug/${slug}`, {
             method: 'GET',
         });
@@ -1063,6 +1072,11 @@ export const courseAPI = {
      * Get courses by badge (FEATURED, BESTSELLER, NEW, TRENDING, POPULAR)
      */
     getCoursesByBadge: async (badge, limit = 10) => {
+        // Check if we should use static data
+        if (USE_STATIC) {
+            return { success: true, data: { courses: STATIC_COURSES.slice(0, limit) } };
+        }
+
         return apiRequest(`/courses/badge/${badge}?limit=${limit}`, {
             method: 'GET',
         });
@@ -1170,6 +1184,11 @@ export const courseAPI = {
      * Check enrollment
      */
     checkEnrollment: async (courseId) => {
+        // Check if we should use static data
+        if (USE_STATIC) {
+            return { success: true, data: { isEnrolled: false } };
+        }
+
         return apiRequest(`/courses/${courseId}/enrollment`, {
             method: 'GET',
         });
@@ -1179,6 +1198,11 @@ export const courseAPI = {
      * Get course progress
      */
     getCourseProgress: async (courseId) => {
+        // Check if we should use static data
+        if (USE_STATIC) {
+            return { success: true, data: { overallProgress: 0, completedChapters: 0, progress: [] } };
+        }
+
         return apiRequest(`/courses/${courseId}/progress`, {
             method: 'GET',
         });
@@ -1188,6 +1212,11 @@ export const courseAPI = {
      * Get course reviews
      */
     getCourseReviews: async (courseId) => {
+        // Check if we should use static data
+        if (USE_STATIC) {
+            return { success: true, data: { reviews: [] } };
+        }
+
         return apiRequest(`/courses/${courseId}/reviews`, {
             method: 'GET',
         });
