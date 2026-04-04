@@ -194,7 +194,7 @@ export default function AdminLayout({ children }) {
       {/* Header */}
       <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-3">
-          <Image src="/new-logo.png" alt="Shrestha Academy" width={60} height={60} />
+          <Image src="/new-logo.png" alt="Shrestha Academy" width={60} height={60} className='rounded-full' />
           <div>
             <h2 className="font-semibold text-sm">Shrestha Academy</h2>
             <p className="text-xs text-muted-foreground">Admin Panel</p>
@@ -319,7 +319,7 @@ export default function AdminLayout({ children }) {
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-card border-b border-border">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <Image src="/new-logo.png" alt="Shrestha Academy" width={50} height={50} />
+            <Image src="/new-logo.png" alt="Shrestha Academy" width={50} height={50} className='rounded-full' />
 
             <div>
               <h2 className="font-semibold text-sm">Admin Panel</h2>
