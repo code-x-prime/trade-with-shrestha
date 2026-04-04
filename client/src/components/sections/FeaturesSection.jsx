@@ -9,12 +9,12 @@ const features = [
     title: 'Expert Courses',
     description: 'Learn from industry veterans with comprehensive professional development courses.',
     tag: '200+ Courses',
-    tagCls: 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/10 border-yellow-300 dark:border-yellow-500/20',
-    dot: 'bg-yellow-700 dark:bg-yellow-400',
-    borderHover: 'hover:border-yellow-300 dark:hover:border-yellow-500/40',
-    glowCls: 'bg-yellow-500',
-    lineCls: 'bg-yellow-700 dark:bg-yellow-500',
-    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
+    tagCls: 'text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border-blue-300 dark:border-blue-500/20',
+    dot: 'bg-blue-700 dark:bg-blue-400',
+    borderHover: 'hover:border-blue-300 dark:hover:border-blue-500/40',
+    glowCls: 'bg-blue-500',
+    lineCls: 'bg-blue-700 dark:bg-blue-500',
+    arrowCls: 'group-hover:text-blue-700 dark:group-hover:text-blue-400',
     number: '01',
   },
   {
@@ -22,12 +22,12 @@ const features = [
     title: 'Real-time Skills',
     description: 'Get practical insights and strategies applicable in the real-world job market.',
     tag: 'Industry Relevant',
-    tagCls: 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/10 border-yellow-300 dark:border-yellow-500/20',
-    dot: 'bg-yellow-700 dark:bg-yellow-400',
-    borderHover: 'hover:border-yellow-300 dark:hover:border-yellow-500/40',
-    glowCls: 'bg-yellow-500',
-    lineCls: 'bg-yellow-700 dark:bg-yellow-500',
-    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
+    tagCls: 'text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border-blue-300 dark:border-blue-500/20',
+    dot: 'bg-blue-700 dark:bg-blue-400',
+    borderHover: 'hover:border-blue-300 dark:hover:border-blue-500/40',
+    glowCls: 'bg-blue-500',
+    lineCls: 'bg-blue-700 dark:bg-blue-500',
+    arrowCls: 'group-hover:text-blue-700 dark:group-hover:text-blue-400',
     number: '02',
   },
   {
@@ -35,12 +35,12 @@ const features = [
     title: 'Certification',
     description: 'Earn recognized certificates upon course completion to boost your resume.',
     tag: 'Recognized',
-    tagCls: 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/10 border-yellow-300 dark:border-yellow-500/20',
-    dot: 'bg-yellow-700 dark:bg-yellow-400',
-    borderHover: 'hover:border-yellow-300 dark:hover:border-yellow-500/40',
-    glowCls: 'bg-yellow-500',
-    lineCls: 'bg-yellow-700 dark:bg-yellow-500',
-    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
+    tagCls: 'text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border-blue-300 dark:border-blue-500/20',
+    dot: 'bg-blue-700 dark:bg-blue-400',
+    borderHover: 'hover:border-blue-300 dark:hover:border-blue-500/40',
+    glowCls: 'bg-blue-500',
+    lineCls: 'bg-blue-700 dark:bg-blue-500',
+    arrowCls: 'group-hover:text-blue-700 dark:group-hover:text-blue-400',
     number: '03',
   },
 ];
@@ -63,8 +63,8 @@ export default function FeaturesSection() {
 
         {/* ── HEADER ── */}
         <div className="flex flex-col items-center gap-4 text-center mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300 dark:border-yellow-500/20 bg-yellow-100 dark:bg-yellow-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-700 dark:text-yellow-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-yellow-700 dark:bg-yellow-400 shadow-[0_0_6px_rgba(180,83,9,0.35)] dark:shadow-[0_0_6px_rgba(250,204,21,0.35)]" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-300 dark:border-blue-500/20 bg-blue-100 dark:bg-blue-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-700 dark:text-blue-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-700 dark:bg-blue-400 shadow-[0_0_6px_rgba(180,83,9,0.35)] dark:shadow-[0_0_6px_rgba(250,204,21,0.35)]" />
             Why Choose Us
           </div>
 
@@ -72,7 +72,7 @@ export default function FeaturesSection() {
             className="text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white"
           >
             Everything You Need to{' '}
-            <span className="text-yellow-700 dark:text-yellow-400">
+            <span className="text-blue-700 dark:text-blue-400">
               Succeed
             </span>
           </h2>
@@ -131,8 +131,8 @@ export default function FeaturesSection() {
                   </div>
 
                   {/* icon box */}
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 bg-yellow-100 dark:bg-yellow-500/10 border border-yellow-300 dark:border-yellow-500/20">
-                    <Icon className="h-6 w-6 transition-colors duration-300 text-yellow-700 dark:text-yellow-400" />
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 bg-blue-100 dark:bg-blue-500/10 border border-blue-300 dark:border-blue-500/20">
+                    <Icon className="h-6 w-6 transition-colors duration-300 text-blue-700 dark:text-blue-400" />
                   </div>
 
                   {/* title */}

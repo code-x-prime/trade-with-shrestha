@@ -17,8 +17,8 @@ export default function MentorshipHero() {
       ctaText="Explore Mentorship"
       ctaLink="#mentorship"
       gradientFrom="from-indigo-600"
-      gradientVia="via-purple-700"
-      gradientTo="to-purple-800"
+      gradientVia="via-blue-700"
+      gradientTo="to-blue-800"
     />
   )
 }

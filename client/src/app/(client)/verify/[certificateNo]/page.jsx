@@ -110,14 +110,14 @@ export default function VerifyCertificatePage({ params }) {
               </div>
             ) : certificate?.valid === false ? (
               /* Revoked State */
-              <div className="bg-amber-50 dark:bg-amber-950/30 p-8 text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-100 dark:bg-amber-900/30 mb-4">
-                  <XCircle className="h-10 w-10 text-amber-600" />
+              <div className="bg-slate-50 dark:bg-slate-950/30 p-8 text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-900/30 mb-4">
+                  <XCircle className="h-10 w-10 text-slate-600" />
                 </div>
-                <h2 className="text-xl font-semibold text-amber-700 dark:text-amber-400 mb-2">
+                <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-400 mb-2">
                   Certificate Revoked
                 </h2>
-                <p className="text-amber-600/80 dark:text-amber-400/80">
+                <p className="text-slate-600/80 dark:text-slate-400/80">
                   This certificate has been revoked and is no longer valid.
                 </p>
               </div>

@@ -135,9 +135,9 @@ export default function HireFromUsPage() {
         <div className="grid gap-6 md:grid-cols-3">
           {WHY_ITEMS.map((item) => {
             return (
-              <Card key={item.title} className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 backdrop-blur shadow-sm hover:shadow-lg hover:border-yellow-700 dark:hover:border-yellow-500/20 transition-all duration-300">
+              <Card key={item.title} className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 backdrop-blur shadow-sm hover:shadow-lg hover:border-blue-700 dark:hover:border-blue-500/20 transition-all duration-300">
                 <CardContent className="p-6 md:p-8">
-                  <div className="h-14 w-14 rounded-2xl bg-yellow-100 dark:bg-yellow-500/10 flex items-center justify-center text-yellow-700 dark:text-yellow-400 mb-5">
+                  <div className="h-14 w-14 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-700 dark:text-blue-400 mb-5">
                     <Image src={item.svg} alt={item.title} className="h-10 w-10 dark:invert" width={40} height={40} />
                   </div>
                   <h3 className="font-semibold text-xl mb-3">{item.title}</h3>
@@ -158,7 +158,7 @@ export default function HireFromUsPage() {
             {TECH_STACK.map((tech) => (
               <span
                 key={tech}
-                className="px-5 py-2.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-medium text-sm shadow-sm hover:shadow hover:border-yellow-700 dark:hover:border-yellow-500/30 hover:bg-yellow-100 dark:hover:bg-yellow-500/5 transition-all duration-200"
+                className="px-5 py-2.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-medium text-sm shadow-sm hover:shadow hover:border-blue-700 dark:hover:border-blue-500/30 hover:bg-blue-100 dark:hover:bg-blue-500/5 transition-all duration-200"
               >
                 {tech}
               </span>
@@ -186,16 +186,16 @@ export default function HireFromUsPage() {
                   <Card className="rounded-2xl border border-border/80 bg-card shadow-lg shadow-black/5 dark:shadow-none overflow-hidden h-full">
                     <CardContent className="p-6 md:p-8 h-full flex flex-col">
                       <div className="flex items-start gap-4 flex-1">
-                        <div className="h-12 w-12 rounded-full bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black flex items-center justify-center text-lg font-bold shrink-0 shadow-md">
+                        <div className="h-12 w-12 rounded-full bg-blue-600 text-white dark:bg-blue-500 dark:text-black flex items-center justify-center text-lg font-bold shrink-0 shadow-md">
                           {t.initial}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex gap-1 mb-3">
                             {[1, 2, 3, 4, 5].map((i) => (
-                              <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400 shrink-0" />
+                              <Star key={i} className="h-4 w-4 fill-slate-400 text-slate-400 shrink-0" />
                             ))}
                           </div>
-                          <Quote className="h-7 w-7 text-yellow-700/25 dark:text-yellow-400/25 mb-2 -ml-0.5" />
+                          <Quote className="h-7 w-7 text-blue-700/25 dark:text-blue-400/25 mb-2 -ml-0.5" />
                           <p className="text-foreground/95 text-base leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
                           <div className="mt-6 pt-4 border-t border-border/60">
                             <p className="font-semibold text-foreground">{t.author}</p>
@@ -217,7 +217,7 @@ export default function HireFromUsPage() {
       {/* Request form – improved layout */}
       <section id="request-form" className="max-w-2xl mx-auto px-4 pb-20">
         <Card className="rounded-3xl border-2 border-border/80 bg-card shadow-xl shadow-black/5 dark:shadow-none overflow-hidden">
-          <div className="bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 border-b border-gray-200 dark:border-gray-800 px-6 md:px-8 py-5">
+          <div className="bg-gradient-to-r from-blue-500/10 to-blue-500/5 border-b border-gray-200 dark:border-gray-800 px-6 md:px-8 py-5">
             <h2 className="text-xl md:text-2xl font-bold">Request Candidates Now</h2>
             <p className="text-muted-foreground text-sm mt-1">
               Fill in your details and we&apos;ll share suitable candidates.
@@ -294,7 +294,7 @@ export default function HireFromUsPage() {
               <Button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-xl bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all"
+                className="w-full rounded-xl bg-blue-600 hover:bg-blue-500 text-white dark:bg-blue-500 dark:text-black dark:hover:bg-blue-400 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all"
               >
                 {submitting ? (
                   <>

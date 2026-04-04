@@ -381,14 +381,14 @@ function OfflineBatchesPageContent() {
                                                         </Badge>
                                                     ) : pricing.hasFlashSale ? (
                                                         <div className="flex flex-col items-end">
-                                                            <div className="flex items-center gap-1 text-orange-500 text-xs font-semibold mb-1">
+                                                            <div className="flex items-center gap-1 text-blue-500 text-xs font-semibold mb-1">
                                                                 <Zap className="h-3 w-3" />
                                                                 <span>{pricing.flashSaleTitle}</span>
                                                             </div>
                                                             <div className="flex items-center gap-2">
                                                                 <span className="line-through text-muted-foreground text-sm">₹{pricing.originalPrice}</span>
                                                                 <span className="font-semibold text-brand-600">₹{pricing.effectivePrice}</span>
-                                                                <span className="text-xs text-orange-600 font-semibold">
+                                                                <span className="text-xs text-blue-600 font-semibold">
                                                                     ({Math.round(((pricing.originalPrice - pricing.effectivePrice) / pricing.originalPrice) * 100)}% OFF)
                                                                 </span>
                                                             </div>

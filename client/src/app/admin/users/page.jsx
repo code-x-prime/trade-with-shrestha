@@ -317,7 +317,7 @@ export default function AdminUsersPage() {
                             <span
                               className={`px-2 py-1 rounded-full text-xs font-medium ${
                                 u.role === 'ADMIN'
-                                  ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                                   : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                               }`}
                             >

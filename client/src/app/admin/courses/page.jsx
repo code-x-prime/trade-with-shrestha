@@ -35,11 +35,11 @@ import {
 } from '@/components/ui/dialog';
 
 const BADGES = [
-    { value: 'FEATURED', label: 'Featured', icon: Star, color: 'bg-yellow-500' },
+    { value: 'FEATURED', label: 'Featured', icon: Star, color: 'bg-blue-500' },
     { value: 'BESTSELLER', label: 'Bestseller', icon: TrendingUp, color: 'bg-green-500' },
     { value: 'NEW', label: 'New Release', icon: Sparkles, color: 'bg-blue-500' },
-    { value: 'TRENDING', label: 'Trending', icon: Flame, color: 'bg-orange-500' },
-    { value: 'POPULAR', label: 'Popular', icon: Users, color: 'bg-purple-500' },
+    { value: 'TRENDING', label: 'Trending', icon: Flame, color: 'bg-blue-500' },
+    { value: 'POPULAR', label: 'Popular', icon: Users, color: 'bg-blue-500' },
 ];
 
 export default function AdminCoursesPage() {

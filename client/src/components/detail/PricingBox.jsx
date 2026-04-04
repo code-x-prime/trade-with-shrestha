@@ -31,7 +31,7 @@ export default function PricingBox({
       return (
         <div className="text-center space-y-2">
           {/* Flash sale badge */}
-          <div className="flex items-center justify-center gap-1 text-orange-500 font-semibold text-sm">
+          <div className="flex items-center justify-center gap-1 text-blue-500 font-semibold text-sm">
             <Zap className="h-4 w-4" />
             <span>{pricing.flashSaleTitle || 'Flash Sale'}</span>
           </div>
@@ -42,7 +42,7 @@ export default function PricingBox({
             <span className="text-muted-foreground line-through text-sm dark:text-gray-500">
               ₹{pricing.displayOriginalPrice.toLocaleString('en-IN')}
             </span>
-            <span className="text-sm text-orange-600 font-semibold">
+            <span className="text-sm text-blue-600 font-semibold">
               ({pricing.discountPercent}% OFF)
             </span>
           </div>

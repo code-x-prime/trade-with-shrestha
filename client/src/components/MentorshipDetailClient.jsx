@@ -390,9 +390,9 @@ export default function MentorshipDetailClient({ mentorship: initialMentorship }
                   {mentorship.keyConceptsRequired.map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3 p-4 bg-white rounded-lg border-2 hover:border-amber-200 transition-colors"
+                      className="flex items-start gap-3 p-4 bg-white rounded-lg border-2 hover:border-slate-200 transition-colors"
                     >
-                      <CheckCircle2 className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <CheckCircle2 className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
                       <span className="text-muted-foreground">{item}</span>
                     </div>
                   ))}
@@ -486,9 +486,9 @@ export default function MentorshipDetailClient({ mentorship: initialMentorship }
             )}
 
             {/* Disclaimer */}
-            <Card className="border-2 border-amber-100 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-900/30">
+            <Card className="border-2 border-slate-100 bg-slate-50/50 dark:bg-slate-950/20 dark:border-slate-900/30">
               <CardContent className="p-6">
-                <p className="text-xs text-muted-foreground leading-relaxed dark:text-amber-200/70">
+                <p className="text-xs text-muted-foreground leading-relaxed dark:text-slate-200/70">
                   <strong>Disclaimer:</strong> The trade ideas, analyses, and strategies shared on this platform are for educational purposes only, and should not be interpreted as financial advice. Shrestha Academy is not responsible for any losses resulting from applying the knowledge gained through the program. Shrestha Academy is merely providing a platform to trainers to provide stock market and financial education, the content shared is that of the trainer.
                 </p>
               </CardContent>

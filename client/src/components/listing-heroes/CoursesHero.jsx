@@ -16,9 +16,9 @@ export default function CoursesHero() {
       ]}
       ctaText="Explore Courses"
       ctaLink="#courses"
-      gradientFrom="from-purple-600"
-      gradientVia="via-purple-700"
-      gradientTo="to-purple-800"
+      gradientFrom="from-blue-600"
+      gradientVia="via-blue-700"
+      gradientTo="to-blue-800"
     />
   )
 }

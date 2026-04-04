@@ -132,7 +132,7 @@ export default function AdminInterviewQuestionsPage() {
   const getDifficultyBadge = (difficulty) => {
     const colors = {
       Easy: 'bg-green-600',
-      Medium: 'bg-yellow-600',
+      Medium: 'bg-blue-600',
       Hard: 'bg-red-600',
     };
     return colors[difficulty] || 'bg-gray-600';

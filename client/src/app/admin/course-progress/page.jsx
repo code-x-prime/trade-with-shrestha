@@ -252,8 +252,8 @@ export default function CourseProgressPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                <PlayCircle className="h-5 w-5 text-yellow-600" />
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                <PlayCircle className="h-5 w-5 text-blue-600" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">In Progress</p>
@@ -265,8 +265,8 @@ export default function CourseProgressPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-purple-600" />
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-blue-600" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Avg Progress</p>
@@ -342,7 +342,7 @@ export default function CourseProgressPage() {
                         <p className="text-muted-foreground">Completed</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-yellow-600">{course.inProgressEnrollments}</p>
+                        <p className="text-2xl font-bold text-blue-600">{course.inProgressEnrollments}</p>
                         <p className="text-muted-foreground">In Progress</p>
                       </div>
                     </div>
@@ -670,7 +670,7 @@ export default function CourseProgressPage() {
                             {chapter.completed ? (
                               <CheckCircle2 className="h-4 w-4 text-green-600" />
                             ) : chapter.progress > 0 ? (
-                              <PlayCircle className="h-4 w-4 text-yellow-600" />
+                              <PlayCircle className="h-4 w-4 text-blue-600" />
                             ) : (
                               <XCircle className="h-4 w-4 text-muted-foreground" />
                             )}

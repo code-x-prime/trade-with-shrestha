@@ -63,7 +63,7 @@ export default function ViewOfflineBatchPage() {
     const STATUS_COLORS = {
         DRAFT: 'bg-gray-500',
         OPEN: 'bg-green-500',
-        FULL: 'bg-orange-500',
+        FULL: 'bg-blue-500',
         CLOSED: 'bg-red-500',
     };
 

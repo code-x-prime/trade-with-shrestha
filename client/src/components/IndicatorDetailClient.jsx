@@ -110,7 +110,7 @@ export default function IndicatorDetailClient({ indicator: initialIndicator }) {
               {/* Key Features - Trading Focused */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700">
-                  <Zap className="h-5 w-5 text-amber-500" />
+                  <Zap className="h-5 w-5 text-slate-500" />
                   <span className="text-sm font-medium dark:text-white">Real-time Signals</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700">
@@ -122,7 +122,7 @@ export default function IndicatorDetailClient({ indicator: initialIndicator }) {
                   <span className="text-sm font-medium dark:text-white">Accurate Analysis</span>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700">
-                  <Monitor className="h-5 w-5 text-purple-500" />
+                  <Monitor className="h-5 w-5 text-blue-500" />
                   <span className="text-sm font-medium dark:text-white">Easy Integration</span>
                 </div>
               </div>

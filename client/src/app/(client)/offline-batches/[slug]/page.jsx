@@ -499,7 +499,7 @@ export default function OfflineBatchDetailPage() {
                                             batch.status === 'OPEN'
                                                 ? 'bg-green-500 text-white'
                                                 : batch.status === 'FULL'
-                                                    ? 'bg-orange-500 text-white'
+                                                    ? 'bg-blue-500 text-white'
                                                     : batch.status === 'CLOSED'
                                                         ? 'bg-red-500 text-white'
                                                         : 'bg-gray-500 text-white'

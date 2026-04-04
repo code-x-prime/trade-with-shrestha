@@ -133,7 +133,7 @@ export default function PracticeWithExpertPage() {
                                 Free
                               </span>
                             ) : (
-                              <span className="inline-flex items-center rounded-full bg-amber-500/15 px-3 py-1 text-sm font-semibold text-amber-700 dark:text-amber-300">
+                              <span className="inline-flex items-center rounded-full bg-slate-500/15 px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300">
                                 ₹{Number(item.price).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                               </span>
                             )}

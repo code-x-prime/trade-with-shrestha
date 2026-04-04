@@ -110,8 +110,8 @@ function SearchContent() {
         {!loading && (
           <>
             {totalResults === 0 ? (
-              <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                <p className="text-yellow-800 dark:text-yellow-200 font-medium">
+              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <p className="text-blue-800 dark:text-blue-200 font-medium">
                   No results found for &quot;{query}&quot;. Try different keywords or browse our categories.
                 </p>
               </div>

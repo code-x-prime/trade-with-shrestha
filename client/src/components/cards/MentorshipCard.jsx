@@ -47,7 +47,7 @@ const MentorshipCard = ({ program, isEnrolled = false }) => {
             {/* Flash Sale Badge */}
             {hasFlashSale && !program.isFree ? (
               <div className="absolute top-3 left-3">
-                <Badge className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-2 py-1 flex items-center gap-1">
+                <Badge className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-2 py-1 flex items-center gap-1">
                   <Zap className="h-3 w-3" />
                   {discountPercent}% OFF
                 </Badge>
@@ -93,7 +93,7 @@ const MentorshipCard = ({ program, isEnrolled = false }) => {
                 <div className="space-y-1">
                   {hasFlashSale ? (
                     <>
-                      <div className="flex items-center gap-1 text-orange-500 text-xs font-semibold">
+                      <div className="flex items-center gap-1 text-blue-500 text-xs font-semibold">
                         <Zap className="h-3 w-3" />
                         Flash Sale
                       </div>

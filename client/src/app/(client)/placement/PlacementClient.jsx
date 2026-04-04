@@ -196,14 +196,14 @@ export default function PlacementClient({ recruiters = [], students = [] }) {
       >
         {/* Background accent */}
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-brand-500/5 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-20 left-0 h-72 w-72 rounded-full bg-amber-500/5 blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-20 left-0 h-72 w-72 rounded-full bg-slate-500/5 blur-[80px] pointer-events-none" />
 
         <motion.div className="mb-12 md:mb-14 relative" variants={itemVariants}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <Award className="h-5 w-5 text-amber-500" />
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20">
+              <Award className="h-5 w-5 text-slate-500" />
             </div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400">
               Success Stories
             </p>
           </div>
@@ -312,7 +312,7 @@ export default function PlacementClient({ recruiters = [], students = [] }) {
           <Button
             asChild
             size="lg"
-            className="rounded-full py-3  bg-yellow-500 text-white hover:bg-yellow-400 font-bold h-13 px-10 text-base shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/30 transition-all duration-300 hover:scale-[1.02]"
+            className="rounded-full py-3  bg-blue-500 text-white hover:bg-blue-400 font-bold h-13 px-10 text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02]"
           >
             <Link href="/courses" className="inline-flex items-center gap-2">
               Explore Courses

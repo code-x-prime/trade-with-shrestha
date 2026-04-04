@@ -304,7 +304,7 @@ export default function PlacementTrainingPage() {
                       <div className="h-full rounded-2xl border border-border/70 bg-muted/20 p-5">
                         <div className="flex gap-1 mb-3">
                           {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                            <Star key={i} className="h-4 w-4 fill-slate-400 text-slate-400" />
                           ))}
                         </div>
                         <p className="text-foreground/90 leading-relaxed">&ldquo;{t.text}&rdquo;</p>

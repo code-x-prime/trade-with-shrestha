@@ -31,9 +31,9 @@ import {
 
 const CERTIFICATE_TYPES = [
   { value: 'COURSE', label: 'Course', icon: BookOpen, color: 'bg-blue-500' },
-  { value: 'WEBINAR', label: 'Webinar', icon: Video, color: 'bg-purple-500' },
+  { value: 'WEBINAR', label: 'Webinar', icon: Video, color: 'bg-blue-500' },
   { value: 'GUIDANCE', label: '1:1 Guidance', icon: FileText, color: 'bg-green-500' },
-  { value: 'OFFLINE_BATCH', label: 'Offline Batch', icon: Award, color: 'bg-orange-500' },
+  { value: 'OFFLINE_BATCH', label: 'Offline Batch', icon: Award, color: 'bg-blue-500' },
   { value: 'BUNDLE', label: 'Bundle', icon: Award, color: 'bg-pink-500' },
 ];
 
@@ -381,7 +381,7 @@ function IssuedCertificatesTab() {
 
                             {/* Revoke - only show for active certificates */}
                             {cert.status === 'GENERATED' && (
-                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-orange-500 hover:text-orange-600" onClick={() => handleRevoke(cert)} disabled={isLoading} title="Revoke">
+                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-blue-500 hover:text-blue-600" onClick={() => handleRevoke(cert)} disabled={isLoading} title="Revoke">
                                 <XCircle className="h-3 w-3" />
                               </Button>
                             )}
@@ -832,7 +832,7 @@ function ManualGenerationTab() {
               stampUrl={currentTemplate?.stampUrl}
             />
             {!currentTemplate && selectedType && (
-              <p className="text-xs text-amber-600 mt-3 text-center bg-amber-50 dark:bg-amber-900/20 p-2 rounded">
+              <p className="text-xs text-slate-600 mt-3 text-center bg-slate-50 dark:bg-slate-900/20 p-2 rounded">
                 ⚠️ No template configured for {CERTIFICATE_TYPES.find(t => t.value === selectedType)?.label}.
                 Go to Design tab to upload logo/signature/stamp.
               </p>

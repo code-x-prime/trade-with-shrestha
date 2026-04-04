@@ -342,7 +342,7 @@ function CheckoutContent() {
         currency: razorpayOrder.currency,
         name: 'Shrestha Academy',
         description: 'Order Payment',
-        image: 'https://shrestha.academy/logo.png', // Optional logo
+        image: 'https://shrestha.academy/new-logo.png', // Optional logo
         order_id: razorpayOrder.id,
         handler: async function (minResponse) {
           // Prevent multiple calls
@@ -629,8 +629,8 @@ function CheckoutContent() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200">
-                            <Package className="h-8 w-8 text-purple-500" />
+                          <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200">
+                            <Package className="h-8 w-8 text-blue-500" />
                           </div>
                         )}
                       </div>

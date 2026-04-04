@@ -16,9 +16,9 @@ export default function IndicatorsHero() {
       ]}
       ctaText="Explore Indicators"
       ctaLink="#indicators"
-      gradientFrom="from-orange-600"
-      gradientVia="via-amber-700"
-      gradientTo="to-orange-800"
+      gradientFrom="from-blue-600"
+      gradientVia="via-slate-700"
+      gradientTo="to-blue-800"
     />
   )
 }

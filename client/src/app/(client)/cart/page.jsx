@@ -489,7 +489,7 @@ function CartContent() {
     if (hasFlashSale) {
       return (
         <div className="space-y-1">
-          <div className="flex items-center gap-1 text-orange-500 text-xs font-semibold">
+          <div className="flex items-center gap-1 text-blue-500 text-xs font-semibold">
             <span>⚡ Flash Sale</span>
           </div>
           <div className="flex items-center gap-2">
@@ -965,7 +965,7 @@ function CartContent() {
                               ⏰ {item.startTime} - {item.endTime} ({item.durationMinutes} min)
                             </p>
                           )}
-                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-medium mb-3">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-3">
                             1:1 Guidance
                           </div>
                         </div>
@@ -1031,7 +1031,7 @@ function CartContent() {
                               {item.startTime && ` at ${item.startTime}`}
                             </p>
                           )}
-                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-orange-50 text-orange-700 text-xs font-medium mb-3">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-3">
                             Webinar
                           </div>
                         </div>
@@ -1139,7 +1139,7 @@ function CartContent() {
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                             {item.shortDescription || 'In-person training program'}
                           </p>
-                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-medium mb-3">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-3">
                             Offline Batch
                           </div>
                         </div>
@@ -1177,8 +1177,8 @@ function CartContent() {
                               className="object-cover"
                             />
                           ) : (
-                            <div className="h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200">
-                              <Package className="h-8 w-8 text-purple-500" />
+                            <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200">
+                              <Package className="h-8 w-8 text-blue-500" />
                             </div>
                           )}
                         </div>
@@ -1193,7 +1193,7 @@ function CartContent() {
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                             {item.courses?.length || 0} courses included in this bundle
                           </p>
-                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 text-xs font-medium mb-3">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-blue-50 to-pink-50 text-blue-700 text-xs font-medium mb-3">
                             <Package className="h-3 w-3 mr-1" />
                             Course Bundle
                           </div>

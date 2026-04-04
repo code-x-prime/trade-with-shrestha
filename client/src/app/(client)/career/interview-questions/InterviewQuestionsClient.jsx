@@ -80,7 +80,7 @@ export default function InterviewQuestionsPage() {
   const getDifficultyBadge = (difficulty) => {
     const colors = {
       Easy: 'bg-green-600 text-white',
-      Medium: 'bg-yellow-600 text-white',
+      Medium: 'bg-blue-600 text-white',
       Hard: 'bg-red-600 text-white',
     };
     return colors[difficulty] || 'bg-gray-600 text-white';

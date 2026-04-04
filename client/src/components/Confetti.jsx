@@ -18,7 +18,7 @@ export default function Confetti({ active = false }) {
     const colors = [
       { front: '#4A50B0', back: '#5C64D7' },
       { front: '#10B981', back: '#34D399' },
-      { front: '#F59E0B', back: '#FBBF24' },
+      { front: '#3b82f6', back: '#FBBF24' },
       { front: '#EF4444', back: '#F87171' },
       { front: '#D4AF37', back: '#F0C040' },
     ];

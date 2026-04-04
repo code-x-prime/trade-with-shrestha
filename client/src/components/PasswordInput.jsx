@@ -43,7 +43,7 @@ export default function PasswordInput({
     if (strength <= 2) {
       return { strength, label: 'Weak', color: 'bg-red-500', checks };
     } else if (strength <= 4) {
-      return { strength, label: 'Medium', color: 'bg-yellow-500', checks };
+      return { strength, label: 'Medium', color: 'bg-blue-500', checks };
     } else {
       return { strength, label: 'Strong', color: 'bg-green-500', checks };
     }

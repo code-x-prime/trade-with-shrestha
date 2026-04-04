@@ -25,7 +25,7 @@ const statusOptions = ['ALL', 'NEW', 'CONTACTED', 'CONVERTED', 'CLOSED'];
 
 const statusClassMap = {
   NEW: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400',
-  CONTACTED: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-400',
+  CONTACTED: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400',
   CONVERTED: 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400',
   CLOSED: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
 };
@@ -152,7 +152,7 @@ export default function AdminCodeXPrimePage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Total Leads</p><p className="text-3xl font-bold mt-2">{statsLoading ? '...' : stats.total || 0}</p></CardContent></Card>
         <Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">New Leads</p><p className="text-3xl font-bold mt-2">{statsLoading ? '...' : stats.new || 0}</p><Badge className="mt-3 bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400">NEW</Badge></CardContent></Card>
-        <Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Contacted</p><p className="text-3xl font-bold mt-2">{statsLoading ? '...' : stats.contacted || 0}</p><Badge className="mt-3 bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-400">CONTACTED</Badge></CardContent></Card>
+        <Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Contacted</p><p className="text-3xl font-bold mt-2">{statsLoading ? '...' : stats.contacted || 0}</p><Badge className="mt-3 bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400">CONTACTED</Badge></CardContent></Card>
         <Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Converted</p><p className="text-3xl font-bold mt-2">{statsLoading ? '...' : stats.converted || 0}</p><Badge className="mt-3 bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400">CONVERTED</Badge></CardContent></Card>
       </div>
 

@@ -53,10 +53,10 @@ const heroStyles = `
 .hero-animate-in > *:nth-child(6) { animation-delay: 0.65s; }
 
 .hero-highlight-text {
-  color: #b45309;
+  color: #2563eb;
 }
 .dark .hero-highlight-text {
-  color: #facc15;
+  color: #60a5fa;
 }
 
 .hero-btn-glow {
@@ -67,7 +67,7 @@ const heroStyles = `
   position: absolute;
   inset: -2px;
   border-radius: 9999px;
-  background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444, #f59e0b);
+  background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8, #3b82f6);
   background-size: 300% 300%;
   animation: shimmer 3s linear infinite;
   z-index: -1;
@@ -90,7 +90,7 @@ const heroStyles = `
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #f59e0b, #f97316, transparent);
+  background: linear-gradient(90deg, transparent, #3b82f6, #2563eb, transparent);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -101,7 +101,7 @@ const heroStyles = `
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.06), transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.06), transparent 70%);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -122,7 +122,7 @@ function MandalaPattern() {
       xmlns="http://www.w3.org/2000/svg"
     >
       {[60, 100, 140, 180].map((r) => (
-        <circle key={r} cx="200" cy="200" r={r} stroke="#b45309" strokeWidth="0.5" opacity="0.6" />
+        <circle key={r} cx="200" cy="200" r={r} stroke="#2563eb" strokeWidth="0.5" opacity="0.6" />
       ))}
       {Array.from({ length: 12 }).map((_, i) => {
         const angle = (i * 30 * Math.PI) / 180;
@@ -131,7 +131,7 @@ function MandalaPattern() {
         const x2 = 200 + Math.cos(angle) * 160;
         const y2 = 200 + Math.sin(angle) * 160;
         return (
-          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#b45309" strokeWidth="0.4" opacity="0.4" />
+          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#2563eb" strokeWidth="0.4" opacity="0.4" />
         );
       })}
       {Array.from({ length: 8 }).map((_, i) => {
@@ -139,7 +139,7 @@ function MandalaPattern() {
         const cx = 200 + Math.cos(angle) * 120;
         const cy = 200 + Math.sin(angle) * 120;
         return (
-          <circle key={`arc-${i}`} cx={cx} cy={cy} r="20" stroke="#b45309" strokeWidth="0.4" fill="none" opacity="0.3" />
+          <circle key={`arc-${i}`} cx={cx} cy={cy} r="20" stroke="#2563eb" strokeWidth="0.4" fill="none" opacity="0.3" />
         );
       })}
     </svg>
@@ -216,7 +216,7 @@ export default function PageHero({
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-amber-50/80 via-orange-50/30 to-white dark:from-[#0c0a09] dark:via-[#0f0d0a] dark:to-gray-950 border-b border-orange-200/40 dark:border-yellow-900/20">
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/80 via-blue-50/30 to-white dark:from-[#0c0a09] dark:via-[#0f0d0a] dark:to-gray-950 border-b border-blue-200/40 dark:border-blue-900/20">
 
       {/* ── Background Effects Layer ── */}
 
@@ -226,7 +226,7 @@ export default function PageHero({
         className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full blur-[120px] opacity-40 dark:opacity-15"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(245,158,11,0.4), rgba(249,115,22,0.2), transparent 70%)',
+            'radial-gradient(ellipse at center, rgba(59,130,246,0.4), rgba(37,99,235,0.2), transparent 70%)',
           animation: 'pulseGlow 6s ease-in-out infinite',
         }}
       />
@@ -234,22 +234,22 @@ export default function PageHero({
       {/* Floating orbs */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-16 left-[12%] h-44 w-44 rounded-full bg-yellow-400/15 dark:bg-yellow-500/5 blur-[60px]"
+        className="pointer-events-none absolute top-16 left-[12%] h-44 w-44 rounded-full bg-blue-400/15 dark:bg-blue-500/5 blur-[60px]"
         style={{ animation: 'floatOrb1 12s ease-in-out infinite' }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-32 right-[8%] h-56 w-56 rounded-full bg-orange-400/[0.12] dark:bg-orange-500/[0.04] blur-[70px]"
+        className="pointer-events-none absolute top-32 right-[8%] h-56 w-56 rounded-full bg-blue-400/[0.12] dark:bg-blue-500/[0.04] blur-[70px]"
         style={{ animation: 'floatOrb2 15s ease-in-out infinite' }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-20 left-[25%] h-36 w-36 rounded-full bg-amber-300/15 dark:bg-amber-500/5 blur-[50px]"
+        className="pointer-events-none absolute bottom-20 left-[25%] h-36 w-36 rounded-full bg-slate-300/15 dark:bg-slate-500/5 blur-[50px]"
         style={{ animation: 'floatOrb3 10s ease-in-out infinite' }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-10 right-[20%] h-40 w-40 rounded-full bg-yellow-300/10 dark:bg-yellow-600/[0.04] blur-[55px]"
+        className="pointer-events-none absolute bottom-10 right-[20%] h-40 w-40 rounded-full bg-blue-300/10 dark:bg-blue-600/[0.04] blur-[55px]"
         style={{ animation: 'floatOrb1 14s ease-in-out infinite 2s' }}
       />
 
@@ -272,15 +272,15 @@ export default function PageHero({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.025] dark:opacity-[0.02]"
         style={{
-          backgroundImage: 'radial-gradient(circle, #92400e 0.8px, transparent 0.8px)',
+          backgroundImage: 'radial-gradient(circle, #1e3a8a 0.8px, transparent 0.8px)',
           backgroundSize: '32px 32px',
         }}
       />
 
       {/* Top decorative saffron border with glow */}
       <div aria-hidden="true" className="absolute top-0 left-0 right-0">
-        <div className="h-[3px] bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-80 dark:opacity-50" />
-        <div className="h-[6px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent blur-sm" />
+        <div className="h-[3px] bg-gradient-to-r from-transparent via-slate-500 to-transparent opacity-80 dark:opacity-50" />
+        <div className="h-[6px] bg-gradient-to-r from-transparent via-slate-500/30 to-transparent blur-sm" />
       </div>
 
       {/* ── Content ── */}
@@ -289,15 +289,15 @@ export default function PageHero({
         {/* Eyebrow */}
         {eyebrow ? (
           <div className="flex items-center justify-center">
-            <p className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-yellow-700 dark:text-yellow-400">
+            <p className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-blue-700 dark:text-blue-400">
               <span className="flex items-center gap-1.5">
-                <span className="block h-px w-8 bg-gradient-to-r from-transparent to-amber-500/70" />
-                <LotusIcon className="h-3.5 w-3.5 text-amber-500/60" />
+                <span className="block h-px w-8 bg-gradient-to-r from-transparent to-slate-500/70" />
+                <LotusIcon className="h-3.5 w-3.5 text-slate-500/60" />
               </span>
               {eyebrow}
               <span className="flex items-center gap-1.5">
-                <LotusIcon className="h-3.5 w-3.5 text-amber-500/60" />
-                <span className="block h-px w-8 bg-gradient-to-l from-transparent to-amber-500/70" />
+                <LotusIcon className="h-3.5 w-3.5 text-slate-500/60" />
+                <span className="block h-px w-8 bg-gradient-to-l from-transparent to-slate-500/70" />
               </span>
             </p>
           </div>
@@ -317,10 +317,10 @@ export default function PageHero({
 
         {/* Badge */}
         {badge ? (
-          <div className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-yellow-100 dark:bg-white/5 backdrop-blur-md border border-yellow-300 dark:border-yellow-500/20 text-yellow-700 dark:text-yellow-400 px-5 py-2 text-xs font-bold tracking-widest uppercase shadow-sm shadow-amber-200/30 dark:shadow-none">
+          <div className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-blue-100 dark:bg-white/5 backdrop-blur-md border border-blue-300 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 px-5 py-2 text-xs font-bold tracking-widest uppercase shadow-sm shadow-slate-200/30 dark:shadow-none">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-60" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-500 opacity-60" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-500" />
             </span>
             {badge}
           </div>
@@ -333,7 +333,7 @@ export default function PageHero({
               <div className="hero-btn-glow">
                 <Button
                   asChild
-                  className="relative z-10 bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black font-bold rounded-full px-10 py-4 h-auto text-base shadow-xl shadow-amber-500/25 hover:bg-yellow-500 dark:hover:bg-yellow-400 transition-all duration-300"
+                  className="relative z-10 bg-blue-600 text-white dark:bg-blue-500 dark:text-black font-bold rounded-full px-10 py-4 h-auto text-base shadow-xl shadow-slate-500/25 hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-300"
                 >
                   <Link href={primaryBtn.href}>{primaryBtn.text}</Link>
                 </Button>
@@ -343,7 +343,7 @@ export default function PageHero({
               <Button
                 asChild
                 variant="outline"
-                className="border-2 border-amber-300/50 dark:border-yellow-500/15 text-gray-700 dark:text-gray-300 rounded-full px-10 py-4 h-auto text-base font-semibold backdrop-blur-sm bg-white/40 dark:bg-white/5 hover:border-amber-500/70 hover:text-amber-800 hover:bg-amber-50/60 dark:hover:border-yellow-500/40 dark:hover:text-yellow-400 dark:hover:bg-yellow-500/5 transition-all duration-300"
+                className="border-2 border-slate-300/50 dark:border-blue-500/15 text-gray-700 dark:text-gray-300 rounded-full px-10 py-4 h-auto text-base font-semibold backdrop-blur-sm bg-white/40 dark:bg-white/5 hover:border-slate-500/70 hover:text-slate-800 hover:bg-slate-50/60 dark:hover:border-blue-500/40 dark:hover:text-blue-400 dark:hover:bg-blue-500/5 transition-all duration-300"
               >
                 <Link href={secondaryBtn.href}>{secondaryBtn.text}</Link>
               </Button>
@@ -357,7 +357,7 @@ export default function PageHero({
             {stats.map((s, i) => (
               <div
                 key={`${s.value}-${s.label}`}
-                className="hero-stat-card group rounded-2xl bg-white/60 dark:bg-white/[0.03] backdrop-blur-md border border-amber-200/40 dark:border-yellow-500/[0.08] shadow-sm hover:shadow-lg hover:shadow-amber-200/20 dark:hover:shadow-yellow-500/5 p-6 transition-all duration-300 hover:-translate-y-0.5"
+                className="hero-stat-card group rounded-2xl bg-white/60 dark:bg-white/[0.03] backdrop-blur-md border border-slate-200/40 dark:border-blue-500/[0.08] shadow-sm hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-blue-500/5 p-6 transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   animation: `scaleIn 0.5s ease-out ${0.7 + i * 0.12}s forwards`,
                   opacity: 0,

@@ -190,7 +190,7 @@ export default function AdminReviewsPage() {
                 {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                         key={star}
-                        className={`h-4 w-4 ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                        className={`h-4 w-4 ${star <= rating ? 'fill-blue-400 text-blue-400' : 'text-gray-300'}`}
                     />
                 ))}
             </div>
@@ -321,7 +321,7 @@ export default function AdminReviewsPage() {
                                     <span className="text-sm font-medium w-6">{rating}★</span>
                                     <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-yellow-400"
+                                            className="h-full bg-blue-400"
                                             style={{
                                                 width: `${stats.total > 0 ? (stats.ratingDistribution[rating] / stats.total) * 100 : 0}%`,
                                             }}
@@ -566,8 +566,8 @@ export default function AdminReviewsPage() {
                                         <Star
                                             className={`h-8 w-8 cursor-pointer transition-colors ${
                                                 star <= editForm.rating
-                                                    ? 'fill-yellow-400 text-yellow-400'
-                                                    : 'text-gray-300 hover:text-yellow-300'
+                                                    ? 'fill-blue-400 text-blue-400'
+                                                    : 'text-gray-300 hover:text-blue-300'
                                             }`}
                                         />
                                     </button>

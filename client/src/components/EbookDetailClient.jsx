@@ -152,7 +152,7 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section - Publishing/Kindle Style */}
-      <div className="bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 border-b dark:border-gray-800">
+      <div className="bg-gradient-to-br from-slate-50/50 via-white to-slate-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 border-b dark:border-gray-800">
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
           <Breadcrumb
             items={[
@@ -177,7 +177,7 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
                     <CarouselContent>
                       {bookImages.map((img, idx) => (
                         <CarouselItem key={idx}>
-                          <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border-2 shadow-2xl bg-gradient-to-br from-amber-100 to-amber-200">
+                          <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border-2 shadow-2xl bg-gradient-to-br from-slate-100 to-slate-200">
                             <Image
                               src={getPublicUrl(img)}
                               alt={`${ebook.title} - Cover ${idx + 1}`}
@@ -197,8 +197,8 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
                     )}
                   </Carousel>
                 ) : (
-                  <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border-2 shadow-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                    <BookOpen className="h-24 w-24 text-amber-600" />
+                  <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border-2 shadow-2xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                    <BookOpen className="h-24 w-24 text-slate-600" />
                   </div>
                 )}
               </div>
@@ -222,7 +222,7 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
                 <div className="flex flex-wrap items-center gap-4 text-sm">
                   {averageRating > 0 && (
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <Star className="h-4 w-4 fill-blue-400 text-blue-400" />
                       <span className="font-medium dark:text-white">{averageRating.toFixed(1)}</span>
                       <span className="text-muted-foreground dark:text-gray-400">({ebook.reviews.length})</span>
                     </div>
@@ -270,8 +270,8 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
               <SectionContainer title="What's Inside">
                 <div className="grid gap-3">
                   {ebook.curriculum.map((point, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg border-2 dark:border-gray-700 hover:border-amber-200 dark:hover:border-amber-500 transition-colors">
-                      <CheckCircle2 className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                    <div key={index} className="flex items-start gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg border-2 dark:border-gray-700 hover:border-slate-200 dark:hover:border-slate-500 transition-colors">
+                      <CheckCircle2 className="h-5 w-5 text-slate-600 dark:text-slate-400 mt-0.5 flex-shrink-0" />
                       <span className="text-muted-foreground dark:text-gray-300">{point}</span>
                     </div>
                   ))}
@@ -298,7 +298,7 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
                               <Star
                                 className={`h-6 w-6 ${
                                   star <= reviewRating
-                                    ? 'fill-yellow-400 text-yellow-400'
+                                    ? 'fill-blue-400 text-blue-400'
                                     : 'text-gray-300 dark:text-gray-600'
                                 }`}
                               />
@@ -336,7 +336,7 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
                     <Card key={review.id} className="dark:bg-gray-900 dark:border-gray-700">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
-                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white font-semibold text-lg">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center text-white font-semibold text-lg">
                             {review.user.name?.[0]?.toUpperCase() || 'U'}
                           </div>
                           <div className="flex-1">
@@ -348,7 +348,7 @@ export default function EbookDetailClient({ ebook: initialEbook }) {
                                     key={star}
                                     className={`h-3 w-3 ${
                                       star <= review.rating
-                                        ? 'fill-yellow-400 text-yellow-400'
+                                        ? 'fill-blue-400 text-blue-400'
                                         : 'text-gray-300 dark:text-gray-600'
                                     }`}
                                   />

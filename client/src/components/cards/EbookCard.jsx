@@ -24,7 +24,7 @@ const EbookCard = ({ ebook, isPurchased = false }) => {
       <Link href={`/ebooks/${ebook.slug}`} className="block h-full">
         <Card className="rounded overflow-hidden bg-white dark:bg-gray-900 shadow-sm hover:shadow-lg transition-all duration-300 h-full flex flex-col border border-gray-100 dark:border-gray-800 cursor-pointer">
           <div>
-            <div className="aspect-[4/5] relative bg-gradient-to-br from-indigo-50 to-purple-50">
+            <div className="aspect-[4/5] relative bg-gradient-to-br from-indigo-50 to-blue-50">
               {ebook.image1Url ? (
                 <Image
                   src={getPublicUrl(ebook.image1Url)}
@@ -40,7 +40,7 @@ const EbookCard = ({ ebook, isPurchased = false }) => {
               {/* Flash Sale Badge - Top Left */}
               {hasFlashSale && !ebook.isFree && (
                 <div className="absolute top-2 left-2">
-                  <Badge className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold px-2 py-0.5 text-xs flex items-center gap-1 shadow-md">
+                  <Badge className="bg-gradient-to-r from-blue-500 to-red-500 hover:from-blue-600 hover:to-red-600 text-white font-bold px-2 py-0.5 text-xs flex items-center gap-1 shadow-md">
                     <Zap className="h-3 w-3" />
                     {discountPercent}%
                   </Badge>

@@ -232,7 +232,7 @@ function OrdersContent() {
 
   const getStatusIcon = (status) => {
     if (status === 'COMPLETED') return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-    if (status === 'PENDING') return <Clock className="h-5 w-5 text-yellow-600" />;
+    if (status === 'PENDING') return <Clock className="h-5 w-5 text-blue-600" />;
     return <XCircle className="h-5 w-5 text-red-600" />;
   };
 
@@ -386,7 +386,7 @@ function OrdersContent() {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {getStatusIcon(order.status)}
                     <span className={`text-sm sm:text-base font-semibold ${order.status === 'COMPLETED' ? 'text-green-600' :
-                      order.status === 'PENDING' ? 'text-yellow-600' :
+                      order.status === 'PENDING' ? 'text-blue-600' :
                         'text-red-600'
                       }`}>
                       {order.status}
@@ -630,8 +630,8 @@ function OrdersContent() {
                             </div>
                           </Link>
                         ) : (
-                          <div className="w-20 h-28 relative rounded-md overflow-hidden border flex-shrink-0 bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
-                            <Package className="h-8 w-8 text-purple-500" />
+                          <div className="w-20 h-28 relative rounded-md overflow-hidden border flex-shrink-0 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                            <Package className="h-8 w-8 text-blue-500" />
                           </div>
                         )}
                         <div className="flex-1">
@@ -685,7 +685,7 @@ function OrdersContent() {
                         <p className="text-sm text-muted-foreground dark:text-gray-400">Total Amount Paid</p>
                         {order.paymentStatus && (
                           <Badge className={`mt-2 ${order.paymentStatus === 'PAID' ? 'bg-green-500' :
-                            order.paymentStatus === 'PENDING' ? 'bg-yellow-500' :
+                            order.paymentStatus === 'PENDING' ? 'bg-blue-500' :
                               'bg-red-500'
                             }`}>
                             {order.paymentStatus}

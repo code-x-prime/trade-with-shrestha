@@ -224,9 +224,9 @@ export default function CourseDetailClient({ course: initialCourse }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-white dark:from-gray-950 dark:via-gray-950 dark:to-gray-950">
       {/* Hero Section - Academic Style */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-amber-50/70 via-white to-yellow-50/40 border-b border-amber-100 dark:from-black dark:via-gray-900 dark:to-gray-950 dark:border-gray-800">
-        <div className="pointer-events-none absolute -top-28 -left-16 h-64 w-64 rounded-full bg-yellow-200/40 blur-3xl dark:bg-yellow-500/10" />
-        <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl dark:bg-yellow-500/10" />
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-50/70 via-white to-blue-50/40 border-b border-slate-100 dark:from-black dark:via-gray-900 dark:to-gray-950 dark:border-gray-800">
+        <div className="pointer-events-none absolute -top-28 -left-16 h-64 w-64 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-500/10" />
+        <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-slate-200/40 blur-3xl dark:bg-blue-500/10" />
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
           <Breadcrumb items={[
             { label: 'Home', href: '/' },
@@ -251,22 +251,22 @@ export default function CourseDetailClient({ course: initialCourse }) {
                 {/* Meta Info */}
                 <div className="flex flex-wrap items-center gap-4 text-sm">
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                    <Globe className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                    <Globe className="h-4 w-4 text-blue-700 dark:text-blue-400" />
                     <span className="font-medium dark:text-gray-200">{getLanguageLabel(course.language)}</span>
                   </div>
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                    <BookOpen className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                    <BookOpen className="h-4 w-4 text-blue-700 dark:text-blue-400" />
                     <span className="font-medium dark:text-gray-200">{totalChapters} Chapters</span>
                   </div>
                   {reviews.length > 0 && (
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-yellow-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                      <Star className="h-4 w-4 fill-yellow-700 text-yellow-700 dark:fill-yellow-400 dark:text-yellow-400" />
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-blue-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                      <Star className="h-4 w-4 fill-blue-700 text-blue-700 dark:fill-blue-400 dark:text-blue-400" />
                       <span className="font-medium dark:text-gray-200">{averageRating.toFixed(1)} ({reviews.length})</span>
                     </div>
                   )}
                   {totalEnrollments > 0 && (
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                      <Award className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                      <Award className="h-4 w-4 text-blue-700 dark:text-blue-400" />
                       <span className="font-medium dark:text-gray-200">{totalEnrollments}+ Enrolled</span>
                     </div>
                   )}
@@ -277,7 +277,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                       <Badge
                         key={name}
                         variant="outline"
-                        className="rounded-full border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-500/30 dark:bg-yellow-500/10 dark:text-yellow-400"
+                        className="rounded-full border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-400"
                       >
                         {name}
                       </Badge>
@@ -288,17 +288,17 @@ export default function CourseDetailClient({ course: initialCourse }) {
 
               {/* Progress Card (if enrolled) */}
               {enrollmentStatus.isEnrolled && progress && (
-                <Card className="bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 dark:from-yellow-500/10 dark:to-yellow-500/5 dark:border-yellow-500/30">
+                <Card className="bg-gradient-to-r from-blue-50 to-slate-50 border-blue-200 dark:from-blue-500/10 dark:to-blue-500/5 dark:border-blue-500/30">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <Award className="h-5 w-5 text-yellow-700 dark:text-yellow-400" />
-                        <span className="font-semibold text-yellow-900 dark:text-yellow-100">Your Learning Progress</span>
+                        <Award className="h-5 w-5 text-blue-700 dark:text-blue-400" />
+                        <span className="font-semibold text-blue-900 dark:text-blue-100">Your Learning Progress</span>
                       </div>
-                      <span className="text-2xl font-bold text-yellow-900 dark:text-yellow-100">{Math.round(overallProgress)}%</span>
+                      <span className="text-2xl font-bold text-blue-900 dark:text-blue-100">{Math.round(overallProgress)}%</span>
                     </div>
                     <Progress value={overallProgress} className="h-3 mb-2" />
-                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
                       {completedChapters} of {totalChapters} chapters completed
                     </p>
                   </CardContent>
@@ -430,7 +430,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
               {course.sessions && course.sessions.length > 0 && (
                 <div className="space-y-4">
                   {course.sessions.map((session) => (
-                    <Card key={session.id} className="border border-gray-200 hover:border-yellow-300 shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:border-yellow-500/30">
+                    <Card key={session.id} className="border border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:border-blue-500/30">
                       <CardContent className="p-4 sm:p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
@@ -487,7 +487,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                                   </div>
                                   {!isLocked && enrollmentStatus.isEnrolled && (
                                     <Link href={`/courses/${course.slug}/learn?chapter=${chapter.id}`} className="w-full sm:w-auto">
-                                      <Button size="sm" variant="ghost" className="w-full sm:w-auto hover:bg-yellow-100 hover:text-yellow-800 dark:hover:bg-yellow-500/10 dark:hover:text-yellow-400">
+                                      <Button size="sm" variant="ghost" className="w-full sm:w-auto hover:bg-blue-100 hover:text-blue-800 dark:hover:bg-blue-500/10 dark:hover:text-blue-400">
                                         <Play className="h-4 w-4 mr-1" />
                                         Watch
                                       </Button>
@@ -544,7 +544,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                               >
                                 <Star
                                   className={`h-6 w-6 ${star <= reviewForm.rating
-                                      ? 'fill-yellow-700 text-yellow-700 dark:fill-yellow-400 dark:text-yellow-400'
+                                      ? 'fill-blue-700 text-blue-700 dark:fill-blue-400 dark:text-blue-400'
                                       : 'text-gray-300'
                                     }`}
                                 />
@@ -608,7 +608,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                               height={360}
                             />
                           ) : (
-                            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-yellow-700 to-amber-600 dark:from-yellow-500 dark:to-amber-400 flex items-center justify-center text-white dark:text-black font-semibold text-lg">
+                            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-700 to-slate-600 dark:from-blue-500 dark:to-slate-400 flex items-center justify-center text-white dark:text-black font-semibold text-lg">
                               {review.user.name?.charAt(0)?.toUpperCase() || 'U'}
                             </div>
                           )}
@@ -624,7 +624,7 @@ export default function CourseDetailClient({ course: initialCourse }) {
                                   <Star
                                     key={star}
                                     className={`h-4 w-4 ${star <= review.rating
-                                        ? 'fill-yellow-700 text-yellow-700 dark:fill-yellow-400 dark:text-yellow-400'
+                                        ? 'fill-blue-700 text-blue-700 dark:fill-blue-400 dark:text-blue-400'
                                         : 'text-gray-300 dark:text-gray-600'
                                       }`}
                                   />

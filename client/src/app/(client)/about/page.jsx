@@ -58,13 +58,13 @@ export default function AboutPage() {
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.6 }}
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 text-sm font-bold mb-8 ring-1 ring-violet-200 dark:ring-violet-800">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-300 text-sm font-bold mb-8 ring-1 ring-slate-200 dark:ring-slate-800">
             <Sparkles className="w-4 h-4" />
             Leading Institute for Data Analytics, AI & Trading
           </span>
           
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6">
-            About <span className="text-violet-600">Shrestha Academy</span>
+            About <span className="text-slate-600">Shrestha Academy</span>
           </h1>
           
           <p className="max-w-3xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed font-light">
@@ -84,7 +84,7 @@ export default function AboutPage() {
               transition={{ delay: 0.2 + idx * 0.1 }}
               className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none"
             >
-              <stat.icon className="w-8 h-8 text-violet-600 dark:text-violet-400 mb-3 mx-auto" />
+              <stat.icon className="w-8 h-8 text-slate-600 dark:text-slate-400 mb-3 mx-auto" />
               <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{stat.value}</div>
               <div className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</div>
             </motion.div>
@@ -103,12 +103,12 @@ export default function AboutPage() {
               className="space-y-6"
             >
               <h2 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                <Users className="w-8 h-8 text-violet-600" />
+                <Users className="w-8 h-8 text-slate-600" />
                 About the Founder
               </h2>
               <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Sagar Shrestha</h3>
-                <p className="text-violet-600 font-medium mb-4">Founder – Shrestha Academy</p>
+                <p className="text-slate-600 font-medium mb-4">Founder – Shrestha Academy</p>
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
                   An experienced educator, technologist, and market professional with over <strong>17+ years</strong> of teaching experience and <strong>10+ years</strong> of hands-on industry experience across technology, finance, and data-driven domains.
                 </p>
@@ -116,7 +116,7 @@ export default function AboutPage() {
 
               <div className="space-y-4">
                  <h4 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-violet-600" />
+                    <TrendingUp className="w-5 h-5 text-slate-600" />
                     Industry Experience
                  </h4>
                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -126,7 +126,7 @@ export default function AboutPage() {
 
               <div className="space-y-4">
                  <h4 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                    <LineChart className="w-5 h-5 text-violet-600" />
+                    <LineChart className="w-5 h-5 text-slate-600" />
                     Leadership in Financial Education
                  </h4>
                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -167,16 +167,16 @@ export default function AboutPage() {
                       'Artificial Intelligence (GenAI & Agentic AI)',
                       'Stock Market & Crypto Trading'
                     ].map((skill) => (
-                      <span key={skill} className="px-3 py-1 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-lg text-sm font-medium border border-violet-100 dark:border-violet-800">
+                      <span key={skill} className="px-3 py-1 bg-slate-50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium border border-slate-100 dark:border-slate-800">
                         {skill}
                       </span>
                     ))}
                   </div>
                </div>
 
-               <div className="bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 p-6 rounded-r-xl">
-                  <h4 className="font-bold text-amber-800 dark:text-amber-200 mb-2">Job Assistance Disclaimer</h4>
-                  <p className="text-amber-900/80 dark:text-amber-100/80 text-sm leading-relaxed">
+               <div className="bg-slate-50 dark:bg-slate-900/10 border-l-4 border-slate-500 p-6 rounded-r-xl">
+                  <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Job Assistance Disclaimer</h4>
+                  <p className="text-slate-900/80 dark:text-slate-100/80 text-sm leading-relaxed">
                     We provide 100% Job Assistance (resume building, interview prep, referrals) for eligible programs, but <strong>Job Placement is NOT guaranteed</strong>. Final employment depends on skills, performance, and market conditions.
                   </p>
                </div>
@@ -202,7 +202,7 @@ export default function AboutPage() {
                 transition={{ delay: idx * 0.1 }}
                 className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300 group"
               >
-                <div className="w-12 h-12 rounded-xl bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-900/30 flex items-center justify-center text-slate-600 dark:text-slate-400 mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-6 h-6" />
                 </div>
                 <h3 className="font-bold text-slate-900 dark:text-white mb-2">{feature.title}</h3>

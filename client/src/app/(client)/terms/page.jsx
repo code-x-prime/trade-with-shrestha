@@ -73,12 +73,12 @@ export default function TermsPage() {
                 <li>Sharing relevant job openings and referrals</li>
               </ul>
               
-              <div className="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-6 rounded-r-lg shadow-sm mb-6">
-                <h3 className="font-bold text-amber-800 dark:text-amber-200 text-lg mb-2">⚠️ Job placement is NOT guaranteed.</h3>
-                <p className="text-amber-800/90 dark:text-amber-200/90 leading-relaxed mb-4">
+              <div className="bg-slate-50 dark:bg-slate-900/20 border-l-4 border-slate-500 p-6 rounded-r-lg shadow-sm mb-6">
+                <h3 className="font-bold text-slate-800 dark:text-slate-200 text-lg mb-2">⚠️ Job placement is NOT guaranteed.</h3>
+                <p className="text-slate-800/90 dark:text-slate-200/90 leading-relaxed mb-4">
                   Final placement depends on:
                 </p>
-                <ul className="list-disc pl-6 text-amber-800/90 dark:text-amber-200/90 space-y-1">
+                <ul className="list-disc pl-6 text-slate-800/90 dark:text-slate-200/90 space-y-1">
                   <li>Candidate’s skills and performance</li>
                   <li>Attendance and course completion</li>
                   <li>Interview results</li>

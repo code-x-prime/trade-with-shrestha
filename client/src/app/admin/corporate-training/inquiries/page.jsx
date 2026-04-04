@@ -59,7 +59,7 @@ export default function CorporateTrainingInquiriesPage() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'NEW': return 'bg-blue-600';
-      case 'CONTACTED': return 'bg-yellow-600';
+      case 'CONTACTED': return 'bg-blue-600';
       case 'CONVERTED': return 'bg-green-600';
       case 'CLOSED': return 'bg-gray-600';
       default: return 'bg-gray-600';

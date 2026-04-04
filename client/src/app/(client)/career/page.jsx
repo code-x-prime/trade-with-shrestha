@@ -12,12 +12,12 @@ const SECTIONS = [
     img: '/card1.png',
     tag: '500+ Openings',
     number: '01',
-    borderHover: 'hover:border-orange-500/50',
-    tagCls: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
-    dot: 'bg-orange-400',
-    arrowCls: 'group-hover:text-orange-400',
-    glowCls: 'bg-orange-500',
-    lineCls: 'bg-orange-400',
+    borderHover: 'hover:border-blue-500/50',
+    tagCls: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    dot: 'bg-blue-400',
+    arrowCls: 'group-hover:text-blue-400',
+    glowCls: 'bg-blue-500',
+    lineCls: 'bg-blue-400',
   },
   {
     title: 'Interview Questions',
@@ -40,12 +40,12 @@ const SECTIONS = [
     img: '/card3.png',
     tag: 'Expert Mentors',
     number: '03',
-    borderHover: 'hover:border-yellow-500/50',
-    tagCls: 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-500/10 dark:text-yellow-400 dark:border-yellow-500/20',
-    dot: 'bg-yellow-500',
-    arrowCls: 'group-hover:text-yellow-700 dark:group-hover:text-yellow-400',
-    glowCls: 'bg-yellow-500',
-    lineCls: 'bg-yellow-500',
+    borderHover: 'hover:border-blue-500/50',
+    tagCls: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20',
+    dot: 'bg-blue-500',
+    arrowCls: 'group-hover:text-blue-700 dark:group-hover:text-blue-400',
+    glowCls: 'bg-blue-500',
+    lineCls: 'bg-blue-500',
   },
 ];
 
@@ -156,7 +156,7 @@ export default function CareerPage() {
         <div className="text-center mt-10">
           <Link
             href="/career/software-jobs"
-            className="inline-flex items-center gap-3 rounded-full bg-yellow-600 text-white dark:bg-yellow-500 dark:text-black hover:bg-yellow-500 dark:hover:bg-yellow-400 px-7 py-3 text-sm font-semibold transition-all duration-300"
+            className="inline-flex items-center gap-3 rounded-full bg-blue-600 text-white dark:bg-blue-500 dark:text-black hover:bg-blue-500 dark:hover:bg-blue-400 px-7 py-3 text-sm font-semibold transition-all duration-300"
           >
             Explore career resources
           </Link>
@@ -170,7 +170,7 @@ export default function CareerPage() {
             Career Portal
           </span>
           <div className="flex gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-orange-400" />
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
             <span className="h-1.5 w-1.5 rounded-full bg-gray-200 dark:bg-white/10" />
             <span className="h-1.5 w-1.5 rounded-full bg-gray-200 dark:bg-white/10" />
           </div>

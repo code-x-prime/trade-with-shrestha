@@ -118,7 +118,7 @@ export default function AdminJobsPage() {
                                 {job.isVerified ? (
                                     <span className="text-xs text-green-600 flex items-center"><FiCheck className="mr-1"/> Verified</span>
                                 ) : (
-                                    <span className="text-xs text-amber-600 flex items-center">Unverified</span>
+                                    <span className="text-xs text-slate-600 flex items-center">Unverified</span>
                                 )}
                             </div>
                         </TableCell>

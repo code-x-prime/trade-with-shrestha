@@ -23,6 +23,8 @@ import {
   FileText,
   Info,
   Shield,
+  Phone,
+  MapPin,
   HelpCircle,
 } from 'lucide-react';
 
@@ -99,17 +101,17 @@ export default function Footer() {
   return (
     <footer className="bg-gray-100 dark:bg-gray-950 text-slate-700 dark:text-slate-300 border-t border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative h-16 w-auto rounded-lg overflow-hidden  flex items-center justify-center">
                 <Image
-                  src={theme === 'dark' ? '/logo.png' : '/logob.png'}
+                  src={theme === 'dark' ? '/new-logo.png' : '/new-logo.png'}
                   alt="Shrestha Academy"
                   width={200}
                   height={200}
-                  className="w-full h-full "
+                  className="w-full h-full rounded-full "
                   onError={(e) => {
                     // Fallback if logo doesn't exist
                     e.target.style.display = 'none';
@@ -134,7 +136,7 @@ export default function Footer() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:scale-110 hover:shadow-lg border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:text-yellow-700 dark:hover:text-yellow-400 bg-white dark:bg-gray-900"
+                      className="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:scale-110 hover:shadow-lg border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:text-blue-700 dark:hover:text-blue-400 bg-white dark:bg-gray-900"
                       title={link.label}
                     >
                       {IconComponent ? (
@@ -153,7 +155,7 @@ export default function Footer() {
 
           {/* Products Section */}
           <div>
-            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2">
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2 text-base">
               <BookOpen className="h-4 w-4" />
               Products
             </h3>
@@ -164,7 +166,7 @@ export default function Footer() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors group"
+                      className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-400 transition-colors group"
                     >
                       <Icon className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <span>{item.name}</span>
@@ -177,7 +179,7 @@ export default function Footer() {
 
           {/* Company Section */}
           <div>
-            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2">
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2 text-base">
               <Info className="h-4 w-4" />
               Company
             </h3>
@@ -186,7 +188,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors"
+                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -195,9 +197,37 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Contact Section */}
+          <div>
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2 text-base">
+              <Phone className="h-4 w-4" />
+              Contact Us
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <MapPin className="h-5 w-5 text-blue-700 dark:text-blue-400 shrink-0 mt-0.5" />
+                <span className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed  capitalize">
+                  Shop No 167B, Third Floor Main Road, 672, opposite Metro Pillar No, Uttam Nagar, New Delhi, Delhi 110059
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="h-5 w-5 text-blue-700 dark:text-blue-400 shrink-0" />
+                <a href="tel:+919236666923" className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-400">
+                  +91 9236666923
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="h-5 w-5 text-blue-700 dark:text-blue-400 shrink-0" />
+                <a href="mailto:support@shrestha.com" className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-400">
+                  support@shrestha.com
+                </a>
+              </li>
+            </ul>
+          </div>
+
           {/* Legal Section */}
           <div>
-            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2">
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2 text-base">
               <Shield className="h-4 w-4" />
               Legal
             </h3>
@@ -206,7 +236,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-yellow-700 dark:hover:text-yellow-400 transition-colors"
+                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
                   >
                     {item.name}
                   </Link>

@@ -156,9 +156,9 @@ export default function MediaPicker({
   const getFileIcon = (fileType) => {
     switch (fileType) {
       case 'image': return <ImageIcon className="h-8 w-8 text-blue-500" />;
-      case 'video': return <Video className="h-8 w-8 text-purple-500" />;
+      case 'video': return <Video className="h-8 w-8 text-blue-500" />;
       case 'document': 
-      case 'pdf': return <FileText className="h-8 w-8 text-orange-500" />;
+      case 'pdf': return <FileText className="h-8 w-8 text-blue-500" />;
       default: return <FileIcon className="h-8 w-8 text-gray-500" />;
     }
   };

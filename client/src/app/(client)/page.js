@@ -242,14 +242,14 @@ function HomeContent() {
                     <div className="flex flex-col items-center gap-4 text-center mb-14">
 
                         {/* eyebrow pill */}
-                        <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300 dark:border-yellow-500/20 bg-yellow-100 dark:bg-yellow-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-yellow-700 dark:text-yellow-400">
-                            <span className="h-1.5 w-1.5 rounded-full bg-yellow-700 dark:bg-yellow-400" />
+                        <div className="inline-flex items-center gap-2 rounded-full border border-blue-300 dark:border-blue-500/20 bg-blue-100 dark:bg-blue-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-700 dark:text-blue-400">
+                            <span className="h-1.5 w-1.5 rounded-full bg-blue-700 dark:bg-blue-400" />
                             Your Growth Hub
                         </div>
 
                         <h2 className="text-[clamp(32px,5vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-gray-900 dark:text-white">
                             Launch Your{' '}
-                            <span className="text-yellow-700 dark:text-yellow-400">
+                            <span className="text-blue-700 dark:text-blue-400">
                                 Career
                             </span>
                         </h2>
@@ -267,23 +267,23 @@ function HomeContent() {
                         {/* Card 1 — Software Jobs */}
                         <Link
                             href="/career/software-jobs"
-                            className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#0F0F1A] shadow-sm hover:shadow-2xl hover:border-orange-500/50 transition-all duration-300"
+                            className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#0F0F1A] shadow-sm hover:shadow-2xl hover:border-blue-500/50 transition-all duration-300"
                         >
-                            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl bg-orange-500 opacity-0 group-hover:opacity-15 transition-opacity duration-500" />
+                            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl bg-blue-500 opacity-0 group-hover:opacity-15 transition-opacity duration-500" />
                             <div className="relative h-52 w-full shrink-0 overflow-hidden">
                                 <Image src="/card1.png" alt="Software Jobs" fill className="object-cover brightness-95 dark:brightness-75 transition-transform duration-500 group-hover:scale-105 dark:group-hover:brightness-90" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-[#0F0F1A]" />
                                 <span className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25">01</span>
                             </div>
                             <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-3">
-                                <span className="self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-orange-400">
-                                    <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-orange-400" />
+                                <span className="self-start rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-400">
+                                    <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-blue-400" />
                                     500+ Openings
                                 </span>
                                 <h3 className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white">Software Jobs</h3>
                                 <p className="flex-1 text-sm font-light leading-relaxed text-gray-500 dark:text-white/40">Browse software and tech job openings. Find roles that match your skills and experience level.</p>
                                 <div className="h-px w-full bg-gray-100 dark:bg-white/[0.05]" />
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-orange-400 transition-all duration-300">
+                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-blue-400 transition-all duration-300">
                                     <span className="h-px w-5 bg-current transition-all duration-300 group-hover:w-9" />
                                     Explore
                                     <svg className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -291,7 +291,7 @@ function HomeContent() {
                                     </svg>
                                 </div>
                             </div>
-                            <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-orange-400 transition-all duration-500 group-hover:w-full" />
+                            <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-blue-400 transition-all duration-500 group-hover:w-full" />
                         </Link>
 
                         {/* Card 2 — Interview Questions */}
@@ -327,7 +327,7 @@ function HomeContent() {
                         {/* Card 3 — Placement Training */}
                         <Link
                             href="/career/placement-training"
-                            className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm hover:shadow-2xl hover:border-yellow-700 dark:hover:border-yellow-500/50 transition-all duration-300"
+                            className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm hover:shadow-2xl hover:border-blue-700 dark:hover:border-blue-500/50 transition-all duration-300"
                         >
                             <div className="relative h-52 w-full shrink-0 overflow-hidden">
                                 <Image src="/card3.png" alt="Placement Training" fill className="object-cover brightness-95 dark:brightness-75 transition-transform duration-500 group-hover:scale-105 dark:group-hover:brightness-90" />
@@ -335,14 +335,14 @@ function HomeContent() {
                                 <span className="absolute left-4 top-4 text-xs font-bold tracking-[0.18em] text-black/20 dark:text-white/25">03</span>
                             </div>
                             <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-3">
-                                <span className="self-start rounded-full border border-yellow-300 dark:border-yellow-500/20 bg-yellow-100 dark:bg-yellow-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-yellow-700 dark:text-yellow-400">
-                                    <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-yellow-700 dark:bg-yellow-400" />
+                                <span className="self-start rounded-full border border-blue-300 dark:border-blue-500/20 bg-blue-100 dark:bg-blue-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-700 dark:text-blue-400">
+                                    <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle bg-blue-700 dark:bg-blue-400" />
                                     Expert Mentors
                                 </span>
                                 <h3 className="text-xl font-bold leading-snug tracking-tight text-gray-900 dark:text-white">Placement Training</h3>
                                 <p className="flex-1 text-sm font-light leading-relaxed text-gray-500 dark:text-white/40">Structured training to get you job-ready: resume, interviews, and essential soft skills.</p>
                                 <div className="h-px w-full bg-gray-100 dark:bg-white/[0.05]" />
-                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-all duration-300">
+                                <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-white/25 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-all duration-300">
                                     <span className="h-px w-5 bg-current transition-all duration-300 group-hover:w-9" />
                                     Explore
                                     <svg className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -350,7 +350,7 @@ function HomeContent() {
                                     </svg>
                                 </div>
                             </div>
-                            <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-yellow-700 dark:bg-yellow-500 transition-all duration-500 group-hover:w-full" />
+                            <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-blue-700 dark:bg-blue-500 transition-all duration-500 group-hover:w-full" />
                         </Link>
 
                     </div>
@@ -359,7 +359,7 @@ function HomeContent() {
                     <div className="text-center mt-10">
                         <Link
                             href="/career"
-                            className="inline-flex items-center gap-3 rounded-full border border-gray-200 dark:border-white/[0.1] bg-white dark:bg-white/[0.04] px-7 py-3 text-sm font-medium text-gray-700 dark:text-white/60 shadow-sm hover:border-orange-500/40 hover:text-orange-500 dark:hover:text-orange-400 dark:hover:border-orange-500/30 transition-all duration-300 group"
+                            className="inline-flex items-center gap-3 rounded-full border border-gray-200 dark:border-white/[0.1] bg-white dark:bg-white/[0.04] px-7 py-3 text-sm font-medium text-gray-700 dark:text-white/60 shadow-sm hover:border-blue-500/40 hover:text-blue-500 dark:hover:text-blue-400 dark:hover:border-blue-500/30 transition-all duration-300 group"
                         >
                             View all career resources
                             <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

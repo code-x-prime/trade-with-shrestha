@@ -181,8 +181,8 @@ export default function MockInterviewPage() {
           <Card className="rounded-2xl border border-border/80 bg-card shadow-lg shadow-black/5 dark:shadow-none dark:bg-gradient-to-b dark:from-card dark:to-card/80 overflow-hidden">
             <CardContent className="p-5 sm:p-6">
               <div className="flex items-center gap-2 mb-3">
-                <div className="h-9 w-9 rounded-lg bg-yellow-100 dark:bg-yellow-500/10 flex items-center justify-center">
-                  <Search className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                <div className="h-9 w-9 rounded-lg bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
+                  <Search className="h-4 w-4 text-blue-700 dark:text-blue-400" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Check your booking</h3>
@@ -200,7 +200,7 @@ export default function MockInterviewPage() {
                 <Button
                   onClick={fetchMyBookings}
                   disabled={checking || !checkEmail.trim()}
-                  className="h-10 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400 font-semibold shrink-0 px-4"
+                  className="h-10 rounded-lg bg-blue-600 hover:bg-blue-500 text-white dark:bg-blue-500 dark:text-black dark:hover:bg-blue-400 font-semibold shrink-0 px-4"
                 >
                   {checking ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check'}
                 </Button>
@@ -239,8 +239,8 @@ export default function MockInterviewPage() {
           <Card className="rounded-2xl border border-border/80 bg-card shadow-lg shadow-black/5 dark:shadow-none dark:bg-gradient-to-b dark:from-card dark:to-card/80 overflow-hidden">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-lg bg-yellow-100 dark:bg-yellow-500/10 flex items-center justify-center">
-                  <CheckCircle2 className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                <div className="h-9 w-9 rounded-lg bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
+                  <CheckCircle2 className="h-4 w-4 text-blue-700 dark:text-blue-400" />
                 </div>
                 <h3 className="font-semibold">Your bookings</h3>
               </div>
@@ -288,13 +288,13 @@ export default function MockInterviewPage() {
         )}
         {loadingSlots ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-yellow-700 dark:text-yellow-400" />
+            <Loader2 className="h-8 w-8 animate-spin text-blue-700 dark:text-blue-400" />
           </div>
         ) : filteredSlots.length === 0 ? (
           <Card className="rounded-2xl border border-border/80 bg-card shadow-lg shadow-black/5 overflow-hidden">
             <CardContent className="py-12 text-center text-muted-foreground">
               {slots.length === 0
-                ? <>No slots available at the moment. Check back later or <Link href="/contact" className="text-yellow-700 dark:text-yellow-400 font-medium hover:underline">contact us</Link> for more options.</>
+                ? <>No slots available at the moment. Check back later or <Link href="/contact" className="text-blue-700 dark:text-blue-400 font-medium hover:underline">contact us</Link> for more options.</>
                 : 'No slots match your search. Try a different date or time.'}
             </CardContent>
           </Card>
@@ -307,19 +307,19 @@ export default function MockInterviewPage() {
                 remainingInfo.variant === 'red'
                   ? 'text-red-600 dark:text-red-400 bg-red-500/15 dark:bg-red-500/20'
                   : remainingInfo.variant === 'orange'
-                    ? 'text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/20'
-                    : 'text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-500/20';
+                    ? 'text-slate-600 dark:text-slate-400 bg-slate-500/15 dark:bg-slate-500/20'
+                    : 'text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/20';
               return (
                 <Card
                   key={slot.id}
-                  className={`group rounded-2xl border border-border/80 bg-card shadow-md shadow-black/5 dark:shadow-none dark:bg-gradient-to-b dark:from-card dark:to-card/90 overflow-hidden transition-all duration-200 ${isFull ? 'opacity-90' : 'hover:shadow-lg hover:shadow-yellow-500/5 hover:border-yellow-700 dark:hover:border-yellow-500/30'}`}
+                  className={`group rounded-2xl border border-border/80 bg-card shadow-md shadow-black/5 dark:shadow-none dark:bg-gradient-to-b dark:from-card dark:to-card/90 overflow-hidden transition-all duration-200 ${isFull ? 'opacity-90' : 'hover:shadow-lg hover:shadow-blue-500/5 hover:border-blue-700 dark:hover:border-blue-500/30'}`}
                 >
                   <CardContent className="p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 text-muted-foreground flex-wrap">
-                          <div className="h-8 w-8 rounded-lg bg-yellow-100 dark:bg-yellow-500/10 flex items-center justify-center shrink-0">
-                            <Calendar className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                          <div className="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center shrink-0">
+                            <Calendar className="h-4 w-4 text-blue-700 dark:text-blue-400" />
                           </div>
                           <span className="text-sm font-medium truncate">{formatSlotDate(slot.slotDate)}</span>
                           <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${remainingClass}`}>
@@ -329,7 +329,7 @@ export default function MockInterviewPage() {
                         <p className="mt-2 font-semibold text-foreground">
                           {slot.startTime}{slot.endTime ? ` – ${slot.endTime}` : ''}
                         </p>
-                        <p className="mt-1 text-lg font-bold text-yellow-700 dark:text-yellow-400">
+                        <p className="mt-1 text-lg font-bold text-blue-700 dark:text-blue-400">
                           {formatPrice(slot.price, slot.currency)}
                         </p>
                         {slot.meetingLink && (
@@ -337,7 +337,7 @@ export default function MockInterviewPage() {
                             href={slot.meetingLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-yellow-700 dark:hover:text-yellow-400 mt-2 transition-colors"
+                            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-blue-700 dark:hover:text-blue-400 mt-2 transition-colors"
                           >
                             <Video className="h-3.5 w-3.5" /> Join link
                           </a>
@@ -346,7 +346,7 @@ export default function MockInterviewPage() {
                       <Button
                         size="sm"
                         disabled={isFull}
-                        className="shrink-0 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400 font-semibold shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+                        className="shrink-0 rounded-lg bg-blue-600 hover:bg-blue-500 text-white dark:bg-blue-500 dark:text-black dark:hover:bg-blue-400 font-semibold shadow-sm disabled:opacity-50 disabled:pointer-events-none"
                         onClick={() => openBookDialog(slot)}
                       >
                         {isFull ? 'Full' : 'Book'}
@@ -422,7 +422,7 @@ export default function MockInterviewPage() {
               <Button type="button" variant="outline" onClick={() => setBookDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting} className="bg-yellow-600 hover:bg-yellow-500 text-white dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400 font-semibold">
+              <Button type="submit" disabled={submitting} className="bg-blue-600 hover:bg-blue-500 text-white dark:bg-blue-500 dark:text-black dark:hover:bg-blue-400 font-semibold">
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 Submit booking
               </Button>

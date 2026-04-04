@@ -19,7 +19,7 @@ export default function BottomNavbar() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[90] lg:hidden border-t border-yellow-200 bg-white/95 backdrop-blur-md shadow-[0_-8px_20px_rgba(0,0,0,0.06)] safe-area-inset-bottom dark:bg-gray-900 dark:border-gray-800 dark:shadow-none">
+    <nav className="fixed bottom-0 left-0 right-0 z-[90] lg:hidden border-t border-blue-200 bg-white/95 backdrop-blur-md shadow-[0_-8px_20px_rgba(0,0,0,0.06)] safe-area-inset-bottom dark:bg-gray-900 dark:border-gray-800 dark:shadow-none">
       <div className="flex items-center justify-around h-16 px-2 pb-1">
         {menuItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -32,8 +32,8 @@ export default function BottomNavbar() {
               className={cn(
                 "relative flex flex-col items-center justify-center gap-1 flex-1 h-full transition-all duration-200 min-w-0 rounded-xl",
                 isActive
-                  ? "text-yellow-700 dark:text-yellow-400 bg-yellow-100/80 dark:bg-yellow-500/10"
-                  : "text-gray-600 hover:text-yellow-700 hover:bg-yellow-50 dark:text-gray-400 dark:hover:text-yellow-400 dark:hover:bg-yellow-500/10"
+                  ? "text-blue-700 dark:text-blue-400 bg-blue-100/80 dark:bg-blue-500/10"
+                  : "text-gray-600 hover:text-blue-700 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-500/10"
               )}
             >
               <Icon className={cn(
@@ -47,7 +47,7 @@ export default function BottomNavbar() {
                 {item.name}
               </span>
               {isActive && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-yellow-700 rounded-t-full dark:bg-yellow-400" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-blue-700 rounded-t-full dark:bg-blue-400" />
               )}
             </Link>
           );

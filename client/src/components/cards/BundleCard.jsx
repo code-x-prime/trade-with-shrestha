@@ -65,12 +65,12 @@ export default function BundleCard({ bundle, isEnrolled = false }) {
                             </Badge>
                         )}
                         {badges?.includes('FEATURED') && (
-                            <Badge className="bg-yellow-500 text-white text-xs font-semibold px-2 py-0.5">
+                            <Badge className="bg-blue-500 text-white text-xs font-semibold px-2 py-0.5">
                                 Featured
                             </Badge>
                         )}
                         {badges?.includes('BESTSELLER') && (
-                            <Badge className="bg-orange-500 text-white text-xs font-semibold px-2 py-0.5">
+                            <Badge className="bg-blue-500 text-white text-xs font-semibold px-2 py-0.5">
                                 Bestseller
                             </Badge>
                         )}

@@ -86,7 +86,7 @@ const getHeader = (title, emoji = '✨') => `
 `;
 
 // Logo URL - use environment variable or default
-const LOGO_URL = process.env.CLIENT_URL ? `${process.env.CLIENT_URL}/logo.png` : 'https://shresthaacademy.com/logo.png';
+const LOGO_URL = process.env.CLIENT_URL ? `${process.env.CLIENT_URL}/new-logo.png` : 'https://shresthaacademy.com/new-logo.png';
 
 // Logo header (simpler version)
 const getLogoHeader = () => `

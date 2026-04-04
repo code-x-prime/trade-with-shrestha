@@ -97,7 +97,7 @@ export default function BookDemoDialog({
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="Your name"
               required
-              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
             />
           </div>
           <div>
@@ -109,7 +109,7 @@ export default function BookDemoDialog({
               onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
               placeholder="your@email.com"
               required
-              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
             />
           </div>
           <div>
@@ -120,8 +120,8 @@ export default function BookDemoDialog({
               value={form.phone}
               onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
               required
-              placeholder="+91 98765 43210"
-              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              placeholder="+91 9236666923"
+              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
             />
           </div>
           <div>
@@ -132,7 +132,7 @@ export default function BookDemoDialog({
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               placeholder="Preferred time or topic..."
               rows={3}
-              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              className="mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
             />
           </div>
           <div className="flex gap-2 pt-2">

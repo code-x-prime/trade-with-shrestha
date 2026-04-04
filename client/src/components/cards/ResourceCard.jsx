@@ -32,7 +32,7 @@ const CARD_THEMES = {
     featureBg: 'rgba(139,92,246,0.08)',
     featureBorder: 'rgba(139,92,246,0.2)',
     accent: '#8b5cf6',
-    shimmer: 'from-violet-400/0 via-violet-400/5 to-violet-400/0',
+    shimmer: 'from-slate-400/0 via-slate-400/5 to-slate-400/0',
   },
   blue: {
     bg: 'linear-gradient(135deg, #080f1f 0%, #0c1530 50%, #080f1f 100%)',
@@ -74,7 +74,7 @@ const CARD_THEMES = {
     featureBg: 'rgba(212,175,55,0.08)',
     featureBorder: 'rgba(212,175,55,0.2)',
     accent: '#d4af37',
-    shimmer: 'from-yellow-400/0 via-yellow-400/5 to-yellow-400/0',
+    shimmer: 'from-blue-400/0 via-blue-400/5 to-blue-400/0',
   },
   orange: {
     bg: 'linear-gradient(135deg, #1a0e00 0%, #261400 50%, #1a0e00 100%)',
@@ -88,7 +88,7 @@ const CARD_THEMES = {
     featureBg: 'rgba(251,146,60,0.08)',
     featureBorder: 'rgba(251,146,60,0.2)',
     accent: '#fb923c',
-    shimmer: 'from-orange-400/0 via-orange-400/5 to-orange-400/0',
+    shimmer: 'from-blue-400/0 via-blue-400/5 to-blue-400/0',
   },
 };
 

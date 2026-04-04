@@ -201,7 +201,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section - Luxury Service Style */}
-      <div className="bg-gradient-to-br from-purple-50/50 via-white to-purple-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 border-b dark:border-gray-800">
+      <div className="bg-gradient-to-br from-blue-50/50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 border-b dark:border-gray-800">
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
           <Breadcrumb items={[
             { label: 'Home', href: '/' },
@@ -214,7 +214,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
             <div className="lg:col-span-2 space-y-6">
               <div className="flex flex-col sm:flex-row gap-6 items-start">
                 {/* Expert Image - Circular, Premium */}
-                <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-purple-100 shadow-xl mx-auto sm:mx-0 flex-shrink-0">
+                <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-blue-100 shadow-xl mx-auto sm:mx-0 flex-shrink-0">
                   {guidance.expertImageUrl ? (
                     <Image
                       src={getPublicUrl(guidance.expertImageUrl)}
@@ -223,8 +223,8 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                       className="object-cover"
                     />
                   ) : (
-                    <div className="h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200">
-                      <User className="h-16 w-16 text-purple-600" />
+                    <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200">
+                      <User className="h-16 w-16 text-blue-600" />
                     </div>
                   )}
                 </div>
@@ -232,7 +232,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                 {/* Expert Info */}
                 <div className="flex-1 text-center sm:text-left space-y-4">
                   <div>
-                    <Badge className="mb-3 bg-purple-100 text-purple-700 border-purple-300">
+                    <Badge className="mb-3 bg-blue-100 text-blue-700 border-blue-300">
                       <Sparkles className="h-3 w-3 mr-1" />
                       Expert Consultation
                     </Badge>
@@ -240,7 +240,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                       {guidance.title}
                     </h1>
                     <div className="flex items-center justify-center sm:justify-start gap-2 mb-4">
-                      <User className="h-5 w-5 text-purple-600" />
+                      <User className="h-5 w-5 text-blue-600" />
                       <span className="text-xl font-semibold text-foreground">{guidance.expertName}</span>
                     </div>
                     {guidance.expertBio && (
@@ -256,22 +256,22 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
 
             {/* Right: Booking Widget - Moved to Hero */}
             <div className="lg:col-span-1">
-              <Card className="sticky top-24 border-2 border-purple-100 dark:border-gray-700 dark:bg-gray-900">
+              <Card className="sticky top-24 border-2 border-blue-100 dark:border-gray-700 dark:bg-gray-900">
                 <CardContent className="p-6 space-y-6">
                   <div className="text-center">
                     {guidance.pricing?.hasFlashSale ? (
                       <div className="space-y-1">
-                        <div className="flex items-center justify-center gap-1 text-orange-500 font-semibold text-sm">
+                        <div className="flex items-center justify-center gap-1 text-blue-500 font-semibold text-sm">
                           <span>⚡ {guidance.pricing.flashSaleTitle || 'Flash Sale'}</span>
                         </div>
-                        <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">₹{guidance.pricing.effectivePrice.toLocaleString('en-IN')}</div>
+                        <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">₹{guidance.pricing.effectivePrice.toLocaleString('en-IN')}</div>
                         <div className="flex items-center justify-center gap-2">
                           <span className="text-muted-foreground dark:text-gray-500 line-through text-sm">₹{guidance.price.toLocaleString('en-IN')}</span>
-                          <span className="text-sm text-orange-600 font-semibold">({guidance.pricing.discountPercent}% OFF)</span>
+                          <span className="text-sm text-blue-600 font-semibold">({guidance.pricing.discountPercent}% OFF)</span>
                         </div>
                       </div>
                     ) : (
-                      <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">₹{guidance.price.toLocaleString('en-IN')}</div>
+                      <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">₹{guidance.price.toLocaleString('en-IN')}</div>
                     )}
                     <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground dark:text-gray-400">
                       <div className="flex items-center gap-1">
@@ -303,8 +303,8 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                             key={dateStr}
                             onClick={() => handleDateSelect(dateStr)}
                             className={`p-2 text-sm rounded-lg border-2 transition-colors ${isSelected
-                              ? 'bg-purple-600 text-white border-purple-600 shadow-lg'
-                              : 'hover:bg-purple-50 dark:hover:bg-purple-900/30 border-purple-200 dark:border-gray-600 dark:text-gray-200'
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
+                              : 'hover:bg-blue-50 dark:hover:bg-blue-900/30 border-blue-200 dark:border-gray-600 dark:text-gray-200'
                               }`}
                           >
                             <div className="font-semibold">{day}</div>
@@ -321,7 +321,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                       <h3 className="font-semibold mb-3 text-sm dark:text-white">Available Slots</h3>
                       {loadingSlots ? (
                         <div className="flex items-center justify-center py-4">
-                          <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
+                          <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
                         </div>
                       ) : slots.length === 0 ? (
                         <div className="text-center py-4 text-muted-foreground dark:text-gray-400 text-xs">
@@ -340,8 +340,8 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                                 className={`w-full p-3 text-left rounded-lg border-2 transition-colors ${isBooked
                                   ? 'bg-muted dark:bg-gray-800 text-muted-foreground cursor-not-allowed opacity-50 border-muted dark:border-gray-700'
                                   : isSelected
-                                    ? 'bg-purple-600 text-white border-purple-600 shadow-lg'
-                                    : 'hover:bg-purple-50 dark:hover:bg-purple-900/30 border-purple-200 dark:border-gray-600 cursor-pointer dark:text-gray-200'
+                                    ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
+                                    : 'hover:bg-blue-50 dark:hover:bg-blue-900/30 border-blue-200 dark:border-gray-600 cursor-pointer dark:text-gray-200'
                                   }`}
                               >
                                 <div className="flex items-center justify-between">
@@ -380,10 +380,10 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                               Join Live Call
                             </Button>
                           ) : (
-                            <div className="text-center text-sm text-muted-foreground p-4 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                              <Clock className="h-6 w-6 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
-                              <p className="font-semibold text-purple-900 dark:text-purple-100 mb-1">Call Starting Soon</p>
-                              <p className="text-xs text-purple-700 dark:text-purple-300 mt-1">
+                            <div className="text-center text-sm text-muted-foreground p-4 bg-gradient-to-br from-blue-50 to-pink-50 dark:from-blue-950/20 dark:to-pink-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                              <Clock className="h-6 w-6 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
+                              <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Call Starting Soon</p>
+                              <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
                                 The Google Meet link will be available 10 minutes before the scheduled time. You&apos;ll also receive it via email.
                               </p>
                             </div>
@@ -392,7 +392,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
                       ) : (
                         <Button
                           onClick={handleBookSlot}
-                          className="w-full bg-purple-600 hover:bg-purple-700"
+                          className="w-full bg-blue-600 hover:bg-blue-700"
                         >
                           <CheckCircle2 className="h-4 w-4 mr-2" />
                           Add to Cart
@@ -423,7 +423,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
               <SectionContainer title="Areas of Expertise">
                 <div className="flex flex-wrap gap-3">
                   {guidance.expertise.map((tag, idx) => (
-                    <Badge key={idx} variant="outline" className="px-4 py-2 text-sm font-medium border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/30">
+                    <Badge key={idx} variant="outline" className="px-4 py-2 text-sm font-medium border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30">
                       <Award className="h-3 w-3 mr-1" />
                       {tag}
                     </Badge>
@@ -443,7 +443,7 @@ export default function GuidanceDetailClient({ guidance: initialGuidance }) {
             )}
 
             {/* Disclaimer */}
-            <Card className="border-2 border-amber-100 dark:border-amber-900 bg-amber-50/50 dark:bg-amber-900/20">
+            <Card className="border-2 border-slate-100 dark:border-slate-900 bg-slate-50/50 dark:bg-slate-900/20">
               <CardContent className="p-6">
                 <p className="text-xs text-muted-foreground dark:text-gray-400 leading-relaxed">
                   <strong>Disclaimer:</strong> The trade ideas, analyses, and strategies shared on this platform are for educational purposes only, and should not be interpreted as financial advice. Shrestha Academy is not responsible for any losses resulting from applying the knowledge gained through the program. Shrestha Academy is merely providing a platform to trainers to provide stock market and financial education, the content shared is that of the trainer.

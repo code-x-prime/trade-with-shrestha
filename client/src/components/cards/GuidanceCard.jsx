@@ -25,11 +25,11 @@ const GuidanceCard = ({ item }) => {
         <Card className="rounded-2xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col cursor-pointer border border-border dark:border-gray-800 group">
 
           {/* Expert Image - Main Visual */}
-          <div className="relative w-full aspect-square bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 flex items-center justify-center overflow-hidden">
+          <div className="relative w-full aspect-square bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 flex items-center justify-center overflow-hidden">
             {/* Flash Sale Badge */}
             {hasFlashSale && (
               <div className="absolute top-3 right-3 z-10">
-                <Badge className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-2 py-1 flex items-center gap-1 shadow-sm">
+                <Badge className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-2 py-1 flex items-center gap-1 shadow-sm">
                   <Zap className="h-3 w-3" />
                   {discountPercent}% OFF
                 </Badge>
@@ -47,14 +47,14 @@ const GuidanceCard = ({ item }) => {
                 />
               </div>
             ) : (
-              <div className="w-32 h-32 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center shadow-lg">
-                <UserIcon className="h-16 w-16 text-purple-600 dark:text-purple-400" />
+              <div className="w-32 h-32 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center shadow-lg">
+                <UserIcon className="h-16 w-16 text-blue-600 dark:text-blue-400" />
               </div>
             )}
           </div>
 
           <CardContent className="flex-1 flex flex-col p-5">
-            <h3 className="font-bold text-lg mb-1 line-clamp-2 leading-snug text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+            <h3 className="font-bold text-lg mb-1 line-clamp-2 leading-snug text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {item.title}
             </h3>
 
@@ -81,7 +81,7 @@ const GuidanceCard = ({ item }) => {
               <div className="flex items-center justify-between mb-4">
                 {hasFlashSale ? (
                   <div className="space-y-0.5">
-                    <div className="text-xs text-orange-500 font-bold uppercase tracking-wider">Flash Sale</div>
+                    <div className="text-xs text-blue-500 font-bold uppercase tracking-wider">Flash Sale</div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-lg font-bold text-gray-900 dark:text-white">₹{effectivePrice.toLocaleString('en-IN')}</span>
                       <span className="text-xs text-muted-foreground line-through">₹{originalPrice.toLocaleString('en-IN')}</span>
@@ -96,7 +96,7 @@ const GuidanceCard = ({ item }) => {
                 )}
               </div>
 
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-sm group-hover:shadow-md transition-all">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-sm group-hover:shadow-md transition-all">
                 Book Consultation
               </Button>
             </div>

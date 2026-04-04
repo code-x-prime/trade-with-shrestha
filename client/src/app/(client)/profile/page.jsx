@@ -262,8 +262,8 @@ export default function ProfilePage() {
                       <p className="text-sm text-muted-foreground mb-1 dark:text-gray-400">Live Programs</p>
                       <p className="text-2xl font-bold dark:text-white">{stats.livePrograms}</p>
                     </div>
-                    <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                      <Video className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                      <Video className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                     </div>
                   </div>
                 </CardContent>
@@ -333,8 +333,8 @@ export default function ProfilePage() {
                   <Button asChild variant="outline" className="h-auto py-6 justify-start dark:border-gray-800 dark:hover:bg-gray-800">
                     <Link href="/profile/enrolled">
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                          <Play className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                        <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                          <Play className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div className="text-left">
                           <p className="font-semibold dark:text-white">My Courses</p>

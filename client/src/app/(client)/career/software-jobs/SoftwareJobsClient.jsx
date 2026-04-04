@@ -134,7 +134,7 @@ export default function JobListingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 onSubmit={handleSearch}
-                className="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-full p-2 pl-4 md:pl-6 flex shadow-2xl items-center border border-gray-200 dark:border-gray-800 focus-within:border-yellow-500/50 focus-within:ring-4 focus-within:ring-yellow-500/10 transition-all w-full"
+                className="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-full p-2 pl-4 md:pl-6 flex shadow-2xl items-center border border-gray-200 dark:border-gray-800 focus-within:border-blue-500/50 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all w-full"
             >
                 <FiSearch className="text-xl text-gray-400 flex-shrink-0" />
                 <input 
@@ -144,7 +144,7 @@ export default function JobListingPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Button type="submit" size="lg" className="rounded-full px-4 md:px-8 bg-yellow-500 hover:bg-yellow-400 text-black h-10 md:h-12 shadow-md hover:shadow-lg transition-all flex-shrink-0 font-semibold">
+                <Button type="submit" size="lg" className="rounded-full px-4 md:px-8 bg-blue-500 hover:bg-blue-400 text-black h-10 md:h-12 shadow-md hover:shadow-lg transition-all flex-shrink-0 font-semibold">
                   <FiSearch className="md:mr-2 w-4 h-4 md:w-5 md:h-5" />
                    <span className='hidden md:block'>Search</span>
                 </Button>
@@ -256,7 +256,7 @@ export default function JobListingPage() {
                 Reach thousands of qualified candidates. Post your job opening in minutes and verify your listing.
             </p>
             <Link href="/career/post-job">
-                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-400 text-black px-8 font-semibold">
+                <Button size="lg" className="bg-blue-500 hover:bg-blue-400 text-black px-8 font-semibold">
                     Post a Job for Free
                 </Button>
             </Link>

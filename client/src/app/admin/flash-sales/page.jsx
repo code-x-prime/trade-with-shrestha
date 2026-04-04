@@ -75,11 +75,11 @@ const TYPE_OPTIONS = [
 const THEME_OPTIONS = [
     { value: 'default', label: 'Default', bg: '#dc2626', text: '#ffffff' },
     { value: 'blackfriday', label: '🖤 Black Friday', bg: '#000000', text: '#fbbf24' },
-    { value: 'diwali', label: '🪔 Diwali', bg: '#f59e0b', text: '#1f2937' },
+    { value: 'diwali', label: '🪔 Diwali', bg: '#3b82f6', text: '#1f2937' },
     { value: 'holi', label: '🎨 Holi', bg: 'linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6)', text: '#ffffff' },
     { value: 'christmas', label: '🎄 Christmas', bg: '#16a34a', text: '#ffffff' },
-    { value: 'newyear', label: '🎉 New Year', bg: 'linear-gradient(90deg, #fbbf24, #f59e0b)', text: '#1f2937' },
-    { value: 'summer', label: '☀️ Summer Sale', bg: '#f97316', text: '#ffffff' },
+    { value: 'newyear', label: '🎉 New Year', bg: 'linear-gradient(90deg, #fbbf24, #3b82f6)', text: '#1f2937' },
+    { value: 'summer', label: '☀️ Summer Sale', bg: '#2563eb', text: '#ffffff' },
     { value: 'monsoon', label: '🌧️ Monsoon Sale', bg: '#0ea5e9', text: '#ffffff' },
 ];
 
@@ -267,7 +267,7 @@ export default function AdminFlashSalesPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold flex items-center gap-2">
-                        <Zap className="h-6 w-6 text-yellow-500" />
+                        <Zap className="h-6 w-6 text-blue-500" />
                         Flash Sales
                     </h1>
                     <p className="text-muted-foreground">Create promotional flash sales for courses, ebooks, and more</p>
@@ -279,15 +279,15 @@ export default function AdminFlashSalesPage() {
             </div>
 
             {/* Info Card */}
-            <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
+            <Card className="bg-gradient-to-r from-blue-50 to-blue-50 border-blue-200">
                 <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
-                        <div className="p-3 bg-yellow-100 rounded-full">
-                            <Zap className="h-6 w-6 text-yellow-600" />
+                        <div className="p-3 bg-blue-100 rounded-full">
+                            <Zap className="h-6 w-6 text-blue-600" />
                         </div>
                         <div>
-                            <h3 className="font-semibold text-yellow-900">How Flash Sales Work</h3>
-                            <p className="text-sm text-yellow-800 mt-1">
+                            <h3 className="font-semibold text-blue-900">How Flash Sales Work</h3>
+                            <p className="text-sm text-blue-800 mt-1">
                                 Only one flash sale can be active at a time. When you activate a sale, all others are automatically deactivated.
                                 The active sale banner appears on the home page below the header.
                             </p>
@@ -447,7 +447,7 @@ export default function AdminFlashSalesPage() {
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
-                            <Zap className="h-5 w-5 text-yellow-500" />
+                            <Zap className="h-5 w-5 text-blue-500" />
                             {isEditing ? 'Edit Flash Sale' : 'Create Flash Sale'}
                         </DialogTitle>
                         <DialogDescription>

@@ -90,8 +90,8 @@ const StatusBadge = ({ status, statusText }) => {
   const statusConfig = {
     0: { color: 'bg-gray-500', icon: Clock, label: 'Created' },
     1: { color: 'bg-blue-500', icon: Upload, label: 'Uploaded' },
-    2: { color: 'bg-yellow-500', icon: RefreshCw, label: 'Processing' },
-    3: { color: 'bg-orange-500', icon: RefreshCw, label: 'Transcoding' },
+    2: { color: 'bg-blue-500', icon: RefreshCw, label: 'Processing' },
+    3: { color: 'bg-blue-500', icon: RefreshCw, label: 'Transcoding' },
     4: { color: 'bg-green-500', icon: CheckCircle, label: 'Ready' },
     5: { color: 'bg-red-500', icon: XCircle, label: 'Error' },
     6: { color: 'bg-red-500', icon: AlertCircle, label: 'Upload Failed' },
@@ -575,9 +575,9 @@ const R2Library = ({ isActive }) => {
   const getFileIcon = (type) => {
     switch (type) {
       case 'image': return <ImageIcon className="h-8 w-8 text-blue-500" />;
-      case 'video': return <Video className="h-8 w-8 text-purple-500" />;
+      case 'video': return <Video className="h-8 w-8 text-blue-500" />;
       case 'document': 
-      case 'pdf': return <FileText className="h-8 w-8 text-orange-500" />;
+      case 'pdf': return <FileText className="h-8 w-8 text-blue-500" />;
       case 'audio': return <Music className="h-8 w-8 text-green-500" />;
       default: return <FileIcon className="h-8 w-8 text-gray-500" />;
     }
@@ -870,12 +870,12 @@ export default function MediaLibraryPage() {
 
         <TabsContent value="bunny" className="space-y-4">
           {!config.isBunnyConfigured ? (
-             <Card className="bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-900">
+             <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900">
                <CardContent className="pt-6 flex items-start gap-4">
-                 <AlertCircle className="h-6 w-6 text-yellow-600 shrink-0" />
+                 <AlertCircle className="h-6 w-6 text-blue-600 shrink-0" />
                  <div>
-                   <h3 className="font-semibold text-yellow-900 dark:text-yellow-200">Bunny.net Not Configured</h3>
-                   <p className="text-yellow-800 dark:text-yellow-300 text-sm mt-1">Please set BUNNY_LIBRARY_ID and BUNNY_API_KEY in your .env file.</p>
+                   <h3 className="font-semibold text-blue-900 dark:text-blue-200">Bunny.net Not Configured</h3>
+                   <p className="text-blue-800 dark:text-blue-300 text-sm mt-1">Please set BUNNY_LIBRARY_ID and BUNNY_API_KEY in your .env file.</p>
                  </div>
                </CardContent>
              </Card>
@@ -886,12 +886,12 @@ export default function MediaLibraryPage() {
 
         <TabsContent value="r2" className="space-y-4">
            {!config.isR2Configured ? (
-             <Card className="bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-900">
+             <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900">
                <CardContent className="pt-6 flex items-start gap-4">
-                 <AlertCircle className="h-6 w-6 text-yellow-600 shrink-0" />
+                 <AlertCircle className="h-6 w-6 text-blue-600 shrink-0" />
                  <div>
-                   <h3 className="font-semibold text-yellow-900 dark:text-yellow-200">R2 Storage Not Configured</h3>
-                   <p className="text-yellow-800 dark:text-yellow-300 text-sm mt-1">Please set R2_BUCKET_NAME, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, and R2_SECRET_ACCESS_KEY in your .env file.</p>
+                   <h3 className="font-semibold text-blue-900 dark:text-blue-200">R2 Storage Not Configured</h3>
+                   <p className="text-blue-800 dark:text-blue-300 text-sm mt-1">Please set R2_BUCKET_NAME, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, and R2_SECRET_ACCESS_KEY in your .env file.</p>
                  </div>
                </CardContent>
              </Card>

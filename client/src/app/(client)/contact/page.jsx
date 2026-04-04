@@ -82,16 +82,16 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: 'Call Us',
-      value: '+91 92207 97499',
-      link: 'tel:+919220797499',
-      color: 'text-violet-600 dark:text-violet-400',
-      bg: 'bg-violet-50 dark:bg-violet-900/30'
+      value: '+91 9236666923',
+      link: 'tel:+919236666923',
+      color: 'text-slate-600 dark:text-slate-400',
+      bg: 'bg-slate-50 dark:bg-slate-900/30'
     },
     {
       icon: MessageCircle,
       title: 'WhatsApp',
-      value: '+91 88600 36536',
-      link: 'https://wa.me/918860036536',
+      value: '+91 9236666923',
+      link: 'https://wa.me/919236666923',
       color: 'text-green-600 dark:text-green-400',
       bg: 'bg-green-50 dark:bg-green-900/30'
     },
@@ -106,8 +106,8 @@ export default function ContactPage() {
     {
       icon: MapPin,
       title: 'Visit Us',
-      value: 'New Delhi, India',
-      link: '#',
+      value: 'Shop No 167B, Third Floor Main Road, 672, opposite Metro Pillar No, Uttam Nagar, New Delhi, Delhi 110059',
+      link: 'https://maps.apple.com/?q=Shop+No+167B+Third+Floor+Main+Road+672+Uttam+Nagar+New+Delhi',
       color: 'text-red-600 dark:text-red-400',
       bg: 'bg-red-50 dark:bg-red-900/30'
     }

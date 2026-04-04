@@ -200,7 +200,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section - Event-Based with Urgency */}
-      <div className="bg-gradient-to-br from-red-50/50 via-white to-orange-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 border-b dark:border-gray-800">
+      <div className="bg-gradient-to-br from-red-50/50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 border-b dark:border-gray-800">
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-7xl">
           <Breadcrumb items={[
             { label: 'Home', href: '/' },
@@ -230,13 +230,13 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="h-full flex items-center justify-center bg-gradient-to-br from-red-100 to-orange-100">
+                  <div className="h-full flex items-center justify-center bg-gradient-to-br from-red-100 to-blue-100">
                     <Video className="h-24 w-24 text-red-400" />
                   </div>
                 )}
                 <div className="absolute top-4 right-4">
                   <Badge className={`text-sm font-semibold ${webinar.type === 'LIVE' ? 'bg-red-500' :
-                    webinar.type === 'WORKSHOP' ? 'bg-purple-500' :
+                    webinar.type === 'WORKSHOP' ? 'bg-blue-500' :
                       'bg-green-500'
                     }`}>
                     {webinar.type}
@@ -262,7 +262,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
                 {startDate && (
                   <Card className={`border-2 ${hasEnded ? 'border-gray-300 bg-gray-50' :
                     isLive ? 'border-red-500 bg-red-50' :
-                      'border-orange-300 bg-orange-50'
+                      'border-blue-300 bg-blue-50'
                     }`}>
                     <CardContent className="p-6">
                       {hasEnded ? (
@@ -284,10 +284,10 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
                       ) : countdown ? (
                         <div>
                           <div className="flex items-center gap-2 mb-2">
-                            <Clock className="h-5 w-5 text-orange-600" />
-                            <p className="text-sm font-medium text-orange-900">Live starts in:</p>
+                            <Clock className="h-5 w-5 text-blue-600" />
+                            <p className="text-sm font-medium text-blue-900">Live starts in:</p>
                           </div>
-                          <p className="font-bold text-3xl font-mono text-orange-900">{formatCountdown()}</p>
+                          <p className="font-bold text-3xl font-mono text-blue-900">{formatCountdown()}</p>
                         </div>
                       ) : null}
                     </CardContent>
@@ -477,7 +477,7 @@ export default function WebinarDetailClient({ webinar: initialWebinar }) {
             )}
 
             {/* Disclaimer */}
-            <Card className="border-2 border-amber-100 dark:border-amber-900 bg-amber-50/50 dark:bg-amber-900/20">
+            <Card className="border-2 border-slate-100 dark:border-slate-900 bg-slate-50/50 dark:bg-slate-900/20">
               <CardContent className="p-6">
                 <p className="text-xs text-muted-foreground dark:text-gray-400 leading-relaxed">
                   <strong>Disclaimer:</strong> The trade ideas, analyses, and strategies shared on this platform are for educational purposes only, and should not be interpreted as financial advice. Shrestha Academy is not responsible for any losses resulting from applying the knowledge gained through the program. Shrestha Academy is merely providing a platform to trainers to provide stock market and financial education, the content shared is that of the trainer.
