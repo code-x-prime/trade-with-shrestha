@@ -14,6 +14,8 @@ import PageHero from '@/components/sections/PageHero';
 import SearchInput from '@/components/SearchInput';
 import { Pagination } from '@/components/ui/pagination';
 import { Filters } from '@/components/ui/filters';
+import { USE_STATIC } from '@/lib/constants';
+import { STATIC_COURSES } from '@/data/courses';
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest First' },
@@ -71,6 +73,18 @@ function CoursesPageContent() {
         search: search || undefined,
         isFree: filters.isFree || undefined,
       });
+      
+      if (USE_STATIC) {
+        setCourses(STATIC_COURSES);
+        setPagination({
+          total: STATIC_COURSES.length,
+          page: 1,
+          limit: 20,
+          totalPages: 1
+        });
+        setLoading(false);
+        return;
+      }
 
       if (response.success) {
         let coursesData = response.data.courses || [];

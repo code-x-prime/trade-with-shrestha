@@ -16,6 +16,10 @@ import PageHero from '@/components/sections/PageHero';
 import SearchInput from '@/components/SearchInput';
 import { Pagination } from '@/components/ui/pagination';
 import { Filters } from '@/components/ui/filters';
+import CourseCard from '@/components/cards/CourseCard';
+import { courseAPI } from '@/lib/api';
+import { USE_STATIC, WHATSAPP_NUMBER, WHATSAPP_MESSAGE_TEMPLATE } from '@/lib/constants';
+import { STATIC_COURSES } from '@/data/courses';
 
 const SORT_OPTIONS = [
     { value: 'date-asc', label: 'Date: Soonest' },
@@ -42,6 +46,8 @@ function OfflineBatchesPageContent() {
     const [pagination, setPagination] = useState(null);
     const [flashSaleData, setFlashSaleData] = useState(null);
     const [sort, setSort] = useState(searchParams.get('sort') || 'date-asc');
+    const [recommendedCourses, setRecommendedCourses] = useState([]);
+    const [coursesLoading, setCoursesLoading] = useState(false);
     const limit = 20;
 
     // Update URL with current state
@@ -125,6 +131,31 @@ function OfflineBatchesPageContent() {
     }
   }, [cityFilter, page, search, sort]);
 
+    const fetchRecommendedCourses = useCallback(async () => {
+        try {
+            setCoursesLoading(true);
+            const response = await courseAPI.getCourses({
+                published: 'true',
+                page: 1,
+                limit: 4,
+            });
+            
+            if (USE_STATIC) {
+                setRecommendedCourses(STATIC_COURSES);
+                setCoursesLoading(false);
+                return;
+            }
+
+            if (response.success) {
+                setRecommendedCourses(response.data.courses || []);
+            }
+        } catch (error) {
+            console.error('Failed to fetch recommended courses:', error);
+        } finally {
+            setCoursesLoading(false);
+        }
+    }, []);
+
   const fetchPurchaseStatus = useCallback(async () => {
     if (!isAuthenticated || batches.length === 0) return;
 
@@ -177,7 +208,8 @@ function OfflineBatchesPageContent() {
   useEffect(() => {
     fetchBatches();
     fetchFlashSale();
-  }, [fetchBatches, fetchFlashSale]);
+    fetchRecommendedCourses();
+  }, [fetchBatches, fetchFlashSale, fetchRecommendedCourses]);
 
   useEffect(() => {
     if (isAuthenticated && batches.length > 0) {
@@ -308,7 +340,7 @@ function OfflineBatchesPageContent() {
                             </Card>
                         ))}
                     </div>
-                ) : batches.length === 0 ? (
+                ) : batches.length === 0 && recommendedCourses.length === 0 ? (
                     <Card className="rounded-2xl dark:bg-gray-800 dark:border-gray-700">
                         <CardContent className="py-12 text-center">
                             <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4 dark:text-gray-500" />
@@ -320,7 +352,7 @@ function OfflineBatchesPageContent() {
                             </p>
                         </CardContent>
                     </Card>
-                ) : (
+                ) : batches.length === 0 && recommendedCourses.length > 0 ? null : (
                     <>
                         <div id="batches" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                             {batches.map((batch) => {
@@ -413,7 +445,22 @@ function OfflineBatchesPageContent() {
                                                         Continue
                                                         <ArrowRight className="ml-2 h-4 w-4" />
                                                     </Button>
-                                                ) : null}
+                                                ) : (
+                                                    USE_STATIC && (
+                                                        <Button
+                                                            className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white text-sm font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                const message = WHATSAPP_MESSAGE_TEMPLATE.replace('[COURSE_NAME]', batch.title);
+                                                                window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+                                                            }}
+                                                        >
+                                                            <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} className="w-5 h-5" />
+                                                            <span>Enroll via WhatsApp</span>
+                                                        </Button>
+                                                    )
+                                                )}
                                             </CardContent>
                                         </Card>
                                     </Link>
@@ -430,6 +477,28 @@ function OfflineBatchesPageContent() {
                             />
                         )}
                     </>
+                )}
+
+                {/* Popular Online Courses */}
+                {recommendedCourses.length > 0 && (
+                    <div className="mt-20">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Our Popular Online Courses</h2>
+                                <p className="text-muted-foreground dark:text-gray-400 mt-1">Master more skills with our structured online programs.</p>
+                            </div>
+                            <Button variant="ghost" asChild>
+                                <Link href="/courses" className="flex items-center gap-2">
+                                    View all courses <ArrowRight className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {recommendedCourses.map((course) => (
+                                <CourseCard key={course.id} course={course} />
+                            ))}
+                        </div>
+                    </div>
                 )}
             </div>
         </div>
