@@ -219,8 +219,6 @@ function IssuedCertificatesTab() {
   const [actionLoading, setActionLoading] = useState(null);
   const [deleteDialog, setDeleteDialog] = useState({ open: false, certificate: null });
 
-  useEffect(() => { fetchCertificates(); }, [fetchCertificates, page, typeFilter]);
-
   const fetchCertificates = useCallback(async () => {
     try {
       setLoading(true);
@@ -231,6 +229,8 @@ function IssuedCertificatesTab() {
       if (response.success) { setCertificates(response.data.certificates || []); setPagination(response.data.pagination); }
     } catch (error) { toast.error('Failed to load'); } finally { setLoading(false); }
   }, [page, typeFilter, search]);
+
+  useEffect(() => { fetchCertificates(); }, [fetchCertificates, page, typeFilter]);
 
   const handleSearch = (e) => { e.preventDefault(); setPage(1); fetchCertificates(); };
   const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -463,12 +463,11 @@ function TemplatesTab() {
   const [uploading, setUploading] = useState({});
   const [previewVisible, setPreviewVisible] = useState(true);
 
-  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
-  useEffect(() => { if (templates.length > 0) handleSelectType(selectedType); }, [templates, selectedType, handleSelectType]);
-
   const fetchTemplates = useCallback(async () => {
     try { setLoading(true); const response = await certificateAPI.getTemplates(); if (response.success) setTemplates(response.data || []); } catch (error) { console.error(error); } finally { setLoading(false); }
   }, []);
+
+  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
 
   const handleSelectType = useCallback((type) => {
     setSelectedType(type);
@@ -483,6 +482,10 @@ function TemplatesTab() {
       setSelectedPreset('classic');
     }
   }, [templates]);
+
+  useEffect(() => {
+    if (templates.length > 0) handleSelectType(selectedType);
+  }, [templates, selectedType, handleSelectType]);
 
   const handlePresetChange = (presetId) => {
     setSelectedPreset(presetId);
@@ -678,8 +681,6 @@ function ManualGenerationTab() {
   const [templates, setTemplates] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(true);
 
-  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
-
   const fetchTemplates = useCallback(async () => {
     try { const response = await certificateAPI.getTemplates(); if (response.success) setTemplates(response.data || []); } catch (error) { console.error(error); }
   }, []);
@@ -687,6 +688,8 @@ function ManualGenerationTab() {
   const fetchItems = useCallback(async (type) => {
     try { setLoading(true); const response = await certificateAPI.getEligibleItems(type); if (response.success) setItems(response.data || []); } catch (error) { toast.error('Failed to load'); } finally { setLoading(false); }
   }, []);
+
+  useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
 
   const searchUsers = async (query) => {
     if (query.length < 2) { setUsers([]); return; }
