@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { BookOpen, Globe, ShoppingCart, Play, CheckCircle2, Lock, Star, MessageSquare, Award, Calendar, Video } from 'lucide-react';
+import { BookOpen, Globe, ShoppingCart, Play, CheckCircle2, Lock, Star, MessageSquare, Award, Calendar, Video, ExternalLink, ShieldCheck, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Breadcrumb from '@/components/Breadcrumb';
 import { toast } from 'sonner';
@@ -210,6 +211,33 @@ export default function CourseDetailClient({ course: initialCourse }) {
   const categoryNames = (course?.categories || [])
     .map((item) => item?.category?.name)
     .filter(Boolean);
+
+  const accreditationCourses = [
+    'full-stack-data-science-agentic-ai',
+    'python-data-structure-track',
+    'full-stack-agentic-ai-engineering'
+  ];
+  const showAccreditation = accreditationCourses.includes(course.slug);
+
+  const certificates = [
+    {
+      id: 'startup-india',
+      title: 'Startup India Recognized',
+      description: 'Officially recognized by DPIIT, Govt. of India',
+      pdf: '/Startup India certificate.pdf',
+      color: 'blue'
+    },
+    {
+      id: 'iso-9001',
+      title: 'ISO 9001:2015 Certified',
+      description: 'Quality Management System Certified',
+      pdf: '/SHRESTHA EDUTECH PRIVATE LIMITED -QMS- FINAL.pdf',
+      color: 'green'
+    }
+  ];
+
+  // For infinite scroll effect, we repeat the items
+  const extendedCertificates = [...certificates, ...certificates, ...certificates, ...certificates];
 
   if (!course) {
     return (
@@ -432,6 +460,88 @@ export default function CourseDetailClient({ course: initialCourse }) {
                     </li>
                   ))}
                 </ul>
+              </SectionContainer>
+            )}
+
+            {/* Accreditations & Recognition - Premium Carousel */}
+            {showAccreditation && (
+              <SectionContainer title="Accreditations & Recognition">
+                <div className="relative w-full overflow-hidden py-4">
+                  {/* Gradient Overlays for smooth edges */}
+                  <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-gray-50 dark:from-gray-950 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-gray-50 dark:from-gray-950 to-transparent z-10 pointer-events-none" />
+                  
+                  <motion.div 
+                    className="flex gap-6"
+                    animate={{
+                      x: [0, -certificates.length * 344], // card width (320px) + gap (24px)
+                    }}
+                    transition={{
+                      x: {
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        duration: 15,
+                        ease: "linear",
+                      },
+                    }}
+                    style={{ width: 'fit-content' }}
+                  >
+                    {extendedCertificates.map((cert, index) => (
+                      <motion.div
+                        key={`${cert.id}-${index}`}
+                        whileHover={{ y: -5 }}
+                        className="flex-shrink-0 w-80"
+                      >
+                        <Card 
+                          className="h-full cursor-pointer border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col"
+                          onClick={() => window.open(cert.pdf, '_blank')}
+                        >
+                          <div className={`h-1 w-full bg-${cert.color}-500 shrink-0`} />
+                          
+                          {/* PDF Preview Area */}
+                          <div className="relative w-full h-56 bg-slate-100 dark:bg-gray-800 overflow-hidden shrink-0 border-b border-slate-100 dark:border-gray-800">
+                            {/* Non-interactive overlay to capture clicks and add hover effects */}
+                            <div className="absolute inset-0 z-10 bg-transparent group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                              <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-white/95 dark:bg-black/80 px-5 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg backdrop-blur-sm text-black dark:text-white">
+                                <ExternalLink className="h-4 w-4" /> View Full PDF
+                              </div>
+                            </div>
+                            
+                            {/* Scaled down PDF iframe */}
+                            <iframe 
+                              src={`${cert.pdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`} 
+                              className="absolute top-0 left-0 w-[285%] h-[285%] origin-top-left scale-[0.35] pointer-events-none border-none bg-white"
+                              title={cert.title}
+                              tabIndex={-1}
+                            />
+                          </div>
+
+                          <CardContent className="p-5 flex-1 flex flex-col bg-white dark:bg-gray-900 relative">
+                            <h4 className="font-bold text-lg mb-1 dark:text-white line-clamp-1">{cert.title}</h4>
+                            <p className="text-sm text-muted-foreground dark:text-gray-400 leading-relaxed line-clamp-2">
+                              {cert.description}
+                            </p>
+                            
+                            {/* Shine Effect */}
+                            <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
+                
+                {/* Trusted by Badge Mentions */}
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-10 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="h-6 w-6 text-blue-600" />
+                    <span className="font-bold text-gray-500 dark:text-gray-400 text-sm tracking-wide">GOVT. RECOGNIZED</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Award className="h-6 w-6 text-green-600" />
+                    <span className="font-bold text-gray-500 dark:text-gray-400 text-sm tracking-wide">ISO 9001:2015</span>
+                  </div>
+                </div>
               </SectionContainer>
             )}
 

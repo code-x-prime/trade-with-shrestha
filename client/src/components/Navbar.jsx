@@ -43,6 +43,7 @@ import {
   Briefcase,
   Users,
   MessageCircle,
+  Camera,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -310,6 +311,7 @@ export default function Navbar() {
     { title: 'Software Jobs', description: 'Browse job openings', href: '/career/software-jobs', icon: Briefcase },
     { title: 'Interview Questions', description: 'Common Q&A and tips', href: '/career/interview-questions', icon: MessageCircle },
     { title: 'Placement Training', description: 'Get job-ready', href: '/career/placement-training', icon: Award },
+    { title: 'Gallery', description: 'View our events and memories', href: '/gallery', icon: Camera },
   ];
 
   const getDropdownItems = (itemName) => {
