@@ -15,9 +15,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Excel se lekar Power BI tak, MySQL se lekar Python tak — yeh course aapko ek complete Data Analyst banata hai. 10+ real-world data analytics projects ke saath aap industry-ready skills seekhenge jo aapko job dilwane mein madad karenge.',
+      'From Excel to Power BI, from MySQL to Python — this course transforms you into a complete Data Analyst. With 10+ real-world data analytics projects, you will gain industry-ready skills that help you land the job you deserve.',
     shortDescription:
-      'Microsoft Excel, MySQL, Power BI, aur Python se Data Analytics seekhein — ek hi course mein sab kuch.',
+      'Learn Data Analytics with Microsoft Excel, MySQL, Power BI, and Python — everything in one course.',
     duration: '3 Months',
     language: 'Hindi',
     isFree: false,
@@ -40,12 +40,12 @@ export const STATIC_COURSES = [
       'Certificate of Completion',
     ],
     prerequisites: [
-      'Koi bhi prior experience zaroori nahi',
+      'No prior experience required',
       'Basic computer knowledge (MS Office)',
-      'Seekhne ki jigyasa!',
+      'A curious mind ready to learn!',
     ],
     benefits: [
-      'Microsoft Excel — Basics se Advanced',
+      'Microsoft Excel — Basics to Advanced',
       'MySQL — Database Queries & Analytics',
       'Power BI — Interactive Dashboards',
       'Python — Pandas, NumPy, Matplotlib',
@@ -137,9 +137,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Yeh sabse comprehensive Data Science course hai jo Python se shuru hokar Advanced Agentic AI tak jaata hai. Machine Learning, Deep Learning, NLP, Generative AI (LLMs, RAG), aur Multi-Agent Systems — sab kuch ek saath seekhein real-world projects ke saath. Placement assistance bhi included hai.',
+      'This is the most comprehensive Data Science course available — starting from Python all the way to Advanced Agentic AI. Learn Machine Learning, Deep Learning, NLP, Generative AI (LLMs, RAG), and Multi-Agent Systems together through real-world projects. Placement assistance is included.',
     shortDescription:
-      'Python se Agentic AI tak — end-to-end Data Science lifecycle with placement support.',
+      'From Python to Agentic AI — end-to-end Data Science lifecycle with placement support.',
     duration: '6 Months',
     language: 'Mixed (Hindi + English)',
     isFree: false,
@@ -267,9 +267,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Zero se Python seekhein — Control Flow, Functions, OOPs, Exception Handling se lekar NumPy, Pandas tak. Saath mein Data Structures & Algorithms bhi cover hote hain jo coding interviews ke liye zaroori hain. 10+ industry projects ke saath hands-on experience milta hai.',
+      'Learn Python from zero — from Control Flow, Functions, and OOPs to Exception Handling, NumPy, and Pandas. Data Structures & Algorithms are also covered, which are essential for coding interviews. Gain hands-on experience with 10+ industry projects.',
     shortDescription:
-      'Python programming + Data Structures & Algorithms — beginners ke liye perfect starting point.',
+      'Python programming + Data Structures & Algorithms — the perfect starting point for beginners.',
     duration: '45 Days',
     language: 'Hindi',
     isFree: false,
@@ -291,7 +291,7 @@ export const STATIC_COURSES = [
       'Doubt Sessions',
     ],
     prerequisites: [
-      'Koi programming experience zaroori nahi',
+      'No programming experience required',
       'Basic computer usage knowledge',
     ],
     benefits: [
@@ -378,9 +378,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'AI Agents banana ab sirf theory nahi — yeh specialized course hai jo aapko production-ready Agentic AI systems banana sikhata hai. LangGraph, GraphRAG (Neo4j), MCP Tool Contracts, aur no-code n8n workflows ke saath aap enterprise-grade AI pipelines deploy kar paoge.',
+      'Building AI Agents is no longer just theory — this specialized course teaches you to build production-ready Agentic AI systems. With LangGraph, GraphRAG (Neo4j), MCP Tool Contracts, and no-code n8n workflows, you will be able to deploy enterprise-grade AI pipelines.',
     shortDescription:
-      'LangGraph, GraphRAG, MCP, aur Multi-Agent Systems se production AI engineers banein.',
+      'Become a production AI engineer with LangGraph, GraphRAG, MCP, and Multi-Agent Systems.',
     duration: '2.5 Months',
     language: 'English',
     isFree: false,
@@ -498,9 +498,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'ChatGPT use karna alag baat hai, lekin asli AI engineer woh hota hai jo LLMs ke andar jhank sake, unhe fine-tune kar sake, aur production AI apps build kar sake. Yeh course aapko exactly wahi sikhata hai — Transformers, RAG, LangChain, LangGraph, aur Multi-Agent Systems ke through 10+ AI projects ke saath.',
+      'Using ChatGPT is one thing, but a real AI engineer is someone who can look inside LLMs, fine-tune them, and build production AI apps. This course teaches you exactly that — through Transformers, RAG, LangChain, LangGraph, and Multi-Agent Systems with 10+ AI projects.',
     shortDescription:
-      'LLMs, RAG, LangChain se aage jakar production-ready AI apps build karna seekhein.',
+      'Go beyond LLMs, RAG, and LangChain — learn to build production-ready AI applications.',
     duration: '4 Months',
     language: 'Mixed (Hindi + English)',
     isFree: false,
@@ -631,9 +631,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Data dekhna alag baat hai, ussse business decisions lena alag. Yeh course aapko sirf tools nahi sikhata — aap business ke andar data kaise kaam karta hai woh samajhte hain. Excel, Power BI, SQL, aur Business KPIs — sab milake aapko ek confident Business Analyst banata hai.',
+      'Reading data is one thing — using it to make business decisions is another. This course does not just teach you tools; it helps you understand how data works inside a business. Excel, Power BI, SQL, and Business KPIs together build you into a confident Business Analyst.',
     shortDescription:
-      'Excel se Power BI tak, SQL se Business KPIs tak — ek data-driven professional banein.',
+      'From Excel to Power BI, from SQL to Business KPIs — become a data-driven professional.',
     duration: '4 Months',
     language: 'Hindi',
     isFree: false,
@@ -657,7 +657,7 @@ export const STATIC_COURSES = [
     ],
     prerequisites: [
       'Basic Excel knowledge (helpful but not required)',
-      'Freshers & working professionals dono ke liye suitable',
+      'Suitable for both freshers and working professionals',
     ],
     benefits: [
       'Microsoft Excel — Advanced Level',
@@ -740,9 +740,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'HTML se lekar MySQL-powered backend tak — yeh course aapko complete web development foundation deta hai. PHP ke saath robust backends banana, Dart se frontend logic banana, aur MySQL se data manage karna — sab ek hi course mein. 3 mahine mein job-ready skills.',
+      'From HTML to a MySQL-powered backend — this course gives you a complete web development foundation. Build robust backends with PHP, write frontend logic with Dart, and manage data with MySQL — all in one course. Become job-ready in 3 months.',
     shortDescription:
-      'HTML/CSS/JS + PHP Backend + MySQL Database + Dart — complete web development package.',
+      'HTML/CSS/JS + PHP Backend + MySQL Database + Dart — the complete web development package.',
     duration: '3 Months',
     language: 'Hindi',
     isFree: false,
@@ -850,9 +850,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'MERN Stack aaj industry ka sabse popular web development combination hai. React se beautiful UIs, Node.js + Express se powerful APIs, aur MongoDB se scalable database — ek saath seekhein. JWT authentication, Redux Toolkit, aur AWS deployment ke saath aap complete full-stack developer banenge.',
+      'The MERN Stack is the most popular web development combination in the industry today. Build beautiful UIs with React, powerful APIs with Node.js + Express, and scalable databases with MongoDB — all together. With JWT authentication, Redux Toolkit, and AWS deployment, you will become a complete full-stack developer.',
     shortDescription:
-      'MongoDB, Express, React, Node.js — India ke sabse in-demand web development stack ka mastery course.',
+      'MongoDB, Express, React, Node.js — master the most in-demand web development stack in India.',
     duration: '3 Months',
     language: 'Hindi',
     isFree: false,
@@ -967,9 +967,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Python aaj data analytics ka sabse powerful tool hai. Yeh course aapko NumPy, Pandas, Matplotlib, Seaborn, aur Plotly ke saath real datasets par kaam karna sikhata hai. Data cleaning se EDA tak, aur visualization se business insights tak — har step practically cover hota hai.',
+      'Python is the most powerful tool for data analytics today. This course teaches you to work with real datasets using NumPy, Pandas, Matplotlib, Seaborn, and Plotly. Every step is covered practically — from data cleaning and EDA to visualization and business insights.',
     shortDescription:
-      'NumPy, Pandas, Matplotlib, Seaborn ke saath Python se professional Data Analytics seekhein.',
+      'Learn professional Data Analytics with Python using NumPy, Pandas, Matplotlib, and Seaborn.',
     duration: '4 Months',
     language: 'Hindi',
     isFree: false,
@@ -1088,9 +1088,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Model banana kafi nahi — model deploy karna, monitor karna, aur automate karna sikho. Yeh course DevOps aur MLOps ka best combination hai — Docker, Kubernetes, CI/CD, GitHub Actions, MLflow, DVC, aur AWS. AI Engineers aur Software Developers dono ke liye perfect course.',
+      'Building a model is not enough — learn how to deploy, monitor, and automate it. This course is the best combination of DevOps and MLOps — Docker, Kubernetes, CI/CD, GitHub Actions, MLflow, DVC, and AWS. A perfect course for both AI Engineers and Software Developers.',
     shortDescription:
-      'Docker, Kubernetes, MLflow, GitHub Actions, AWS — modern software & ML delivery pipeline mastery.',
+      'Docker, Kubernetes, MLflow, GitHub Actions, AWS — master the modern software and ML delivery pipeline.',
     duration: '2 Months',
     language: 'Mixed (Hindi + English)',
     isFree: false,
@@ -1200,9 +1200,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Aaj ke daur mein business online hain — aur unhe Digital Marketers ki zarurat hai. Yeh course aapko SEO, Google Ads, Meta Ads, Email Marketing, Content Strategy, aur Google Analytics 4 sikhata hai. Freshers ke liye job, business owners ke liye growth, aur professionals ke liye freelancing — sabke liye perfect.',
+      'In today\'s world, businesses are online — and they need Digital Marketers. This course teaches you SEO, Google Ads, Meta Ads, Email Marketing, Content Strategy, and Google Analytics 4. Whether you are a fresher looking for a job, a business owner seeking growth, or a professional wanting to freelance — this course is perfect for all.',
     shortDescription:
-      'SEO, Google Ads, Social Media, Email Marketing — digital marketing ka complete package.',
+      'SEO, Google Ads, Social Media, Email Marketing — the complete digital marketing package.',
     duration: '2 Months',
     language: 'Hindi',
     isFree: false,
@@ -1225,7 +1225,7 @@ export const STATIC_COURSES = [
     ],
     prerequisites: [
       'Basic internet usage knowledge',
-      'Koi marketing experience zaroori nahi',
+      'No prior marketing experience required',
     ],
     benefits: [
       'SEO — On-page, Off-page, Technical',
@@ -1314,9 +1314,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'FAANG-level interviews crack karne ke liye DSA aur Advanced Python dono zaroori hain. Yeh course Arrays se Graphs tak har data structure, aur Generators se AsyncIO tak advanced Python patterns cover karta hai — sabke saath Time & Space Complexity analysis. Mock interviews aur practice problems included.',
+      'Cracking FAANG-level interviews requires both DSA and Advanced Python. This course covers every data structure from Arrays to Graphs, and advanced Python patterns from Generators to AsyncIO — all with Time & Space Complexity analysis. Mock interviews and practice problems are included.',
     shortDescription:
-      'DSA + Advanced Python — FAANG/product company interviews ke liye complete preparation.',
+      'DSA + Advanced Python — complete preparation for FAANG and product company interviews.',
     duration: '3 Months',
     language: 'Hindi',
     isFree: false,
@@ -1430,9 +1430,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'India mein 600 million+ Android users hain — aur apps ki demand kabhi khatam nahi hoti. Kotlin aur Jetpack Compose ke saath modern Android apps banana seekhein — MVVM architecture, Firebase integration, REST APIs, Room DB, aur Google Play Store publishing. 2 mahine mein industry-ready developer banein.',
+      'India has 600 million+ Android users — and the demand for apps never stops. Learn to build modern Android apps with Kotlin and Jetpack Compose — MVVM architecture, Firebase integration, REST APIs, Room DB, and Google Play Store publishing. Become an industry-ready developer in 2 months.',
     shortDescription:
-      'Kotlin + Jetpack Compose se professional Android apps banayein aur Play Store par publish karein.',
+      'Build professional Android apps with Kotlin + Jetpack Compose and publish them on the Play Store.',
     duration: '2 Months',
     language: 'Hindi',
     isFree: false,
@@ -1542,9 +1542,9 @@ export const STATIC_COURSES = [
       hasFlashSale: false,
     },
     description:
-      'Ek codebase, teen platforms — Android, iOS, aur Web. Flutter aaj cross-platform development ka future hai. Dart programming se shuru hokar, beautiful widget-based UIs, advanced state management (BLoC, Riverpod), aur Firebase backend ke saath aap production-ready apps banayenge. 2 mahine mein cross-platform developer banein.',
+      'One codebase, three platforms — Android, iOS, and Web. Flutter is the future of cross-platform development. Starting from Dart programming, through beautiful widget-based UIs, advanced state management (BLoC, Riverpod), and Firebase backend, you will build production-ready apps. Become a cross-platform developer in 2 months.',
     shortDescription:
-      'Flutter + Dart se Android, iOS, aur Web apps ek saath banayein — cross-platform developer banein.',
+      'Build Android, iOS, and Web apps together with Flutter + Dart — become a cross-platform developer.',
     duration: '2 Months',
     language: 'Hindi',
     isFree: false,
