@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShoppingCart, Trash2, ArrowRight, Tag, Video, Calendar, Package, Lock, Gift, Copy } from 'lucide-react';
+import { ShoppingCart, Trash2, ArrowRight, Tag, Video, Calendar, Package, Lock, Gift } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Script from 'next/script';
@@ -435,9 +435,9 @@ function CartContent() {
             couponType === 'WEBINAR' ? 'Webinars Only' :
               couponType === 'GUIDANCE' ? '1:1 Guidance Only' :
                 couponType === 'COURSE' ? 'Courses Only' :
-                    couponType === 'BUNDLE' ? 'Bundles Only' :
-                      couponType === 'OFFLINE_BATCH' ? 'Offline Batches Only' :
-                        couponType === 'SUBSCRIPTION' ? 'Subscriptions Only' : 'All Products';
+                  couponType === 'BUNDLE' ? 'Bundles Only' :
+                    couponType === 'OFFLINE_BATCH' ? 'Offline Batches Only' :
+                      couponType === 'SUBSCRIPTION' ? 'Subscriptions Only' : 'All Products';
 
         if (!isAutoApply) {
           toast.success(`Coupon applied! Valid for: ${typeText}`);
@@ -1278,8 +1278,8 @@ function CartContent() {
                                 applicableTo === 'WEBINAR' ? 'Webinars Only' :
                                   applicableTo === 'GUIDANCE' ? '1:1 Guidance Only' :
                                     applicableTo === 'COURSE' ? 'Courses Only' :
-                                        applicableTo === 'BUNDLE' ? 'Bundles Only' :
-                                          applicableTo === 'OFFLINE_BATCH' ? 'Offline Batches Only' : 'All Products';
+                                      applicableTo === 'BUNDLE' ? 'Bundles Only' :
+                                        applicableTo === 'OFFLINE_BATCH' ? 'Offline Batches Only' : 'All Products';
                             return `Applied to: ${typeText}`;
                           })()}
                         </div>

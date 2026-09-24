@@ -13,6 +13,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "https://shrestha.academy"
+  ),
   title: "Shrestha Academy",
   description: "Learn professional skills with expert guidance",
   verification: {

@@ -23,6 +23,21 @@ export function middleware(request) {
     const isLoggedIn = !!decoded;
     const isAdmin = decoded?.role === 'ADMIN';
 
+    // ====== NOINDEX (never rank private pages) ======
+    // Covers /admin (client layout can't export metadata) + other private routes
+    const noindexPrefixes = [
+        '/admin',
+        '/auth',
+        '/cart',
+        '/checkout',
+        '/profile',
+        '/search',
+    ];
+    const isNoindex =
+        noindexPrefixes.some(
+            (p) => pathname === p || pathname.startsWith(p + '/')
+        ) || /^\/courses\/[^/]+\/learn/.test(pathname);
+
     // ====== AUTH PAGE PROTECTION ======
     // Redirect logged-in users away from /auth page
     if (pathname === '/auth' || pathname.startsWith('/auth/')) {
@@ -40,14 +55,18 @@ export function middleware(request) {
             // Not logged in - redirect to auth
             const url = new URL('/auth', request.url);
             url.searchParams.set('redirect', pathname);
-            return NextResponse.redirect(url);
+            const res = NextResponse.redirect(url);
+            res.headers.set('X-Robots-Tag', 'noindex, nofollow');
+            return res;
         }
 
         if (!isAdmin) {
             // Logged in but not admin - redirect to home with error
             const url = new URL('/', request.url);
             url.searchParams.set('error', 'unauthorized');
-            return NextResponse.redirect(url);
+            const res = NextResponse.redirect(url);
+            res.headers.set('X-Robots-Tag', 'noindex, nofollow');
+            return res;
         }
     }
 
@@ -65,7 +84,9 @@ export function middleware(request) {
     if (isProtectedRoute && !isLoggedIn) {
         const url = new URL('/auth', request.url);
         url.searchParams.set('redirect', pathname);
-        return NextResponse.redirect(url);
+        const res = NextResponse.redirect(url);
+        res.headers.set('X-Robots-Tag', 'noindex, nofollow');
+        return res;
     }
 
     // ====== ENROLLMENT/PURCHASE PROTECTION ======
@@ -74,11 +95,17 @@ export function middleware(request) {
         if (!isLoggedIn) {
             const url = new URL('/auth', request.url);
             url.searchParams.set('redirect', pathname);
-            return NextResponse.redirect(url);
+            const res = NextResponse.redirect(url);
+            res.headers.set('X-Robots-Tag', 'noindex, nofollow');
+            return res;
         }
     }
 
-    return NextResponse.next();
+    const response = NextResponse.next();
+    if (isNoindex) {
+        response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+    }
+    return response;
 }
 
 export const config = {

@@ -1,13 +1,7 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
+export const metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function LearnLayout({ children }) {
-  // This layout prevents the parent (client) layout from showing Navbar/Footer
-  // by returning only children without the Navbar/BottomNavbar
-  return (
-    <div className="min-h-screen bg-background">
-      {children}
-    </div>
-  );
+  return <div className="min-h-screen bg-background">{children}</div>;
 }
