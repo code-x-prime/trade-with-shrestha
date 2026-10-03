@@ -791,9 +791,11 @@ function CheckoutContent() {
                   {/* Terms and Privacy Links */}
                   <p className="text-xs text-center text-gray-500 dark:text-gray-400">
                     By completing this purchase, you agree to our{' '}
-                    <Link href="/terms" className="text-brand-600 hover:underline">Terms of Service</Link>{' '}
+                    <Link href="/terms" className="text-brand-600 hover:underline">Terms of Service</Link>,{' '}
+                    <Link href="/refund" className="text-brand-600 hover:underline">Refund Policy</Link>{' '}
                     and{' '}
-                    <Link href="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>
+                    <Link href="/privacy" className="text-brand-600 hover:underline">Privacy Policy</Link>.
+                    Fees are non-refundable once enrolled.
                   </p>
 
                   <Button variant="outline" className="w-full border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700" asChild>

@@ -33,9 +33,11 @@ export default function RefundPage() {
                 Course fees are non-refundable in the following cases:
               </p>
               <ul className="list-disc pl-6 text-lg text-slate-700 dark:text-slate-300 space-y-3">
+                <li>Once enrollment is completed and payment is made, the fee is non-refundable</li>
                 <li>After course access is granted</li>
                 <li>After attending live classes</li>
                 <li>After accessing or downloading recorded sessions</li>
+                <li>If the student backs out, withdraws, or discontinues the course for any reason</li>
                 <li>Change of mind or personal scheduling issues</li>
                 <li>Dissatisfaction related to job placement outcomes</li>
               </ul>
@@ -54,6 +56,7 @@ export default function RefundPage() {
                 Refunds may be considered only if:
               </p>
               <ul className="list-disc pl-6 text-lg text-slate-700 dark:text-slate-300 space-y-3 mb-4">
+                <li>Shrestha Academy fails to deliver the classes of the enrolled course (no class has been conducted)</li>
                 <li>A course is cancelled by Shrestha Academy</li>
                 <li>Technical issues from our side prevent course access</li>
               </ul>
@@ -72,7 +75,7 @@ export default function RefundPage() {
             <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-6 my-8 rounded-r-lg shadow-sm">
               <h2 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-4">⚠️ IMPORTANT DISCLAIMER</h2>
               <p className="text-lg text-red-700 dark:text-red-300 leading-relaxed mb-4">
-                Shrestha Academy provides education and training only. We are not a financial advisory firm. Stock market and cryptocurrency trading involve market risk. Learners are advised to practice independently, responsibly, and at their own discretion.
+                Shrestha Academy provides education and training only. We are not a financial advisory firm. Stock market and cryptocurrency trading involve market risk. All courses are for educational purposes only, and no profit or income is promised. Learners are advised to practice independently, responsibly, and at their own discretion.
               </p>
             </div>
           </div>
